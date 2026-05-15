@@ -8,7 +8,7 @@ This addon aims to add a variety of immersive roleplay features relating to the 
 ## Weather Toy Accessories
 * When rain starts, a popup will remind you to equip an umbrella / parasol (the models and icons are called umbrella, the ingame item is called parasol, I know parasols aren't great for rain, idk deal with it).
 * Right-click the popup icon to select a specific tracked character-specific toy to use, or set it to "Random" to cycle through your available collection.
-* An optional setting ensures that accessory reminders only appear when your character is actively flagged as "In Character" (IC) in TRP3.
+* An optional setting ensures that accessory reminders only appear when your character is actively flagged as "In Character" (IC) in [TRP3](https://www.curseforge.com/wow/addons/total-rp-3).
 * Choose from a variety of notification sounds (such as ship bells, alarm clocks, or standard UI toasts) to accompany your accessory reminders.
 
 ## Movement Sounds
