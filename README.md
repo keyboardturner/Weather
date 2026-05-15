@@ -2,6 +2,9 @@
 
 This addon aims to add a variety of immersive roleplay features relating to the weather, ambience, and environment.
 
+<img width="960" height="540" alt="Wow_2026-05-14_19-53-27_x2" src="https://github.com/user-attachments/assets/6f363f89-673d-4d77-90ae-4fa68048a5db" />
+
+
 ## Indoor Ambience
 * Plays muffled, ambient weather sounds while you're indoors during active rain, snow, and sandstorms. Each weather has its own weather ambience sounds.
 
