@@ -29,6 +29,7 @@ local Defaults = {
 	EnableScreenEffect = true,
 	ScreenEffectOpacity = 1.0,
 	ScreenEffectWeatherToggles = {},
+	ScreenEffectInstances = {},
 };
 
 WeatherAddon.Defaults = Defaults;
@@ -550,6 +551,15 @@ local function BuildSettingsData()
 		},
 	};
 
+	local dynamicInstanceOptions = {
+		{ key = "party", text = L["Widget_ACT_Dungeon"], default = false },
+		{ key = "raid", text = L["Widget_ACT_Raids"], default = false },
+		{ key = "scenario", text = L["Widget_ACT_ScenariosDelves"], default = false },
+		{ key = "pvp", text = L["Widget_ACT_Battlegrounds"], default = false },
+		{ key = "arena", text = L["Widget_ACT_Arena"], default = false },
+		{ key = "neighborhood", text = L["Widget_ACT_Housing"], default = false },
+	};
+
 	table.insert(allSettingsData, { type = "header", label = L["Header_AmbienceSettings"] });
 
 	table.insert(allSettingsData, {
@@ -688,6 +698,19 @@ local function BuildSettingsData()
 		label = L["Setting_EnableScreenEffect"],
 		tooltip = L["Setting_EnableScreenEffectTT"],
 		default = Defaults.EnableScreenEffect,
+		callback = function(value)
+			if WeatherAddon.RefreshScreenEffects then
+				WeatherAddon:RefreshScreenEffects();
+			end
+		end,
+	});
+
+	table.insert(allSettingsData, {
+		type = "multicheckbox",
+		key = "ScreenEffectInstances",
+		label = L["Setting_DisableScreenEffectsInstances"],
+		tooltip = L["Setting_DisableScreenEffectsInstancesTT"],
+		options = dynamicInstanceOptions,
 		callback = function(value)
 			if WeatherAddon.RefreshScreenEffects then
 				WeatherAddon:RefreshScreenEffects();

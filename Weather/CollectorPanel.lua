@@ -56,10 +56,16 @@ function WeatherAddon:CreateDataUI(parentFrame)
 	leftBorder:SetTextureSliceMode(Enum.UITextureSliceMode.Stretched);
 	--]]
 
+	local searchBox = CreateFrame("EditBox", nil, leftPanel, "SearchBoxTemplate");
+	searchBox:SetPoint("TOPLEFT", leftPanel, "TOPLEFT", 10, -10);
+	searchBox:SetPoint("TOPRIGHT", leftPanel, "TOPRIGHT", -10, -10);
+	searchBox:SetHeight(20);
+	searchBox:SetAutoFocus(false);
+
 	--QuestLog-frame-filigree
 
 	local zoneScroll = CreateFrame("Frame", nil, leftPanel, "WowScrollBoxList");
-	zoneScroll:SetPoint("TOPLEFT", 2, -2);
+	zoneScroll:SetPoint("TOPLEFT", 2, -35);
 	zoneScroll:SetPoint("BOTTOMRIGHT", -2, 2);
 
 	local zoneScrollBar = CreateFrame("EventFrame", nil, leftPanel, "MinimalScrollBar");
@@ -307,8 +313,8 @@ function WeatherAddon:CreateDataUI(parentFrame)
 
 			row.collapseBtn = CreateFrame("Button", nil, row);
 			row.collapseBtn:SetSize(18, 18);
-			row.collapseBtn:SetNormalAtlas("UI-QuestTrackerButton-Expand-All");
-			row.collapseBtn:SetPushedAtlas("UI-QuestTrackerButton-Expand-All-Pressed");
+			--row.collapseBtn:SetNormalAtlas("UI-QuestTrackerButton-Expand-All");
+			--row.collapseBtn:SetPushedAtlas("UI-QuestTrackerButton-Expand-All-Pressed");
 
 			row.headerBg = row:CreateTexture(nil, "BACKGROUND", nil, -1);
 			row.headerBg:SetAtlas("QuestLog-tab", true);
@@ -325,13 +331,23 @@ function WeatherAddon:CreateDataUI(parentFrame)
 		local depth = data.depth or 0;
 		local indent = depth * INDENT;
 
+		local query = searchBox:GetText():lower();
+		local isCollapsed = false;
+		if query == "" then
+			if collapsedNodes[data.key] ~= nil then
+				isCollapsed = collapsedNodes[data.key];
+			else
+				isCollapsed = data.isSubHeader;
+			end
+		end
+
 		if data.isContinentHeader then
 			row.headerBg:Show();
 			row.collapseBtn:Show();
 			row.collapseBtn:ClearAllPoints();
 			row.collapseBtn:SetPoint("LEFT", 2, 0);
 
-			local isCollapsed = collapsedNodes[data.key];
+			--local isCollapsed = collapsedNodes[data.key];
 			if isCollapsed then
 				row.collapseBtn:SetNormalAtlas("UI-QuestTrackerButton-Expand-All");
 				row.collapseBtn:SetPushedAtlas("UI-QuestTrackerButton-Expand-All-Pressed");
@@ -341,7 +357,9 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			end
 
 			row.collapseBtn:SetScript("OnClick", function()
-				collapsedNodes[data.key] = not collapsedNodes[data.key];
+				local currentState = collapsedNodes[data.key];
+				if currentState == nil then currentState = data.isSubHeader; end
+				collapsedNodes[data.key] = not currentState;
 				view:RefreshMapList();
 				PlaySound(273125);
 			end)
@@ -375,7 +393,7 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			row.collapseBtn:ClearAllPoints();
 			row.collapseBtn:SetPoint("LEFT", 2 + indent, 0);
 
-			local isCollapsed = collapsedNodes[data.key];
+			--local isCollapsed = collapsedNodes[data.key];
 			if isCollapsed then
 				row.collapseBtn:SetNormalAtlas("UI-QuestTrackerButton-Expand-All");
 				row.collapseBtn:SetPushedAtlas("UI-QuestTrackerButton-Expand-All-Pressed");
@@ -385,7 +403,9 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			end
 
 			row.collapseBtn:SetScript("OnClick", function()
-				collapsedNodes[data.key] = not collapsedNodes[data.key];
+				local currentState = collapsedNodes[data.key];
+				if currentState == nil then currentState = data.isSubHeader; end
+				collapsedNodes[data.key] = not currentState;
 				view:RefreshMapList();
 				PlaySound(273125);
 			end)
@@ -462,10 +482,10 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			local info = C_Map.GetMapInfo(currentID);
 			if not info then break; end
 			if info.mapType <= 2 then
-				collapsedNodes["c:" .. (info.name or string.format(L["UnknownMap"], currentID))] = nil;
+				collapsedNodes["c:" .. (info.name or string.format(L["UnknownMap"], currentID))] = false;
 				break;
 			end
-			collapsedNodes["m:" .. currentID] = nil;
+			collapsedNodes["m:" .. currentID] = false;
 			currentID = info.parentMapID;
 		end
 
@@ -546,7 +566,42 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			table.sort(children, function(a, b) return a.name < b.name; end);
 		end
 
-		local function FlattenNode(node, depth)
+		local query = searchBox:GetText():lower();
+		local function NodeMatches(node)
+			if query == "" then return true; end
+			if node.name:lower():find(query, 1, true) then return true; end
+			-- check subzones
+			if node.mapID and Weather_Collector_DB[node.mapID] then
+				for subzoneName, _ in pairs(Weather_Collector_DB[node.mapID]) do
+					if subzoneName:lower():find(query, 1, true) then
+						return true;
+					end
+				end
+			end
+			for _, child in ipairs(node.children) do
+				if NodeMatches(child) then return true; end
+			end
+			return false;
+		end
+
+		local function FlattenNode(node, depth, forceKeep)
+			local selfMatches = query == "" or forceKeep or node.name:lower():find(query, 1, true) ~= nil;
+			-- check subzones
+			if not selfMatches and node.mapID and Weather_Collector_DB[node.mapID] then
+				for subzoneName, _ in pairs(Weather_Collector_DB[node.mapID]) do
+					if subzoneName:lower():find(query, 1, true) then
+						selfMatches = true;
+						break;
+					end
+				end
+			end
+			local childMatches = false;
+			for _, child in ipairs(node.children) do
+				if NodeMatches(child) then childMatches = true; break; end
+			end
+			
+			local keep = selfMatches or childMatches;
+			if not keep then return; end
 			local hasChildren = #node.children > 0;
 			local key = "m:" .. node.mapID;
 
@@ -559,10 +614,19 @@ function WeatherAddon:CreateDataUI(parentFrame)
 				depth = depth,
 			});
 
-			if hasChildren and not collapsedNodes[key] then
+			local isCollapsed = false;
+			if query == "" then
+				if collapsedNodes[key] ~= nil then
+					isCollapsed = collapsedNodes[key];
+				else
+					isCollapsed = hasChildren;
+				end
+			end
+
+			if hasChildren and not isCollapsed then
 				SortChildren(node.children);
 				for _, child in ipairs(node.children) do
-					FlattenNode(child, depth + 1);
+					FlattenNode(child, depth + 1, selfMatches);
 				end
 			end
 		end
@@ -577,24 +641,51 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			local continent = mapTree[continentName];
 			local key = "c:" .. continentName;
 
-			zoneDP:Insert({
-				isContinentHeader = true,
-				isSubHeader = false,
-				name = continentName,
-				key = key,
-				depth = 0,
-			});
+			local selfMatches = query == "" or continentName:lower():find(query, 1, true) ~= nil;
+			local childMatches = false;
+			for _, child in ipairs(continent.children) do
+				if NodeMatches(child) then childMatches = true; break; end
+			end
 
-			if not collapsedNodes[key] then
-				SortChildren(continent.children);
-				for _, child in ipairs(continent.children) do
-					FlattenNode(child, 1);
+			if selfMatches or childMatches then
+				zoneDP:Insert({
+					isContinentHeader = true,
+					isSubHeader = false,
+					name = continentName,
+					key = key,
+					depth = 0,
+				});
+
+				local isCollapsed = false;
+				if query == "" then
+					if collapsedNodes[key] ~= nil then
+						isCollapsed = collapsedNodes[key];
+					end
+				end
+
+				if not isCollapsed then
+					SortChildren(continent.children);
+					for _, child in ipairs(continent.children) do
+						FlattenNode(child, 1, selfMatches);
+					end
 				end
 			end
 		end
 
 		zoneScroll:SetScrollPercentage(currentScroll);
 	end
+
+	searchBox:HookScript("OnTextChanged", function(self)
+		self.t = 0;
+		self:SetScript("OnUpdate", function(self, elapsed)
+			self.t = self.t + elapsed;
+			if self.t >= 0.2 then
+				self.t = 0;
+				self:SetScript("OnUpdate", nil);
+				view:RefreshMapList();
+			end
+		end)
+	end)
 
 	view:SetScript("OnShow", function()
 		if view.selectCurrentOnShow then

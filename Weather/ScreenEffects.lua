@@ -32,9 +32,22 @@ local function IsEnabled()
 	return GetDB("EnableScreenEffect") ~= false;
 end
 
+local inInstanceStatus = false;
+local instanceTypeStatus = "none";
+
 local function ComputeTargetAlpha(weatherType, intensity)
 	if not IsEnabled() then return 0; end
 	if isIndoors then return 0; end
+	
+	local inInstance, instanceType = IsInInstance();
+	if inInstance and instanceType and instanceType ~= "none" then
+		local instanceSettings = GetDB("ScreenEffectInstances");
+		-- suppress the screen effect in selected instance types
+		if instanceSettings and instanceSettings[instanceType] == true then
+			return 0;
+		end
+	end
+
 	if not WeatherColors[weatherType] then return 0; end
 
 	local toggles = GetDB("ScreenEffectWeatherToggles");
@@ -151,10 +164,13 @@ local function BuildEffectFrame()
 end
 
 local function CheckEnvironment()
-	local currentlyIndoors = not IsOutdoors()
+	local currentlyIndoors = not IsOutdoors();
+	local currentInInstance, currentInstanceType = IsInInstance();
 	
-	if currentlyIndoors ~= isIndoors then
+	if currentlyIndoors ~= isIndoors or currentInInstance ~= inInstanceStatus or currentInstanceType ~= instanceTypeStatus then
 		isIndoors = currentlyIndoors;
+		inInstanceStatus = currentInInstance;
+		instanceTypeStatus = currentInstanceType;
 		WeatherAddon:RefreshScreenEffects();
 	end
 end

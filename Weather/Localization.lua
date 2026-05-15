@@ -92,6 +92,8 @@ if LOCALE == "enUS" then
 	L["Setting_ResetIgnoredSession"] = "Reset Ignored Reminders"
 	L["Btn_Reset"] = "Reset Reminders"
 	L["Setting_ResetIgnoredSessionTT"] = "Resets the ignored reminders."
+	L["Setting_DisableScreenEffectsInstances"] = "Hide in Instances"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "Toggles the screen color effects for weather to be hidden during certain specific instances."
 
 	L["Weather_Settings"] = "Weather - Settings"
 	L["UIScale"] = UI_SCALE
@@ -128,6 +130,13 @@ if LOCALE == "enUS" then
 	L["KharazahnBellToll"] = "KharazahnBellToll"
 	L["BellTollNightElf"] = "BellTollNightElf"
 	L["BellTollAlliance"] = "BellTollAlliance"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 	
 
 return end
@@ -210,6 +219,8 @@ if LOCALE == "esMX" then
 	L["Setting_ResetIgnoredSession"] = "Restablecer recordatorios ignorados"
 	L["Btn_Reset"] = "Restablecer recordatorios"
 	L["Setting_ResetIgnoredSessionTT"] = "Restablece los recordatorios ignorados."
+	L["Setting_DisableScreenEffectsInstances"] = "Ocultar en instancias"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "Oculta los efectos de color de pantalla del clima durante ciertas instancias específicas."
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -236,6 +247,13 @@ if LOCALE == "esMX" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Invitación a canal de voz de Battle.net"
 	L["Sound_AlarmClockWarning2"] = "Advertencia de despertador 2"
 	L["Sound_UI_BnetToast"] = "Notificación emergente de Battle.net"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
 
@@ -317,6 +335,8 @@ if LOCALE == "esES" then
 	L["Setting_ResetIgnoredSession"] = "Restablecer recordatorios ignorados"
 	L["Btn_Reset"] = "Restablecer recordatorios"
 	L["Setting_ResetIgnoredSessionTT"] = "Restablece los recordatorios ignorados."
+	L["Setting_DisableScreenEffectsInstances"] = "Ocultar en estancias"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "Oculta los efectos de color de pantalla del clima durante determinadas estancias específicas."
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -343,6 +363,13 @@ if LOCALE == "esES" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Invitación a canal de voz de Battle.net"
 	L["Sound_AlarmClockWarning2"] = "Aviso de alarma 2"
 	L["Sound_UI_BnetToast"] = "Notificación emergente de Battle.net"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
 
@@ -424,6 +451,8 @@ if LOCALE == "deDE" then
 	L["Setting_ResetIgnoredSession"] = "Ignorierte Erinnerungen zurücksetzen"
 	L["Btn_Reset"] = "Erinnerungen zurücksetzen"
 	L["Setting_ResetIgnoredSessionTT"] = "Setzt ignorierte Erinnerungen zurück."
+	L["Setting_DisableScreenEffectsInstances"] = "In Instanzen ausblenden"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "Blendet die Wetter-Bildschirmfarbeneffekte in bestimmten Instanzen aus."
 
 	L["Weather_Settings"] = "Wetter - Einstellungen"
 	L["UIScale"] = UI_SCALE
@@ -450,6 +479,13 @@ if LOCALE == "deDE" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Battle.net-Sprachchat-Kanaleinladung"
 	L["Sound_AlarmClockWarning2"] = "Weckerwarnung 2"
 	L["Sound_UI_BnetToast"] = "Battle.net-Benachrichtigung"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
 
@@ -531,6 +567,8 @@ if LOCALE == "frFR" then
 	L["Setting_ResetIgnoredSession"] = "Réinitialiser les rappels ignorés"
 	L["Btn_Reset"] = "Réinitialiser les rappels"
 	L["Setting_ResetIgnoredSessionTT"] = "Réinitialise les rappels ignorés."
+	L["Setting_DisableScreenEffectsInstances"] = "Masquer en instance"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "Masque les effets de couleur d’écran liés à la météo dans certaines instances spécifiques."
 
 	L["Weather_Settings"] = "Météo - Paramètres"
 	L["UIScale"] = UI_SCALE
@@ -557,6 +595,13 @@ if LOCALE == "frFR" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Invitation au canal vocal Battle.net"
 	L["Sound_AlarmClockWarning2"] = "Alerte de réveil 2"
 	L["Sound_UI_BnetToast"] = "Notification Battle.net"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
 
@@ -638,6 +683,8 @@ if LOCALE == "itIT" then
 	L["Setting_ResetIgnoredSession"] = "Ripristina promemoria ignorati"
 	L["Btn_Reset"] = "Ripristina promemoria"
 	L["Setting_ResetIgnoredSessionTT"] = "Ripristina i promemoria ignorati."
+	L["Setting_DisableScreenEffectsInstances"] = "Nascondi nelle istanze"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "Nasconde gli effetti colore dello schermo per il meteo durante specifiche istanze."
 
 	L["Weather_Settings"] = "Meteo - Impostazioni"
 	L["UIScale"] = UI_SCALE
@@ -664,6 +711,13 @@ if LOCALE == "itIT" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Invito al canale vocale Battle.net"
 	L["Sound_AlarmClockWarning2"] = "Avviso sveglia 2"
 	L["Sound_UI_BnetToast"] = "Notifica Battle.net"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
 
@@ -745,6 +799,8 @@ if LOCALE == "ptBR" then
 	L["Setting_ResetIgnoredSession"] = "Redefinir lembretes ignorados"
 	L["Btn_Reset"] = "Redefinir lembretes"
 	L["Setting_ResetIgnoredSessionTT"] = "Redefine os lembretes ignorados."
+	L["Setting_DisableScreenEffectsInstances"] = "Ocultar em instâncias"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "Oculta os efeitos de cor da tela do clima durante instâncias específicas."
 
 	L["Weather_Settings"] = "Clima - Configurações"
 	L["UIScale"] = UI_SCALE
@@ -771,6 +827,13 @@ if LOCALE == "ptBR" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Convite para canal de voz Battle.net"
 	L["Sound_AlarmClockWarning2"] = "Aviso de despertador 2"
 	L["Sound_UI_BnetToast"] = "Notificação Battle.net"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 -- Note that the EU Portuguese WoW client also
 -- uses the Brazilian Portuguese locale code.
@@ -854,6 +917,8 @@ if LOCALE == "ruRU" then
 	L["Setting_ResetIgnoredSession"] = "Сбросить игнорируемые напоминания"
 	L["Btn_Reset"] = "Сбросить напоминания"
 	L["Setting_ResetIgnoredSessionTT"] = "Сбрасывает игнорируемые напоминания."
+	L["Setting_DisableScreenEffectsInstances"] = "Скрывать в подземельях"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "Скрывает цветовые эффекты экрана погоды в определённых игровых подземельях и сценариях."
 
 	L["Weather_Settings"] = "Погода - Настройки"
 	L["UIScale"] = UI_SCALE
@@ -880,6 +945,13 @@ if LOCALE == "ruRU" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Приглашение в голосовой канал Battle.net"
 	L["Sound_AlarmClockWarning2"] = "Предупреждение будильника 2"
 	L["Sound_UI_BnetToast"] = "Уведомление Battle.net"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
 
@@ -961,6 +1033,8 @@ if LOCALE == "koKR" then
 	L["Setting_ResetIgnoredSession"] = "무시된 알림 초기화"
 	L["Btn_Reset"] = "알림 초기화"
 	L["Setting_ResetIgnoredSessionTT"] = "무시된 알림을 초기화합니다."
+	L["Setting_DisableScreenEffectsInstances"] = "인스턴스에서 숨기기"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "특정 인스턴스에서 날씨 화면 색상 효과를 숨깁니다."
 
 	L["Weather_Settings"] = "날씨 - 설정"
 	L["UIScale"] = UI_SCALE
@@ -987,6 +1061,13 @@ if LOCALE == "koKR" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Battle.net 음성 대화 채널 초대"
 	L["Sound_AlarmClockWarning2"] = "알람 시계 경고 2"
 	L["Sound_UI_BnetToast"] = "Battle.net 알림"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
 
@@ -1068,6 +1149,8 @@ if LOCALE == "zhCN" then
 	L["Setting_ResetIgnoredSession"] = "重置已忽略提醒"
 	L["Btn_Reset"] = "重置提醒"
 	L["Setting_ResetIgnoredSessionTT"] = "重置已忽略的提醒。"
+	L["Setting_DisableScreenEffectsInstances"] = "在副本中隐藏"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "在某些特定副本中隐藏天气屏幕颜色效果。"
 
 	L["Weather_Settings"] = "天气 - 设置"
 	L["UIScale"] = UI_SCALE
@@ -1094,6 +1177,13 @@ if LOCALE == "zhCN" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Battle.net 语音聊天频道邀请"
 	L["Sound_AlarmClockWarning2"] = "闹钟警告 2"
 	L["Sound_UI_BnetToast"] = "Battle.net 提示通知"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
 
@@ -1175,6 +1265,8 @@ if LOCALE == "zhTW" then
 	L["Setting_ResetIgnoredSession"] = "重設已忽略提醒"
 	L["Btn_Reset"] = "重設提醒"
 	L["Setting_ResetIgnoredSessionTT"] = "重設已忽略的提醒。"
+	L["Setting_DisableScreenEffectsInstances"] = "在副本中隱藏"
+	L["Setting_DisableScreenEffectsInstancesTT"] = "在某些特定副本中隱藏天氣畫面色彩效果。"
 
 	L["Weather_Settings"] = "天氣 - 設定"
 	L["UIScale"] = UI_SCALE
@@ -1201,5 +1293,12 @@ if LOCALE == "zhTW" then
 	L["Sound_BNET_VoiceChat_ChannelInvite"] = "Battle.net 語音聊天頻道邀請"
 	L["Sound_AlarmClockWarning2"] = "鬧鐘警告 2"
 	L["Sound_UI_BnetToast"] = "Battle.net 提示通知"
+
+	L["Widget_ACT_Battlegrounds"] = BATTLEFIELDS
+	L["Widget_ACT_Arena"] = ARENA
+	L["Widget_ACT_Dungeon"] = LFG_TYPE_DUNGEON .. "/" .. PLAYER_DIFFICULTY_MYTHIC_PLUS
+	L["Widget_ACT_Raids"] = RAID
+	L["Widget_ACT_ScenariosDelves"] = SCENARIOS_PVEFRAME .. "/" .. DELVES_LABEL
+	L["Widget_ACT_Housing"] = BINDING_HEADER_HOUSING_SYSTEM
 
 return end
