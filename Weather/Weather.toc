@@ -5,9 +5,9 @@
 ## Version: @project-version@
 ## IconTexture: Interface\AddOns\Weather\Textures\Forecast\rain_heavy.png
 ## SavedVariables: WeatherAddon_DB
-## X-Curse-Project-ID: 
+## X-Curse-Project-ID: 1537521
 ## X-WoWI-ID: 
-## X-Wago-ID: 
+## X-Wago-ID: nKW3gqKE
 
 ## Title-enUS: Weather
 ## Notes-enUS: Various weather-related options and features, including indoor weather ambience and accessory reminders.
