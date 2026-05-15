@@ -1,5 +1,13 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.2a
+
+Minimap forecast icon & almanac now ignore "unknown" weather encounters
+
+Added "secret" Ctrl+Shift+Right Click to delete subzone data
+
+Modified the "Clear" sun icon to be slightly more stylized to indicate it is in fact a sun and not a circular cheese wheel or dinner plate
+
 # 0.0.2
 
 Added options to hide Screen Effects in certain instance types

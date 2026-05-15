@@ -113,48 +113,6 @@ function WeatherAddon:CreateDataUI(parentFrame)
 	rightListBg:SetTextureSliceMargins(10, 10, 10, 10);
 	rightListBg:SetTextureSliceMode(Enum.UITextureSliceMode.Stretched);
 
-	local rightDP = CreateDataProvider();
-	local rightView = CreateScrollBoxListLinearView();
-	rightView:SetElementExtent(20);
-	rightView:SetElementInitializer("Frame", function(row, data)
-		if not row.isInitialized then
-			row.label = row:CreateFontString(nil, "OVERLAY", "GameFontNormal");
-			row.label:SetPoint("LEFT", 10, 0);
-			
-			row.timeLabel = row:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
-			row.timeLabel:SetPoint("RIGHT", -10, 0);
-			
-			row.isInitialized = true;
-		end
-
-		if data.isHeader then
-			row.label:SetText(data.text);
-			row.label:SetFontObject("GameFontHighlight");
-			row.label:SetTextColor(1, 0.82, 0);
-			row.timeLabel:SetText("");
-
-			row:SetScript("OnEnter", function()
-				GameTooltip:SetOwner(row, "ANCHOR_RIGHT");
-				GameTooltip:SetText(data.text, 1, 0.82, 0);
-				GameTooltip:AddLine(string.format(L["TimeObserved"], FormatDuration(data.subzoneTotal)), 1, 1, 1);
-				GameTooltip:Show();
-			end)
-			row:SetScript("OnLeave", function()
-				GameTooltip:Hide();
-			end)
-		else
-			row.label:SetText("  " .. data.weatherType);
-			row.label:SetFontObject("GameFontHighlight");
-			row.label:SetTextColor(0.8, 0.8, 0.8);
-			row.timeLabel:SetText(data.pct .. "%");
-			
-			row:SetScript("OnEnter", nil);
-			row:SetScript("OnLeave", nil);
-		end
-	end)
-	ScrollUtil.InitScrollBoxListWithScrollBar(rightScroll, rightScrollBar, rightView);
-	rightScroll:SetDataProvider(rightDP);
-
 	local function CollectLeafMapIDs(node, result)
 		if node.hasData then
 			result[#result + 1] = node.mapID;
@@ -187,6 +145,60 @@ function WeatherAddon:CreateDataUI(parentFrame)
 		end
 		return result;
 	end
+
+	local DeleteSubzoneEntry 
+
+	local rightDP = CreateDataProvider();
+	local rightView = CreateScrollBoxListLinearView();
+	rightView:SetElementExtent(20);
+	rightView:SetElementInitializer("Frame", function(row, data)
+		if not row.isInitialized then
+			row.label = row:CreateFontString(nil, "OVERLAY", "GameFontNormal");
+			row.label:SetPoint("LEFT", 10, 0);
+			
+			row.timeLabel = row:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
+			row.timeLabel:SetPoint("RIGHT", -10, 0);
+			
+			row.isInitialized = true;
+		end
+
+		if data.isHeader then
+			row:EnableMouse(true);
+			row.label:SetText(data.text);
+			row.label:SetFontObject("GameFontHighlight");
+			row.label:SetTextColor(1, 0.82, 0);
+			row.timeLabel:SetText("");
+
+			row:SetScript("OnEnter", function()
+				GameTooltip:SetOwner(row, "ANCHOR_RIGHT");
+				GameTooltip:SetText(data.text, 1, 0.82, 0);
+				GameTooltip:AddLine(string.format(L["TimeObserved"], FormatDuration(data.subzoneTotal)), 1, 1, 1);
+				GameTooltip:Show();
+			end)
+			row:SetScript("OnLeave", function()
+				GameTooltip:Hide();
+			end)
+			row:SetScript("OnMouseUp", function(self, button)
+				if button == "RightButton" and IsControlKeyDown() and IsShiftKeyDown() then
+					DeleteSubzoneEntry(data.text);
+					PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF);
+				end
+			end)
+		else
+			row:EnableMouse(false);
+
+			row.label:SetText("  " .. data.weatherType);
+			row.label:SetFontObject("GameFontHighlight");
+			row.label:SetTextColor(0.8, 0.8, 0.8);
+			row.timeLabel:SetText(data.pct .. "%");
+			
+			row:SetScript("OnEnter", nil);
+			row:SetScript("OnLeave", nil);
+			row:SetScript("OnMouseUp", nil);
+		end
+	end)
+	ScrollUtil.InitScrollBoxListWithScrollBar(rightScroll, rightScrollBar, rightView);
+	rightScroll:SetDataProvider(rightDP);
 
 	local function RefreshRightPanel()
 		local subzonesToShow = nil;
@@ -228,8 +240,10 @@ function WeatherAddon:CreateDataUI(parentFrame)
 
 		local grandTotal = 0;
 		for _, weathers in pairs(subzonesToShow) do
-			for _, duration in pairs(weathers) do
-				grandTotal = grandTotal + duration;
+			for wType, duration in pairs(weathers) do
+				if wType ~= L["Unknown"] then
+					grandTotal = grandTotal + duration;
+				end
 			end
 		end
 
@@ -244,15 +258,19 @@ function WeatherAddon:CreateDataUI(parentFrame)
 		for _, subzone in ipairs(sortedSubzones) do
 			local weathers = subzonesToShow[subzone];
 			local subzoneTotal = 0;
-			for _, duration in pairs(weathers) do
-				subzoneTotal = subzoneTotal + duration;
+			for wType, duration in pairs(weathers) do
+				if wType ~= L["Unknown"] then
+					subzoneTotal = subzoneTotal + duration;
+				end
 			end
 
 			rows[#rows + 1] = { isHeader = true, text = subzone, subzoneTotal = subzoneTotal };
 
 			local sortedWeathers = {};
 			for wType in pairs(weathers) do
-				sortedWeathers[#sortedWeathers + 1] = wType;
+				if wType ~= L["Unknown"] then
+					sortedWeathers[#sortedWeathers + 1] = wType;
+				end
 			end
 			table.sort(sortedWeathers);
 
@@ -291,6 +309,41 @@ function WeatherAddon:CreateDataUI(parentFrame)
 				end
 			end
 		end)
+	end
+
+	DeleteSubzoneEntry = function(subzone)
+		local mapIDs = {};
+
+		if selectedContinentName and mapTree and mapTree[selectedContinentName] then
+			for _, child in ipairs(mapTree[selectedContinentName].children) do
+				CollectLeafMapIDs(child, mapIDs);
+			end
+		elseif selectedMapID then
+			local selectedNode = nil;
+			if mapTree then
+				for _, cont in pairs(mapTree) do
+					selectedNode = FindNode(selectedMapID, cont.children);
+					if selectedNode then break; end
+				end
+			end
+			if selectedNode and #selectedNode.children > 0 then
+				CollectLeafMapIDs(selectedNode, mapIDs);
+			else
+				mapIDs[1] = selectedMapID;
+			end
+		end
+
+		for _, mapID in ipairs(mapIDs) do
+			if Weather_Collector_DB[mapID] then
+				Weather_Collector_DB[mapID][subzone] = nil;
+				if not next(Weather_Collector_DB[mapID]) then
+					Weather_Collector_DB[mapID] = nil;
+				end
+			end
+		end
+
+		view:RefreshMapList();
+		RefreshRightPanel();
 	end
 
 	local INDENT = 12;

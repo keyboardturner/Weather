@@ -419,8 +419,10 @@ local function GetCollectorStats(mapID, subzone)
 	local regionalTotal = 0;
 	for _, subzoneData in pairs(zoneData) do
 		for weatherName, duration in pairs(subzoneData) do
-			regional[weatherName] = (regional[weatherName] or 0) + duration;
-			regionalTotal = regionalTotal + duration;
+			if weatherName ~= L["Unknown"] then
+				regional[weatherName] = (regional[weatherName] or 0) + duration;
+				regionalTotal = regionalTotal + duration;
+			end
 		end
 	end
 
@@ -429,8 +431,10 @@ local function GetCollectorStats(mapID, subzone)
 	local subzoneDB = subzone and zoneData[subzone];
 	if subzoneDB then
 		for weatherName, duration in pairs(subzoneDB) do
-			localData[weatherName] = duration;
-			localTotal = localTotal + duration;
+			if weatherName ~= L["Unknown"] then
+				localData[weatherName] = duration;
+				localTotal = localTotal + duration;
+			end
 		end
 	end
 
