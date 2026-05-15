@@ -1,5 +1,11 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.2
+
+Added options to hide Screen Effects in certain instance types
+
+Added search filter to the Almanac to allow searching by zone, subzone, and weather type
+
 # 0.0.1
 
 Release version:

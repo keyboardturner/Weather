@@ -572,9 +572,16 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			if node.name:lower():find(query, 1, true) then return true; end
 			-- check subzones
 			if node.mapID and Weather_Collector_DB[node.mapID] then
-				for subzoneName, _ in pairs(Weather_Collector_DB[node.mapID]) do
+				for subzoneName, weathers in pairs(Weather_Collector_DB[node.mapID]) do
 					if subzoneName:lower():find(query, 1, true) then
 						return true;
+					end
+					if type(weathers) == "table" then
+						for wType, _ in pairs(weathers) do
+							if wType:lower():find(query, 1, true) then
+								return true;
+							end
+						end
 					end
 				end
 			end
@@ -588,11 +595,21 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			local selfMatches = query == "" or forceKeep or node.name:lower():find(query, 1, true) ~= nil;
 			-- check subzones
 			if not selfMatches and node.mapID and Weather_Collector_DB[node.mapID] then
-				for subzoneName, _ in pairs(Weather_Collector_DB[node.mapID]) do
+				for subzoneName, weathers in pairs(Weather_Collector_DB[node.mapID]) do
 					if subzoneName:lower():find(query, 1, true) then
 						selfMatches = true;
 						break;
 					end
+					if type(weathers) == "table" then
+						for wType, _ in pairs(weathers) do
+							if wType:lower():find(query, 1, true) then
+								selfMatches = true;
+								break;
+							end
+						end
+					end
+					
+					if selfMatches then break; end
 				end
 			end
 			local childMatches = false;
