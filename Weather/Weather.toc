@@ -1,0 +1,59 @@
+## Interface: 120005
+## Title: Weather
+## Notes: Various weather-related options and features, including indoor weather ambience and accessory reminders.
+## Author: Keyboardturner
+## Version: @project-version@
+## IconTexture: 
+## SavedVariables: WeatherAddon_DB
+## X-Curse-Project-ID: 
+## X-WoWI-ID: 
+## X-Wago-ID: 
+
+## Title-enUS: Weather
+## Notes-enUS: Various weather-related options and features, including indoor weather ambience and accessory reminders.
+## Title-esMX: Clima
+## Notes-esMX: Varias opciones y funciones relacionadas con el clima, incluyendo ambiente climático en interiores y recordatorios de accesorios.
+## Title-esES: Clima
+## Notes-esES: Varias opciones y funciones relacionadas con el clima, incluyendo ambiente climático en interiores y recordatorios de accesorios.
+## Title-deDE: Wetter
+## Notes-deDE: Verschiedene wetterbezogene Optionen und Funktionen, einschließlich Wetteratmosphäre in Innenräumen und Zubehör-Erinnerungen.
+## Title-frFR: Météo
+## Notes-frFR: Diverses options et fonctionnalités liées à la météo, y compris l’ambiance météo intérieure et les rappels d’accessoires.
+## Title-itIT: Meteo
+## Notes-itIT: Varie opzioni e funzionalità relative al meteo, inclusa l'atmosfera meteorologica al chiuso e i promemoria accessori.
+## Title-ptBR: Clima
+## Notes-ptBR: Várias opções e recursos relacionados ao clima, incluindo ambiência climática interna e lembretes de acessórios.
+## Title-ruRU: Погода
+## Notes-ruRU: Различные параметры и функции, связанные с погодой, включая атмосферу погоды в помещениях и напоминания об аксессуарах.
+## Title-koKR: 날씨
+## Notes-koKR: 실내 날씨 분위기 및 액세서리 알림을 포함한 다양한 날씨 관련 옵션과 기능입니다.
+## Title-zhCN: 天气
+## Notes-zhCN: 各种与天气相关的选项和功能，包括室内天气氛围与饰品提醒。
+## Title-zhTW: 天氣
+## Notes-zhTW: 各種與天氣相關的選項與功能，包括室內天氣氛圍與飾品提醒。
+
+## Category-enUS: Roleplay
+## Category-deDE: Rollenspiel
+## Category-esES: Juego de rol
+## Category-esMX: Juego de rol
+## Category-frFR: Jeu de rôle
+## Category-itIT: Gioco di Ruolo
+## Category-koKR: 역할 수행
+## Category-ptBR: Interpretação de Papel
+## Category-ruRU: Ролевая игра
+## Category-zhCN: 角色扮演
+## Category-zhTW: 角色扮演
+
+Libs\LibStub\LibStub.lua
+Libs\LibForecast\lib.xml
+
+Localization.lua
+Data_SlowFallSpells.lua
+Core.lua
+FallingSound.lua
+SkyridingSound.lua
+Reminders.lua
+SettingsUI.lua
+CollectorPanel.lua
+ForecastIcon.lua
+ScreenEffects.lua

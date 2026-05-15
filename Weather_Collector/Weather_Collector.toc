@@ -1,0 +1,47 @@
+## Interface: 120005
+## Title: Weather_Collector
+## Notes: Data storage collection for historical observed weather.
+## Author: Keyboardturner
+## Version: @project-version@
+## IconTexture: 
+## SavedVariables: Weather_Collector_DB
+## Dependencies: Weather
+
+## Title-enUS: Weather_Collector
+## Notes-enUS: Data storage collection for historical observed weather.
+## Title-esMX: Clima_Collector
+## Notes-esMX: Colección de almacenamiento de datos para clima observado históricamente.
+## Title-esES: Clima_Collector
+## Notes-esES: Colección de almacenamiento de datos para clima observado históricamente.
+## Title-deDE: Wetter_Collector
+## Notes-deDE: Datenspeichersammlung für historisch beobachtetes Wetter.
+## Title-frFR: Météo_Collector
+## Notes-frFR: Collection de stockage de données pour les observations météorologiques historiques.
+## Title-itIT: Meteo_Collector
+## Notes-itIT: Raccolta di archiviazione dati per il meteo osservato storicamente.
+## Title-ptBR: Clima_Collector
+## Notes-ptBR: Coleção de armazenamento de dados para clima observado historicamente.
+## Title-ruRU: Погода_Collector
+## Notes-ruRU: Хранилище данных для исторически наблюдаемой погоды.
+## Title-koKR: 날씨_Collector
+## Notes-koKR: 과거 관측 날씨 데이터를 저장하는 수집기입니다.
+## Title-zhCN: 天气_Collector
+## Notes-zhCN: 用于历史观测天气的数据存储集合。
+## Title-zhTW: 天氣_Collector
+## Notes-zhTW: 用於歷史觀測天氣的資料儲存集合。
+
+## Category-enUS: Roleplay
+## Category-deDE: Rollenspiel
+## Category-esES: Juego de rol
+## Category-esMX: Juego de rol
+## Category-frFR: Jeu de rôle
+## Category-itIT: Gioco di Ruolo
+## Category-koKR: 역할 수행
+## Category-ptBR: Interpretação de Papel
+## Category-ruRU: Ролевая игра
+## Category-zhCN: 角色扮演
+## Category-zhTW: 角色扮演
+
+Localization.lua
+Data_ForceWeatherSpells.lua
+Collector.lua
