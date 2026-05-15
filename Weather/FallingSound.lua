@@ -30,7 +30,7 @@ local function HasSlowFallBuff()
 	
 	for _, spellID in ipairs(WeatherAddon.SlowFallEffectTable) do
 		local aura = C_UnitAuras.GetPlayerAuraBySpellID(spellID);
-		if aura then
+		if aura and not issecretvalue(aura) then -- doesn't throw errors but not cancelling in combat can make the noise persist too long
 			return true;
 		end
 	end
@@ -79,7 +79,7 @@ local function CheckFallingState()
 			isGliding = C_PlayerInfo.GetGlidingInfo();
 		end
 
-		local isBusyOrInvalid = UnitIsDeadOrGhost("player") or isGliding or UnitInVehicle("player") or UnitHasVehicleUI("player") or HasSlowFallBuff();
+		local isBusyOrInvalid = UnitAffectingCombat("player") or UnitIsDeadOrGhost("player") or isGliding or UnitInVehicle("player") or UnitHasVehicleUI("player") or HasSlowFallBuff();
 		
 		if isBusyOrInvalid then
 			currentlyFalling = false;
