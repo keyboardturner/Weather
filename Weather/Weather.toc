@@ -3,7 +3,7 @@
 ## Notes: Various weather-related options and features, including indoor weather ambience and accessory reminders.
 ## Author: Keyboardturner
 ## Version: @project-version@
-## IconTexture: 
+## IconTexture: Interface\AddOns\Weather\Textures\Forecast\rain_heavy.png
 ## SavedVariables: WeatherAddon_DB
 ## X-Curse-Project-ID: 
 ## X-WoWI-ID: 

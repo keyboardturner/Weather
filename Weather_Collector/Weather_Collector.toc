@@ -3,7 +3,7 @@
 ## Notes: Data storage collection for historical observed weather.
 ## Author: Keyboardturner
 ## Version: @project-version@
-## IconTexture: 
+## IconTexture: Interface\AddOns\Weather\Textures\Forecast\partialcloudy_day.png
 ## SavedVariables: Weather_Collector_DB
 ## Dependencies: Weather
 
