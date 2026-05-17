@@ -98,6 +98,18 @@ if LOCALE == "enUS" then
 	L["Setting_TooltipWeatherStatsTT"] = "Toggle the tooltip weather stats for regional and local weather in the current weather tooltip."
 	L["RegionalWeatherOption"] = "Regional Weather"
 	L["LocalWeatherOption"] = "Local Weather"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "Accessories Ambience Volume"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "Adjusts the volume of accessories ambience."
+	L["Setting_SpellAmbienceVolume"] = "Spell Ambience Volume"
+	L["Setting_SpellAmbienceVolumeTT"] = "Adjusts the volume of spells ambience."
+	L["Setting_FallingVolume"] = "Falling Ambience Volume"
+	L["Setting_FallingVolumeTT"] = "Adjusts the volume of falling ambience."
+	L["Setting_SkyridingVolume"] = "Skyriding Ambience Volume"
+	L["Setting_SkyridingVolumeTT"] = "Adjusts the volume of skyriding ambience."
+	L["Setting_WeatherIntensityPercent"] = "Weather Intensity Percentage"
+	L["Setting_WeatherIntensityPercentTT"] = "Displays the weather intensity as a percentage rather than a 0 - 1 scale."
 
 	L["Weather_Settings"] = "Weather - Settings"
 	L["UIScale"] = UI_SCALE
@@ -229,6 +241,18 @@ if LOCALE == "esMX" then
 	L["Setting_TooltipWeatherStatsTT"] = "Activa las estadísticas meteorológicas regionales y locales en el tooltip del clima actual."
 	L["RegionalWeatherOption"] = "Clima regional"
 	L["LocalWeatherOption"] = "Clima local"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "Volumen de ambiente de accesorios"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "Ajusta el volumen del ambiente de accesorios."
+	L["Setting_SpellAmbienceVolume"] = "Volumen de ambiente de hechizos"
+	L["Setting_SpellAmbienceVolumeTT"] = "Ajusta el volumen del ambiente de hechizos."
+	L["Setting_FallingVolume"] = "Volumen de ambiente al caer"
+	L["Setting_FallingVolumeTT"] = "Ajusta el volumen del ambiente al caer."
+	L["Setting_SkyridingVolume"] = "Volumen de ambiente de surcacielos"
+	L["Setting_SkyridingVolumeTT"] = "Ajusta el volumen del ambiente de surcacielos."
+	L["Setting_WeatherIntensityPercent"] = "Porcentaje de intensidad del clima"
+	L["Setting_WeatherIntensityPercentTT"] = "Muestra la intensidad del clima como porcentaje en lugar de una escala de 0 a 1."
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -349,6 +373,18 @@ if LOCALE == "esES" then
 	L["Setting_TooltipWeatherStatsTT"] = "Activa las estadísticas meteorológicas regionales y locales en el tooltip del tiempo actual."
 	L["RegionalWeatherOption"] = "Clima regional"
 	L["LocalWeatherOption"] = "Clima local"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "Volumen de ambiente de accesorios"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "Ajusta el volumen del ambiente de accesorios."
+	L["Setting_SpellAmbienceVolume"] = "Volumen de ambiente de hechizos"
+	L["Setting_SpellAmbienceVolumeTT"] = "Ajusta el volumen del ambiente de hechizos."
+	L["Setting_FallingVolume"] = "Volumen de ambiente de caída"
+	L["Setting_FallingVolumeTT"] = "Ajusta el volumen del ambiente de caída."
+	L["Setting_SkyridingVolume"] = "Volumen de ambiente de surcacielos"
+	L["Setting_SkyridingVolumeTT"] = "Ajusta el volumen del ambiente de surcacielos."
+	L["Setting_WeatherIntensityPercent"] = "Porcentaje de intensidad meteorológica"
+	L["Setting_WeatherIntensityPercentTT"] = "Muestra la intensidad meteorológica como porcentaje en lugar de una escala de 0 a 1."
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -469,6 +505,18 @@ if LOCALE == "deDE" then
 	L["Setting_TooltipWeatherStatsTT"] = "Aktiviert Wetterstatistiken für regionales und lokales Wetter im aktuellen Wetter-Tooltip."
 	L["RegionalWeatherOption"] = "Regionales Wetter"
 	L["LocalWeatherOption"] = "Lokales Wetter"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "Lautstärke der Accessoire-Umgebung"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "Passt die Lautstärke der Accessoire-Umgebung an."
+	L["Setting_SpellAmbienceVolume"] = "Lautstärke der Zauber-Umgebung"
+	L["Setting_SpellAmbienceVolumeTT"] = "Passt die Lautstärke der Zauber-Umgebung an."
+	L["Setting_FallingVolume"] = "Lautstärke der Fallgeräusche"
+	L["Setting_FallingVolumeTT"] = "Passt die Lautstärke der Fallgeräusche an."
+	L["Setting_SkyridingVolume"] = "Lautstärke der Himmelsreiten-Umgebung"
+	L["Setting_SkyridingVolumeTT"] = "Passt die Lautstärke der Himmelsreiten-Umgebung an."
+	L["Setting_WeatherIntensityPercent"] = "Wetterintensität in Prozent"
+	L["Setting_WeatherIntensityPercentTT"] = "Zeigt die Wetterintensität als Prozentwert statt auf einer Skala von 0 bis 1 an."
 
 	L["Weather_Settings"] = "Wetter - Einstellungen"
 	L["UIScale"] = UI_SCALE
@@ -589,6 +637,18 @@ if LOCALE == "frFR" then
 	L["Setting_TooltipWeatherStatsTT"] = "Active les statistiques météo régionales et locales dans l’infobulle météo actuelle."
 	L["RegionalWeatherOption"] = "Météo régionale"
 	L["LocalWeatherOption"] = "Météo locale"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "Volume d’ambiance des accessoires"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "Ajuste le volume de l’ambiance des accessoires."
+	L["Setting_SpellAmbienceVolume"] = "Volume d’ambiance des sorts"
+	L["Setting_SpellAmbienceVolumeTT"] = "Ajuste le volume de l’ambiance des sorts."
+	L["Setting_FallingVolume"] = "Volume d’ambiance de chute"
+	L["Setting_FallingVolumeTT"] = "Ajuste le volume de l’ambiance de chute."
+	L["Setting_SkyridingVolume"] = "Volume d’ambiance de vol dynamique"
+	L["Setting_SkyridingVolumeTT"] = "Ajuste le volume de l’ambiance de vol dynamique."
+	L["Setting_WeatherIntensityPercent"] = "Pourcentage d’intensité météo"
+	L["Setting_WeatherIntensityPercentTT"] = "Affiche l’intensité météo sous forme de pourcentage au lieu d’une échelle de 0 à 1."
 
 	L["Weather_Settings"] = "Météo - Paramètres"
 	L["UIScale"] = UI_SCALE
@@ -709,6 +769,18 @@ if LOCALE == "itIT" then
 	L["Setting_TooltipWeatherStatsTT"] = "Attiva le statistiche meteo regionali e locali nel tooltip del meteo attuale."
 	L["RegionalWeatherOption"] = "Meteo regionale"
 	L["LocalWeatherOption"] = "Meteo locale"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "Volume ambiente accessori"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "Regola il volume dell’ambiente degli accessori."
+	L["Setting_SpellAmbienceVolume"] = "Volume ambiente incantesimi"
+	L["Setting_SpellAmbienceVolumeTT"] = "Regola il volume dell’ambiente degli incantesimi."
+	L["Setting_FallingVolume"] = "Volume ambiente caduta"
+	L["Setting_FallingVolumeTT"] = "Regola il volume dell’ambiente di caduta."
+	L["Setting_SkyridingVolume"] = "Volume ambiente volo dinamico"
+	L["Setting_SkyridingVolumeTT"] = "Regola il volume dell’ambiente di volo dinamico."
+	L["Setting_WeatherIntensityPercent"] = "Percentuale intensità meteo"
+	L["Setting_WeatherIntensityPercentTT"] = "Mostra l’intensità meteo come percentuale invece che su una scala da 0 a 1."
 
 	L["Weather_Settings"] = "Meteo - Impostazioni"
 	L["UIScale"] = UI_SCALE
@@ -829,6 +901,18 @@ if LOCALE == "ptBR" then
 	L["Setting_TooltipWeatherStatsTT"] = "Ativa as estatísticas climáticas regionais e locais na dica do clima atual."
 	L["RegionalWeatherOption"] = "Clima regional"
 	L["LocalWeatherOption"] = "Clima local"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "Volume da ambiência de acessórios"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "Ajusta o volume da ambiência dos acessórios."
+	L["Setting_SpellAmbienceVolume"] = "Volume da ambiência de feitiços"
+	L["Setting_SpellAmbienceVolumeTT"] = "Ajusta o volume da ambiência dos feitiços."
+	L["Setting_FallingVolume"] = "Volume da ambiência de queda"
+	L["Setting_FallingVolumeTT"] = "Ajusta o volume da ambiência de queda."
+	L["Setting_SkyridingVolume"] = "Volume da ambiência de Skyriding"
+	L["Setting_SkyridingVolumeTT"] = "Ajusta o volume da ambiência de Skyriding."
+	L["Setting_WeatherIntensityPercent"] = "Porcentagem da intensidade do clima"
+	L["Setting_WeatherIntensityPercentTT"] = "Exibe a intensidade do clima como porcentagem em vez de uma escala de 0 a 1."
 
 	L["Weather_Settings"] = "Clima - Configurações"
 	L["UIScale"] = UI_SCALE
@@ -951,6 +1035,18 @@ if LOCALE == "ruRU" then
 	L["Setting_TooltipWeatherStatsTT"] = "Включает отображение региональной и локальной статистики погоды в подсказке текущей погоды."
 	L["RegionalWeatherOption"] = "Региональная погода"
 	L["LocalWeatherOption"] = "Местная погода"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "Громкость атмосферных звуков аксессуаров"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "Регулирует громкость атмосферных звуков аксессуаров."
+	L["Setting_SpellAmbienceVolume"] = "Громкость атмосферных звуков заклинаний"
+	L["Setting_SpellAmbienceVolumeTT"] = "Регулирует громкость атмосферных звуков заклинаний."
+	L["Setting_FallingVolume"] = "Громкость звуков падения"
+	L["Setting_FallingVolumeTT"] = "Регулирует громкость атмосферных звуков падения."
+	L["Setting_SkyridingVolume"] = "Громкость небесной езды"
+	L["Setting_SkyridingVolumeTT"] = "Регулирует громкость атмосферных звуков небесной езды."
+	L["Setting_WeatherIntensityPercent"] = "Процент интенсивности погоды"
+	L["Setting_WeatherIntensityPercentTT"] = "Отображает интенсивность погоды в процентах вместо шкалы от 0 до 1."
 
 	L["Weather_Settings"] = "Погода - Настройки"
 	L["UIScale"] = UI_SCALE
@@ -1071,6 +1167,18 @@ if LOCALE == "koKR" then
 	L["Setting_TooltipWeatherStatsTT"] = "현재 날씨 툴팁에 지역 및 현지 날씨 통계를 표시합니다."
 	L["RegionalWeatherOption"] = "지역 날씨"
 	L["LocalWeatherOption"] = "현지 날씨"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "장신구 환경음 볼륨"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "장신구 환경음의 볼륨을 조절합니다."
+	L["Setting_SpellAmbienceVolume"] = "주문 환경음 볼륨"
+	L["Setting_SpellAmbienceVolumeTT"] = "주문 환경음의 볼륨을 조절합니다."
+	L["Setting_FallingVolume"] = "낙하 환경음 볼륨"
+	L["Setting_FallingVolumeTT"] = "낙하 환경음의 볼륨을 조절합니다."
+	L["Setting_SkyridingVolume"] = "하늘비행 환경음 볼륨"
+	L["Setting_SkyridingVolumeTT"] = "하늘비행 환경음의 볼륨을 조절합니다."
+	L["Setting_WeatherIntensityPercent"] = "날씨 강도 백분율"
+	L["Setting_WeatherIntensityPercentTT"] = "날씨 강도를 0~1 범위 대신 백분율로 표시합니다."
 
 	L["Weather_Settings"] = "날씨 - 설정"
 	L["UIScale"] = UI_SCALE
@@ -1191,6 +1299,18 @@ if LOCALE == "zhCN" then
 	L["Setting_TooltipWeatherStatsTT"] = "在当前天气提示中显示区域和本地天气统计信息。"
 	L["RegionalWeatherOption"] = "区域天气"
 	L["LocalWeatherOption"] = "本地天气"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "饰品环境音量"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "调整饰品环境音量。"
+	L["Setting_SpellAmbienceVolume"] = "法术环境音量"
+	L["Setting_SpellAmbienceVolumeTT"] = "调整法术环境音量。"
+	L["Setting_FallingVolume"] = "坠落环境音量"
+	L["Setting_FallingVolumeTT"] = "调整坠落环境音量。"
+	L["Setting_SkyridingVolume"] = "驭空术环境音量"
+	L["Setting_SkyridingVolumeTT"] = "调整驭空术环境音量。"
+	L["Setting_WeatherIntensityPercent"] = "天气强度百分比"
+	L["Setting_WeatherIntensityPercentTT"] = "以百分比而非 0 - 1 范围显示天气强度。"
 
 	L["Weather_Settings"] = "天气 - 设置"
 	L["UIScale"] = UI_SCALE
@@ -1311,6 +1431,18 @@ if LOCALE == "zhTW" then
 	L["Setting_TooltipWeatherStatsTT"] = "在目前天氣提示中顯示區域與當地天氣統計資訊。"
 	L["RegionalWeatherOption"] = "區域天氣"
 	L["LocalWeatherOption"] = "當地天氣"
+	L["Setting_IndoorWeatherVolume"] = VOLUME
+	L["Setting_IndoorWeatherVolumeTT"] = OPTION_TOOLTIP_AMBIENCE_VOLUME
+	L["Setting_AccessoriesAmbienceVolume"] = "飾品環境音量"
+	L["Setting_AccessoriesAmbienceVolumeTT"] = "調整飾品環境音量。"
+	L["Setting_SpellAmbienceVolume"] = "法術環境音量"
+	L["Setting_SpellAmbienceVolumeTT"] = "調整法術環境音量。"
+	L["Setting_FallingVolume"] = "墜落環境音量"
+	L["Setting_FallingVolumeTT"] = "調整墜落環境音量。"
+	L["Setting_SkyridingVolume"] = "御空術環境音量"
+	L["Setting_SkyridingVolumeTT"] = "調整御空術環境音量。"
+	L["Setting_WeatherIntensityPercent"] = "天氣強度百分比"
+	L["Setting_WeatherIntensityPercentTT"] = "以百分比而非 0 - 1 範圍顯示天氣強度。"
 
 	L["Weather_Settings"] = "天氣 - 設定"
 	L["UIScale"] = UI_SCALE

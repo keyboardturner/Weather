@@ -12,13 +12,14 @@ local SkyridingSounds = {
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_000_faded.ogg", duration = 10 },
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_001_faded.ogg", duration = 10 },
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_002_faded.ogg", duration = 10 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_003_faded.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_003_faded.ogg", duration = 9.5 },
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_004_faded.ogg", duration = 10 },
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_005_faded.ogg", duration = 10 },
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_006_faded.ogg", duration = 10 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_007_faded.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_007_faded.ogg", duration = 9.5 },
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_008_faded.ogg", duration = 10 },
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_009_faded.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\skyriding_lvl2_010_faded.ogg", duration = 9.5 },
 };
 
 local MAX_LAYERS = 6;
@@ -40,8 +41,17 @@ local function PlayLayerLoop(layerIndex)
 	local randomIndex = math.random(1, #SkyridingSounds);
 	local soundData = SkyridingSounds[randomIndex];
 	
-	local willPlay, handle = PlaySoundFile(soundData.file, SOUND_CHANNEL);
-	if willPlay and handle then
+	local userVol = WeatherAddon_DB.SkyridingVolume or 0.6;
+	
+	local volumeIncrease = (layerIndex - 1) * 0.075;
+	
+	local finalVol = math.min(1.0, userVol + volumeIncrease);
+	
+	C_EncounterEvents.SetEventSound(8, 0, { file = soundData.file, channel = SOUND_CHANNEL, volume = finalVol });
+	local handle = C_EncounterEvents.PlayEventSound(8, 0);
+	C_EncounterEvents.SetEventSound(8, 0, nil);
+	
+	if handle then
 		layer.handles[handle] = true;
 		
 		-- clean up the handle from the tracking table once its duration finishes naturally

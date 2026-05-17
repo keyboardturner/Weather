@@ -4,6 +4,12 @@
 
 Added option to toggle the regional and local weathers in the minimap forecast button
 
+Added option to choose weather intensity style in the chat message as either a percentage or decimal scale
+
+Added volume sliders to Indoor Weather Ambience, Accessories Ambience, Spells Ambience, and Falling / Skyriding Ambience
+ - These were previously playing in the "UI SFX" channel while copying the ambience volume value - they should now all be in the Ambience channel by default (much like rain in game) and no longer scaling with the SFX channel
+ - The base volume of these sound files are now boosted, but the default volumes are kept low. This should additionally help accomodate odd disparities between combined volume sliders without raising the base volume
+
 Modified the collector panel:
  - Changed the expand/collapse buttons of sub-headers to be less prominent compared to the main headers
  - Added a totalled regional weather section at the top of the subzone list similar to the icon buttons

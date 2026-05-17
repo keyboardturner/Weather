@@ -2,6 +2,7 @@ local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
 local LibForecast = LibStub("LibForecast-1.0");
 
+local SOUND_CHANNEL = "Ambience";
 local frame = CreateFrame("Frame");
 
 local function Print(text)
@@ -40,17 +41,17 @@ local lastWarnedExpiration = 0;
 
 local WeatherSounds = {
 	[LibForecast.WeatherType.Rain] = {
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_000_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_001_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_002_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_003_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_004_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_005_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_006_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_007_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_008_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_009_faded_boosted.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_010_faded_boosted.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_000_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_001_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_002_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_003_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_004_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_005_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_006_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_007_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_008_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_009_faded_boostedx2.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_010_faded_boostedx2.ogg", duration = 60 },
 	},
 	[LibForecast.WeatherType.Snow] = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_000_faded.ogg", duration = 60 },
@@ -109,70 +110,64 @@ WeatherAddon.UmbrellaItemIDsBuffIDs = UmbrellaItemIDsBuffIDs;
 
 local SpellSounds = {
 	[17] = { -- power word shield
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded_30percent.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded.ogg", duration = 60 },
 	},
 	[235450] = { -- prismatic barrier
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded_30percent.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded.ogg", duration = 60 },
 	},
 	[11426] = { -- ice barrier
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded_30percent.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded.ogg", duration = 60 },
 	},
 	[235313] = { -- blazing barrier
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_000_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_001_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_002_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_003_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_004_faded_30percent.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_000_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_001_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_002_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_003_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_004_faded.ogg", duration = 60 },
 	},
 	[108416] = { -- dark pact
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_000_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_001_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_002_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_003_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_004_faded_30percent.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_000_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_001_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_002_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_003_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_004_faded.ogg", duration = 60 },
 	},
 	[186265] = { -- aspect of the turtle
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded_30percent.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded.ogg", duration = 60 },
 	},
 	[642] = { -- divine shield
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded_30percent.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_000_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_001_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_002_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_003_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\magicshield_004_faded.ogg", duration = 60 },
 	},
 	[48707] = { -- anti-magic shell
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_000_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_001_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_002_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_003_faded_30percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_004_faded_30percent.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_000_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_001_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_002_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_003_faded.ogg", duration = 60 },
+		{ file = "Interface\\AddOns\\Weather\\Sounds\\firebarrier_004_faded.ogg", duration = 60 },
 	},
 
 
-	[122708] = { -- yak mount
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_000_faded_80percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_001_faded_80percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_002_faded_80percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_003_faded_80percent.ogg", duration = 60 },
-		{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_004_faded_80percent.ogg", duration = 60 },
-	},
+	[122708] = CopyTable(UmbrellaSounds),
 };
 
 WeatherAddon.SpellSounds = SpellSounds;
@@ -271,16 +266,22 @@ local function PlayNextTrack()
 	if WeatherAddon_DB.WeatherToggles and not WeatherAddon_DB.WeatherToggles[tostring(weatherType)] then return; end
 
 	local soundTable = nil;
+	local categoryVol = 0.5;
 	
 	if isIndoors then
 		soundTable = WeatherSounds[weatherType];
+		local volKey = "WeatherVolume_" .. weatherType;
+		local volDefault = WeatherAddon.Defaults and WeatherAddon.Defaults[volKey] or 0.5;
+		categoryVol = WeatherAddon_DB[volKey] ~= nil and WeatherAddon_DB[volKey] or volDefault;
 	elseif hasUmbrella and not isIndoors then
 		if weatherType == LibForecast.WeatherType.Rain then
 			soundTable = UmbrellaSounds;
+			categoryVol = WeatherAddon_DB.UmbrellaVolume or 0.5;
 		end
 	elseif activeSpellID and not isIndoors then
 		if weatherType == LibForecast.WeatherType.Rain then
 			soundTable = SpellSounds[activeSpellID];
+			categoryVol = WeatherAddon_DB.SpellVolume or 0.5;
 		end
 	end
 	
@@ -291,10 +292,11 @@ local function PlayNextTrack()
 		local soundFile = soundData.file;
 		local soundDuration = soundData.duration;
 		
-		local ambVol = tonumber(C_CVar.GetCVar("Sound_AmbienceVolume")) or 1;
-		local finalVol = ambVol * weatherIntensity;
+		--local ambVol = tonumber(C_CVar.GetCVar("Sound_AmbienceVolume")) or 1;
 		
-		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, { file = soundFile, volume = finalVol });
+		local finalVol = weatherIntensity * categoryVol;
+		
+		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, { file = soundFile, channel = SOUND_CHANNEL, volume = finalVol });
 		
 		local soundHandle = C_EncounterEvents.PlayEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID);
 		
@@ -312,6 +314,13 @@ local function PlayNextTrack()
 		playbackTimer = C_Timer.NewTimer(nextTrackDelay, PlayNextTrack);
 	else
 		StopAllAmbience();
+	end
+end
+
+function WeatherAddon:RefreshAmbience()
+	if isSoundEnabled and (isIndoors or hasUmbrella or activeSpellID) then
+		StopAllAmbience();
+		RunNextFrame(PlayNextTrack); -- sometimes the ambience would die completely
 	end
 end
 
@@ -337,7 +346,9 @@ local function CheckEnvironment()
 end
 
 local function OnEvent(self, event, ...)
-	if event == "CVAR_UPDATE" then
+	if event == "PLAYER_LOGOUT" then
+		StopAllAmbience();
+	elseif event == "CVAR_UPDATE" then
 		local cvarName = ...;
 		if cvarName == "Sound_EnableAllSound" or cvarName == "Sound_EnableAmbience" or cvarName == "Sound_MasterVolume" or cvarName == "Sound_AmbienceVolume" then
 			CheckEnvironment();
@@ -352,9 +363,17 @@ local function OnWeatherChanged(event, weatherType, weatherInfo)
 	if WeatherAddon_DB and WeatherAddon_DB.WeatherMessages then
 		local weatherName = WeatherNames[weatherType] or "Unknown";
 		local intensity = weatherInfo.intensity or 0;
+		
+		local formattedIntensity;
+		if WeatherAddon_DB.DisplayIntensityAsPercentage then
+			formattedIntensity = math.floor((intensity * 100) + 0.5) .. "%";
+		else
+			formattedIntensity = tostring(intensity);
+		end
+		
 		local recordID = weatherInfo.recordID;
 		
-		Print(string.format(L["ChangedWeather"], weatherName, intensity));
+		Print(string.format(L["ChangedWeather"], weatherName, formattedIntensity));
 	end
 
 	if isSoundEnabled and (isIndoors or hasUmbrella or activeSpellID) then
@@ -376,6 +395,7 @@ frame:RegisterEvent("PLAYER_ENTERING_WORLD");
 frame:RegisterEvent("ZONE_CHANGED");
 frame:RegisterEvent("ZONE_CHANGED_INDOORS");
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+frame:RegisterEvent("PLAYER_LOGOUT");
 
 frame:SetScript("OnEvent", OnEvent);
 LibForecast.RegisterCallback(frame, "OnWeatherChanged", OnWeatherChanged);

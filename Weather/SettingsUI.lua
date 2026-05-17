@@ -16,6 +16,7 @@ local Defaults = {
 	ReminderSoundVolume = 1.0,
 	OnlyInCharacter = false,
 	WeatherMessages = true,
+	DisplayIntensityAsPercentage = true,
 	SpellToggles = {},
 	EnableFallingSound = true,
 	EnableSkyridingSound = true,
@@ -34,6 +35,13 @@ local Defaults = {
 		Regional = true,
 		Local = true,
 	},
+	["WeatherVolume_" .. LibForecast.WeatherType.Rain] = 0.25,
+	["WeatherVolume_" .. LibForecast.WeatherType.Snow] = 0.50,
+	["WeatherVolume_" .. LibForecast.WeatherType.Sandstorm] = 0.40,
+	UmbrellaVolume = 0.50,
+	SpellVolume = 0.50,
+	FallingVolume = 0.50,
+	SkyridingVolume = 0.25,
 };
 
 WeatherAddon.Defaults = Defaults;
@@ -447,7 +455,7 @@ local function InitializeActionButton(buttonRow, data)
 	if not buttonRow.actionBtn then
 		buttonRow.actionBtn = CreateFrame("Button", nil, buttonRow, "UIPanelButtonTemplate");
 		buttonRow.actionBtn:SetPoint("RIGHT", buttonRow, "RIGHT", -10, 0);
-		buttonRow.actionBtn:SetSize(120, 24);
+		buttonRow.actionBtn:SetSize(150, 24);
 
 		buttonRow.actionLabel = buttonRow:CreateFontString(nil, "OVERLAY", "GameTooltipText");
 		buttonRow.actionLabel:SetPoint("LEFT", buttonRow, "LEFT", 24+15, 0);
@@ -574,6 +582,33 @@ local function BuildSettingsData()
 		options = dynamicWeatherOptions
 	});
 
+	if WeatherAddon.WeatherSounds then
+		local sortedWeatherTypes = {};
+		for weatherType in pairs(WeatherAddon.WeatherSounds) do
+			table.insert(sortedWeatherTypes, weatherType);
+		end
+		table.sort(sortedWeatherTypes);
+
+		for _, weatherType in ipairs(sortedWeatherTypes) do
+			local weatherName = WeatherAddon.WeatherNames and WeatherAddon.WeatherNames[weatherType] or tostring(weatherType);
+			local dbKey = "WeatherVolume_" .. weatherType;
+			table.insert(allSettingsData, {
+				type = "slider",
+				key = dbKey,
+				label = string.format("%s %s", weatherName, L["Setting_IndoorWeatherVolume"]),
+				tooltip = L["Setting_IndoorWeatherVolumeTT"],
+				min = 0.0, max = 1.0, step = 0.05,
+				defaultValue = Defaults[dbKey] or 0.25,
+				formatter = function(value)
+					return math.floor(value * 100 + 0.5) .. "%";
+				end,
+				callback = function(value)
+					if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
+				end,
+			});
+		end
+	end
+
 	table.insert(allSettingsData, { type = "header", label = L["Header_AccessorySettings"] });
 
 	table.insert(allSettingsData, {
@@ -590,6 +625,21 @@ local function BuildSettingsData()
 		label = L["Setting_TrackedAccessories"],
 		tooltip = L["Setting_TrackedAccessoriesTT"],
 		options = dynamicUmbrellaOptions
+	});
+
+	table.insert(allSettingsData, {
+		type = "slider",
+		key = "UmbrellaVolume",
+		label = L["Setting_AccessoriesAmbienceVolume"],
+		tooltip = L["Setting_AccessoriesAmbienceVolumeTT"],
+		min = 0.0, max = 1.0, step = 0.05,
+		defaultValue = Defaults.UmbrellaVolume,
+		formatter = function(value)
+			return math.floor(value * 100 + 0.5) .. "%";
+		end,
+		callback = function(value)
+			if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
+		end,
 	});
 
 	table.insert(allSettingsData, {
@@ -654,6 +704,21 @@ local function BuildSettingsData()
 	});
 
 	table.insert(allSettingsData, {
+		type = "slider",
+		key = "SpellVolume",
+		label = L["Setting_SpellAmbienceVolume"],
+		tooltip = L["Setting_SpellAmbienceVolumeTT"],
+		min = 0.0, max = 1.0, step = 0.05,
+		defaultValue = Defaults.SpellVolume,
+		formatter = function(value)
+			return math.floor(value * 100 + 0.5) .. "%";
+		end,
+		callback = function(value)
+			if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
+		end,
+	});
+
+	table.insert(allSettingsData, {
 		type = "action_button",
 		key = "ResetIgnoredSession",
 		label = L["Setting_ResetIgnoredSession"],
@@ -682,6 +747,18 @@ local function BuildSettingsData()
 	});
 
 	table.insert(allSettingsData, {
+		type = "slider",
+		key = "FallingVolume",
+		label = L["Setting_FallingVolume"],
+		tooltip = L["Setting_FallingVolumeTT"],
+		min = 0.0, max = 1.0, step = 0.05,
+		defaultValue = Defaults.FallingVolume,
+		formatter = function(value)
+			return math.floor(value * 100 + 0.5) .. "%";
+		end,
+	});
+
+	table.insert(allSettingsData, {
 		type = "checkbox",
 		key = "EnableSkyridingSound",
 		label = L["Setting_SkyridingSounds"],
@@ -691,6 +768,18 @@ local function BuildSettingsData()
 			if WeatherAddon.UpdateSkyridingSoundState then
 				WeatherAddon:UpdateSkyridingSoundState();
 			end
+		end,
+	});
+
+	table.insert(allSettingsData, {
+		type = "slider",
+		key = "SkyridingVolume",
+		label = L["Setting_SkyridingVolume"],
+		tooltip = L["Setting_SkyridingVolumeTT"],
+		min = 0.0, max = 1.0, step = 0.05,
+		defaultValue = Defaults.SkyridingVolume,
+		formatter = function(value)
+			return math.floor(value * 100 + 0.5) .. "%";
 		end,
 	});
 
@@ -846,6 +935,14 @@ local function BuildSettingsData()
 		label = L["Setting_WeatherMessages"],
 		tooltip = L["Setting_WeatherMessagesTT"],
 		default = Defaults.WeatherMessages,
+	});
+
+	table.insert(allSettingsData, {
+		type = "checkbox",
+		key = "DisplayIntensityAsPercentage",
+		label = L["Setting_WeatherIntensityPercent"],
+		tooltip = L["Setting_WeatherIntensityPercentTT"], 
+		default = Defaults.DisplayIntensityAsPercentage,
 	});
 
 	-- automatically generate search text for all entries

@@ -9,12 +9,12 @@ local TICK_RATE = 0.1;
 local SOUND_FALLOFF = 50;
 
 local FallingSounds = {
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_000_faded_60percent.ogg", duration = 10 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_001_faded_60percent.ogg", duration = 10 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_002_faded_60percent.ogg", duration = 10 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_003_faded_60percent.ogg", duration = 10 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_004_faded_60percent.ogg", duration = 10 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_005_faded_60percent.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_000_faded.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_001_faded.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_002_faded.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_003_faded.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_004_faded.ogg", duration = 10 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_005_faded.ogg", duration = 10 },
 };
 
 local fallTicker = nil;
@@ -60,12 +60,19 @@ local function StartNextFallingSound()
 	local randomIndex = math.random(1, #FallingSounds);
 	local soundData = FallingSounds[randomIndex];
 	
-	local willPlay, handle = PlaySoundFile(soundData.file, SOUND_CHANNEL);
-	if willPlay then
+	--local ambVol = tonumber(C_CVar.GetCVar("Sound_AmbienceVolume")) or 1;
+	local userVol = WeatherAddon_DB.FallingVolume or 0.6;
+	local finalVol = userVol;
+	
+	C_EncounterEvents.SetEventSound(8, 0, { file = soundData.file, channel = SOUND_CHANNEL, volume = finalVol });
+	local handle = C_EncounterEvents.PlayEventSound(8, 0);
+	C_EncounterEvents.SetEventSound(8, 0, nil);
+	
+	if handle then
 		activeSoundHandle = handle;
 	end
 
-	--queue to account for next sound to crossfade
+	-- queue to account for next sound to crossfade
 	playbackTimer = C_Timer.NewTimer(soundData.duration - 2.5, StartNextFallingSound);
 end
 
