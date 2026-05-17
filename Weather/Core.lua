@@ -83,16 +83,16 @@ local WeatherSounds = {
 WeatherAddon.WeatherSounds = WeatherSounds;
 
 local UmbrellaSounds = {
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_000_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_001_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_002_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_003_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_004_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_005_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_006_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_007_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_008_faded_80percent.ogg", duration = 60 },
-	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_009_faded_80percent.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_000_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_001_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_002_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_003_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_004_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_005_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_006_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_007_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_008_faded.ogg", duration = 60 },
+	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_009_faded.ogg", duration = 60 },
 };
 
 local UmbrellaItemIDsBuffIDs = {
