@@ -1,5 +1,9 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.3a
+
+Reminders now hide upon entering combat (oops)
+
 # 0.0.3
 
 Added option to toggle the regional and local weathers in the minimap forecast button

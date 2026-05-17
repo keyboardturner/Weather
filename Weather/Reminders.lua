@@ -134,27 +134,36 @@ local function MergeDefaults(target, defaults)
 end
 
 popup:RegisterEvent("ADDON_LOADED");
-popup:SetScript("OnEvent", function(self, event, loadedAddon)
-	if loadedAddon == AddonName then
-		local name, realm = UnitFullName("player");
-		if not realm or realm == "" then
-			realm = GetRealmName();
+popup:RegisterEvent("PLAYER_REGEN_DISABLED");
+popup:SetScript("OnEvent", function(self, event, ...)
+	if event == "ADDON_LOADED" then
+		local loadedAddon = ...;
+		if loadedAddon == AddonName then
+			local name, realm = UnitFullName("player");
+			if not realm or realm == "" then
+				realm = GetRealmName();
+			end
+			playerKey = name .. "-" .. realm;
+
+			WeatherAddon_DB = WeatherAddon_DB or {};
+			
+			if WeatherAddon.Defaults then
+				MergeDefaults(WeatherAddon_DB, WeatherAddon.Defaults);
+			end
+
+			WeatherAddon_DB.CharacterParasols = WeatherAddon_DB.CharacterParasols or {};
+
+			if WeatherAddon_DB.CharacterParasols[playerKey] == nil then
+				WeatherAddon_DB.CharacterParasols[playerKey] = WeatherAddon.CharDefaults.SelectedParasol;
+			end
+
+			self:UnregisterEvent("ADDON_LOADED");
 		end
-		playerKey = name .. "-" .. realm;
-
-		WeatherAddon_DB = WeatherAddon_DB or {};
-		
-		if WeatherAddon.Defaults then
-			MergeDefaults(WeatherAddon_DB, WeatherAddon.Defaults);
-		end
-
-		WeatherAddon_DB.CharacterParasols = WeatherAddon_DB.CharacterParasols or {};
-
-		if WeatherAddon_DB.CharacterParasols[playerKey] == nil then
-			WeatherAddon_DB.CharacterParasols[playerKey] = WeatherAddon.CharDefaults.SelectedParasol;
-		end
-
-		self:UnregisterEvent("ADDON_LOADED");
+	elseif event == "PLAYER_REGEN_DISABLED" then
+		self:SetScript("OnUpdate", nil);
+		self.animState = "IDLE";
+		self:SetAlpha(0);
+		self:Hide();
 	end
 end)
 
