@@ -1,5 +1,11 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.3
+
+Modified the collector panel:
+ - Changed the expand/collapse buttons of sub-headers to be less prominent compared to the main headers
+ - Added a totalled regional weather section at the top of the subzone list similar to the icon buttons
+
 # 0.0.2a
 
 Minimap forecast icon & almanac now ignore "unknown" weather encounters
