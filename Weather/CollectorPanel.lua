@@ -153,6 +153,9 @@ function WeatherAddon:CreateDataUI(parentFrame)
 	rightView:SetElementExtent(20);
 	rightView:SetElementInitializer("Frame", function(row, data)
 		if not row.isInitialized then
+			row.bg = row:CreateTexture(nil, "BACKGROUND");
+			row.bg:SetAllPoints();
+
 			row.label = row:CreateFontString(nil, "OVERLAY", "GameFontNormal");
 			row.label:SetPoint("LEFT", 10, 0);
 			
@@ -162,16 +165,42 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			row.isInitialized = true;
 		end
 
-		if data.isHeader then
+		if data.isSpacer then
+			row:EnableMouse(false);
+			row.bg:SetTexCoord(0, 1, 0, 1);
+			row.bg:SetAtlas("completiondialog-dragonflightcampaign-divider");
+			row.bg:Show();
+			--row.bg:Hide();
+			row.label:SetText("");
+			row.timeLabel:SetText("");
+			row:SetScript("OnEnter", nil);
+			row:SetScript("OnLeave", nil);
+			row:SetScript("OnMouseUp", nil);
+		elseif data.isHeader or data.isRegionalHeader then
 			row:EnableMouse(true);
 			row.label:SetText(data.text);
-			row.label:SetFontObject("GameFontHighlight");
-			row.label:SetTextColor(1, 0.82, 0);
 			row.timeLabel:SetText("");
+
+			if data.isRegionalHeader then
+				row.label:SetFontObject("GameFontNormal");
+				row.label:SetTextColor(0.4, 0.8, 1);
+				--row.bg:SetColorTexture(0.2, 0.4, 0.6, 0.25);
+				row.bg:SetTexCoord(0, 1, 0, 1);
+				row.bg:SetAtlas("QuestLog-tab");
+				row.bg:Show();
+			else
+				row.label:SetFontObject("GameFontHighlight");
+				row.label:SetTextColor(1, 0.82, 0);
+				row.bg:Hide();
+			end
 
 			row:SetScript("OnEnter", function()
 				GameTooltip:SetOwner(row, "ANCHOR_RIGHT");
-				GameTooltip:SetText(data.text, 1, 0.82, 0);
+				if data.isRegionalHeader then
+					GameTooltip:SetText(string.format(L["RegionalWeather"], data.text), 1, 0.82, 0);
+				else
+					GameTooltip:SetText(data.text, 1, 0.82, 0);
+				end
 				GameTooltip:AddLine(string.format(L["TimeObserved"], FormatDuration(data.subzoneTotal)), 1, 1, 1);
 				GameTooltip:Show();
 			end)
@@ -179,6 +208,7 @@ function WeatherAddon:CreateDataUI(parentFrame)
 				GameTooltip:Hide();
 			end)
 			row:SetScript("OnMouseUp", function(self, button)
+				if data.isRegionalHeader then return end
 				if button == "RightButton" and IsControlKeyDown() and IsShiftKeyDown() then
 					DeleteSubzoneEntry(data.text);
 					PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF);
@@ -186,10 +216,20 @@ function WeatherAddon:CreateDataUI(parentFrame)
 			end)
 		else
 			row:EnableMouse(false);
-
 			row.label:SetText("  " .. data.weatherType);
 			row.label:SetFontObject("GameFontHighlight");
-			row.label:SetTextColor(0.8, 0.8, 0.8);
+
+			if data.isRegionalData then
+				row.label:SetTextColor(0.9, 0.9, 0.9);
+				row.bg:SetAtlas("CreditsScreen-Highlight");
+				row.bg:SetTexCoord(.05, .95, .1, .9);
+				row.bg:Show();
+				--row.bg:SetColorTexture(0.2, 0.4, 0.6, 0.1);
+			else
+				row.label:SetTextColor(0.8, 0.8, 0.8);
+				row.bg:Hide();
+			end
+
 			row.timeLabel:SetText(data.pct .. "%");
 			
 			row:SetScript("OnEnter", nil);
@@ -239,15 +279,41 @@ function WeatherAddon:CreateDataUI(parentFrame)
 		end
 
 		local grandTotal = 0;
+		local regionalWeathers = {};
+
 		for _, weathers in pairs(subzonesToShow) do
 			for wType, duration in pairs(weathers) do
 				if wType ~= L["Unknown"] then
 					grandTotal = grandTotal + duration;
+					regionalWeathers[wType] = (regionalWeathers[wType] or 0) + duration;
 				end
 			end
 		end
 
 		timeBarLabel:SetText(string.format(L["TimeObserved"], FormatDuration(grandTotal)));
+
+		local regionName = selectedContinentName;
+		if not regionName and selectedMapID then
+			local info = C_Map.GetMapInfo(selectedMapID);
+			regionName = info and info.name or string.format(L["UnknownMap"], selectedMapID);
+		end
+		
+		if grandTotal > 0 then
+			rows[#rows + 1] = { isRegionalHeader = true, text = regionName, subzoneTotal = grandTotal };
+
+			local sortedRegWeathers = {};
+			for wType in pairs(regionalWeathers) do
+				sortedRegWeathers[#sortedRegWeathers + 1] = wType;
+			end
+			table.sort(sortedRegWeathers);
+
+			for _, wType in ipairs(sortedRegWeathers) do
+				local pct = grandTotal > 0 and math.floor((regionalWeathers[wType] / grandTotal) * 100 + 0.5) or 0;
+				rows[#rows + 1] = { isRegionalData = true, weatherType = wType, pct = pct };
+			end
+
+			rows[#rows + 1] = { isSpacer = true };
+		end
 
 		local sortedSubzones = {};
 		for subzone in pairs(subzonesToShow) do
@@ -448,11 +514,11 @@ function WeatherAddon:CreateDataUI(parentFrame)
 
 			--local isCollapsed = collapsedNodes[data.key];
 			if isCollapsed then
-				row.collapseBtn:SetNormalAtlas("UI-QuestTrackerButton-Expand-All");
-				row.collapseBtn:SetPushedAtlas("UI-QuestTrackerButton-Expand-All-Pressed");
+				row.collapseBtn:SetNormalAtlas("UI-QuestTrackerButton-Secondary-Expand");
+				row.collapseBtn:SetPushedAtlas("UI-QuestTrackerButton-Secondary-Expand-Pressed");
 			else
-				row.collapseBtn:SetNormalAtlas("UI-QuestTrackerButton-Collapse-All");
-				row.collapseBtn:SetPushedAtlas("UI-QuestTrackerButton-Collapse-All-Pressed");
+				row.collapseBtn:SetNormalAtlas("UI-QuestTrackerButton-Secondary-Collapse");
+				row.collapseBtn:SetPushedAtlas("UI-QuestTrackerButton-Secondary-Collapse-Pressed");
 			end
 
 			row.collapseBtn:SetScript("OnClick", function()
