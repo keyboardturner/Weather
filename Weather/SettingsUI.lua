@@ -30,6 +30,10 @@ local Defaults = {
 	ScreenEffectOpacity = 1.0,
 	ScreenEffectWeatherToggles = {},
 	ScreenEffectInstances = {},
+	TooltipWeatherStats = {
+		Regional = true,
+		Local = true,
+	},
 };
 
 WeatherAddon.Defaults = Defaults;
@@ -821,6 +825,17 @@ local function BuildSettingsData()
 				WeatherAddon:UpdateMinimapButtonPosition();
 			end
 		end,
+	});
+
+	table.insert(allSettingsData, {
+		type = "multicheckbox",
+		key = "TooltipWeatherStats",
+		label = L["Setting_TooltipWeatherStats"],
+		tooltip = L["Setting_TooltipWeatherStatsTT"],
+		options = {
+			{ key = "Regional", text = L["RegionalWeatherOption"], default = true },
+			{ key = "Local", text = L["LocalWeatherOption"], default = true },
+		},
 	});
 
 	table.insert(allSettingsData, { type = "header", label = L["Header_Notifications"] });

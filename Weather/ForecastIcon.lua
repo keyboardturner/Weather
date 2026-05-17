@@ -467,6 +467,13 @@ function WeatherAddon:AppendWeatherTooltip(tooltip)
 		tooltip:AddLine(string.format(L["CurrentWeatherIntensity"], weatherName, intensityStr), 1, 1, 1);
 	end
 
+	local showRegional = true;
+	local showLocal = true;
+	if WeatherAddon_DB and WeatherAddon_DB.TooltipWeatherStats then
+		showRegional = WeatherAddon_DB.TooltipWeatherStats.Regional ~= false;
+		showLocal = WeatherAddon_DB.TooltipWeatherStats.Local ~= false;
+	end
+
 	-- from Weather_Collector
 	local mapID = C_Map.GetBestMapForUnit("player");
 	local subzone = GetMinimapZoneText();
@@ -476,7 +483,7 @@ function WeatherAddon:AppendWeatherTooltip(tooltip)
 
 	local regional, regionalTotal, localData, localTotal = GetCollectorStats(mapID, subzone);
 
-	if regional and regionalTotal > 0 then
+	if showRegional and regional and regionalTotal > 0 then
 		local mapInfo = mapID and C_Map.GetMapInfo(mapID);
 		local zoneName = (mapInfo and mapInfo.name) or "Unknown Zone"; -- if no map info there's probably something weird (housing) going on
 
@@ -492,7 +499,7 @@ function WeatherAddon:AppendWeatherTooltip(tooltip)
 		end
 	end
 
-	if localData and localTotal > 0 and subzone then
+	if showLocal and localData and localTotal > 0 and subzone then
 		tooltip:AddLine(" ");
 		tooltip:AddLine(string.format(L["LocalWeather"], subzone), 1, 0.82, 0);
 
