@@ -2,9 +2,13 @@
 
 # 0.0.3
 
+Added option to toggle the regional and local weathers in the minimap forecast button
+
 Modified the collector panel:
  - Changed the expand/collapse buttons of sub-headers to be less prominent compared to the main headers
  - Added a totalled regional weather section at the top of the subzone list similar to the icon buttons
+
+Adjusted the reminders to pause if all parasols are on cooldown
 
 # 0.0.2a
 

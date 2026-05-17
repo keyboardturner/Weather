@@ -337,6 +337,49 @@ popup.content:SetScript("OnUpdate", function(self)
 	end
 end)
 
+local function GetParasolCooldown()
+	if not playerKey or not WeatherAddon_DB or not WeatherAddon_DB.CharacterParasols then 
+		return 0; 
+	end
+	
+	local charSelection = WeatherAddon_DB.CharacterParasols[playerKey];
+	local minRemaining = nil;
+	local currentTime = GetTime();
+
+	if charSelection == "Random" then
+		for itemIDStr, isEnabled in pairs(WeatherAddon_DB.UmbrellaToggles) do
+			local itemID = tonumber(itemIDStr);
+			if isEnabled and C_ToyBox.IsToyUsable(itemID) then
+				local start, duration = C_Item.GetItemCooldown(itemID);
+				local remaining = 0;
+				if start and start > 0 and duration > 0 then
+					remaining = (start + duration) - currentTime;
+				end
+				
+				if not minRemaining or remaining < minRemaining then
+					minRemaining = remaining;
+				end
+				
+				if remaining <= 0 then
+					return 0;
+				end
+			end
+		end
+	else
+		local itemID = tonumber(charSelection);
+		if itemID and C_ToyBox.IsToyUsable(itemID) then
+			local start, duration = C_Item.GetItemCooldown(itemID);
+			local remaining = 0;
+			if start and start > 0 and duration > 0 then
+				remaining = (start + duration) - currentTime;
+			end
+			minRemaining = remaining;
+		end
+	end
+
+	return minRemaining and math.max(0, minRemaining) or 0;
+end
+
 function WeatherAddon:CheckUmbrellaReminder()
 	if not WeatherAddon_DB.EnableReminders or sessionIgnored then return; end
 
@@ -394,19 +437,26 @@ function WeatherAddon:CheckUmbrellaReminder()
 	local shouldShow = false;
 
 	if not activeAura then
-		if (currentTime - lastReminderTime > REMINDER_THROTTLE_SECONDS) then
-			shouldShow = true;
-			lastReminderTime = currentTime;
-			lastWarnedExpiration = 0;
-		else
+		local throttleRemaining = 0;
+		if (currentTime - lastReminderTime <= REMINDER_THROTTLE_SECONDS) then
+			throttleRemaining = REMINDER_THROTTLE_SECONDS - (currentTime - lastReminderTime);
+		end
+
+		local itemCDRemaining = GetParasolCooldown();
+		
+		local totalWaitTime = math.max(throttleRemaining, itemCDRemaining);
+
+		if totalWaitTime > 0 then
 			if not queuedReminderTimer then
-				local cooldownRemaining = REMINDER_THROTTLE_SECONDS - (currentTime - lastReminderTime);
-				
-				queuedReminderTimer = C_Timer.NewTimer(cooldownRemaining, function()
+				queuedReminderTimer = C_Timer.NewTimer(totalWaitTime + 5, function()
 					queuedReminderTimer = nil;
 					WeatherAddon:CheckUmbrellaReminder();
 				end)
 			end
+		else
+			shouldShow = true;
+			lastReminderTime = currentTime;
+			lastWarnedExpiration = 0;
 		end
 	else
 		if activeAura.expirationTime > 0 then
