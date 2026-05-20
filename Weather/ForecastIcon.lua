@@ -30,7 +30,12 @@ local WeatherForecastTextures = {
 		Medium = "Interface\\AddOns\\Weather\\Textures\\Forecast\\sandstorm_medium.png",
 		Heavy = "Interface\\AddOns\\Weather\\Textures\\Forecast\\sandstorm_heavy.png",
 	},
-	Miscellaneous = "Interface\\AddOns\\Weather\\Textures\\Forecast\\misc_unknown.png",
+	Firestorm = {
+		Light = "Interface\\AddOns\\Weather\\Textures\\Forecast\\firestorm_light.png",
+		Medium = "Interface\\AddOns\\Weather\\Textures\\Forecast\\firestorm_medium.png",
+		Heavy = "Interface\\AddOns\\Weather\\Textures\\Forecast\\firestorm_heavy.png",
+	},
+	Miscellaneous = "Interface\\AddOns\\Weather\\Textures\\Forecast\\misc_unknown.png", -- also unknown
 };
 
 WeatherAddon.WeatherIcons = {};
@@ -233,8 +238,8 @@ local function UpdateWeatherIcon()
 		newTexturePath = WeatherForecastTextures.Snow[intensityStr];
 	elseif weatherType == LibForecast.WeatherType.Sandstorm then
 		newTexturePath = WeatherForecastTextures.Sandstorm[intensityStr];
-	--elseif weatherType == LibForecast.WeatherType.Firestorm then
-		--newTexturePath = WeatherForecastTextures.Firestorm[intensityStr];
+	elseif weatherType == LibForecast.WeatherType.Firestorm then
+		newTexturePath = WeatherForecastTextures.Firestorm[intensityStr];
 	end
 
 	if not newTexturePath or newTexturePath == currentIconTexture or isIconTransitioning then return; end
