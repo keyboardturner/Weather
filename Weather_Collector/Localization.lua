@@ -20,6 +20,7 @@ if LOCALE == "enUS" then
 	L["Rain"] = "Rain"
 	L["Snow"] = "Snow"
 	L["Sandstorm"] = "Sandstorm"
+	L["Firestorm"] = "Firestorm"
 	L["Miscellaneous"] = BINDING_HEADER_MISC
 	L["Unknown"] = UNKNOWN
 	

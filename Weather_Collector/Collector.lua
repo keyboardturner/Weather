@@ -12,6 +12,7 @@ local currentSubzone = nil;
 local currentWeatherType = nil;
 local weatherStartTime = nil;
 local isForcedWeatherActive = false;
+local isSceneActive = false;
 
 local WeatherNames = {
 	[LibForecast.WeatherType.Clear] = L["Clear"],
@@ -19,6 +20,7 @@ local WeatherNames = {
 	[LibForecast.WeatherType.Snow] = L["Snow"],
 	[LibForecast.WeatherType.Sandstorm] = L["Sandstorm"],
 	[LibForecast.WeatherType.Miscellaneous] = L["Miscellaneous"],
+	[LibForecast.WeatherType.Firestorm] = L["Firestorm"],
 	[LibForecast.WeatherType.Unknown] = L["Unknown"],
 };
 
@@ -72,7 +74,11 @@ local function UpdateAuraState()
 			weatherStartTime = nil;
 		else
 			isForcedWeatherActive = false;
-			weatherStartTime = currentTime;
+			if not isSceneActive then
+				weatherStartTime = currentTime;
+			else
+				weatherStartTime = nil;
+			end
 		end
 	end
 end
@@ -87,7 +93,7 @@ local function UpdateState(newMapID, newSubzone, newWeatherType)
 		currentSubzone = newSubzone;
 		currentWeatherType = newWeatherType;
 
-		if isForcedWeatherActive then
+		if isForcedWeatherActive or isSceneActive then
 			weatherStartTime = nil;
 		else
 			weatherStartTime = currentTime;
@@ -100,12 +106,21 @@ local function CheckEnvironment()
 	local weatherInfo = LibForecast:GetCurrentWeatherInfo();
 	local newWeatherType = weatherInfo and weatherInfo.type or LibForecast.WeatherType.Unknown;
 
+	if newWeatherType == LibForecast.WeatherType.Unknown and weatherInfo and weatherInfo.recordID then
+		newWeatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or newWeatherType;
+	end
+
 	UpdateAuraState();
 	UpdateState(newMapID, newSubzone, newWeatherType);
 end
 
 local function OnWeatherChanged(event, weatherType, weatherInfo)
 	local newMapID, newSubzone = GetCurrentLocationInfo();
+	
+	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
+		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
+	end
+	
 	UpdateState(newMapID, newSubzone, weatherType);
 end
 
@@ -115,6 +130,13 @@ local function OnEvent(self, event, ...)
 		if unit == "player" then
 			UpdateAuraState();
 		end
+	elseif event == "CLIENT_SCENE_OPENED" then
+		RecordCurrentWeatherDuration();
+		isSceneActive = true;
+		weatherStartTime = nil;
+	elseif event == "CLIENT_SCENE_CLOSED" then
+		isSceneActive = false;
+		CheckEnvironment();
 	elseif event == "PLAYER_LOGOUT" then
 		RecordCurrentWeatherDuration()
 	elseif event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED" or event == "ZONE_CHANGED_INDOORS" or event == "ZONE_CHANGED_NEW_AREA" then
@@ -127,6 +149,8 @@ frame:RegisterEvent("PLAYER_LOGOUT");
 frame:RegisterEvent("ZONE_CHANGED");
 frame:RegisterEvent("ZONE_CHANGED_INDOORS");
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+frame:RegisterEvent("CLIENT_SCENE_OPENED");
+frame:RegisterEvent("CLIENT_SCENE_CLOSED");
 frame:RegisterUnitEvent("UNIT_AURA", "player");
 frame:SetScript("OnEvent", OnEvent);
 
@@ -135,7 +159,7 @@ LibForecast.RegisterCallback(frame, "OnWeatherChanged", OnWeatherChanged);
 Weather_Collector = Weather_Collector or {};
 function Weather_Collector.FlushCurrentDuration()
 	RecordCurrentWeatherDuration()
-	if not isForcedWeatherActive then
+	if not isForcedWeatherActive and not isSceneActive then
 		weatherStartTime = GetTime();
 	end
 end

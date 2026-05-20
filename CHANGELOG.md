@@ -1,5 +1,11 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.4
+
+The weather type "Firestorm" is now partially supported. If you ever encounter this, make sure to report where you found it, as it seems particularly elusive. It will be classified differently, similar to Rain, Clear, Snow, and Sandstorm.
+ - The addon now supports changing record IDs as weather types. This is mostly a back-end compatibility issue, but blizz seem to like to use these during cutscenes(?)
+ - Textures are not yet added
+
 # 0.0.3a
 
 Reminders now hide upon entering combat (oops)

@@ -9,6 +9,7 @@ local WeatherColors = {
 	[LibForecast.WeatherType.Rain] = { 0.20, 0.45, 0.85 },
 	[LibForecast.WeatherType.Snow] = { 0.90, 0.95, 1.00 },
 	[LibForecast.WeatherType.Sandstorm] = { 0.72, 0.52, 0.10 },
+	[LibForecast.WeatherType.Firestorm] = { 0.95, 0.32, 0.08 },
 };
 
 local isIndoors = false;
@@ -130,6 +131,10 @@ local function TriggerWeatherTransition(weatherType, intensity)
 end
 
 local function OnWeatherChanged(event, weatherType, weatherInfo)
+	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
+		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
+	end
+
 	curWeatherType = weatherType;
 	curIntensity = weatherInfo.intensity or 0;
 	TriggerWeatherTransition(curWeatherType, curIntensity);
@@ -204,6 +209,11 @@ initFrame:SetScript("OnEvent", function(self, event)
 
 		local info = LibForecast:GetCurrentWeatherInfo();
 		curWeatherType = info.type;
+		
+		if curWeatherType == LibForecast.WeatherType.Unknown and info.recordID then
+			curWeatherType = WeatherAddon.RecordIDsTable[info.recordID] or curWeatherType;
+		end
+		
 		curIntensity = info.intensity or 0;
 
 		TriggerWeatherTransition(curWeatherType, curIntensity);

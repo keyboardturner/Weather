@@ -216,6 +216,11 @@ local function UpdateWeatherIcon()
 	if not weatherInfo then return; end
 
 	local weatherType = weatherInfo.type;
+
+	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
+		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType
+	end
+
 	local intensityStr = GetIntensityCategory(weatherInfo.intensity);
 	local newTexturePath = WeatherForecastTextures.Miscellaneous;
 
@@ -228,6 +233,8 @@ local function UpdateWeatherIcon()
 		newTexturePath = WeatherForecastTextures.Snow[intensityStr];
 	elseif weatherType == LibForecast.WeatherType.Sandstorm then
 		newTexturePath = WeatherForecastTextures.Sandstorm[intensityStr];
+	--elseif weatherType == LibForecast.WeatherType.Firestorm then
+		--newTexturePath = WeatherForecastTextures.Firestorm[intensityStr];
 	end
 
 	if not newTexturePath or newTexturePath == currentIconTexture or isIconTransitioning then return; end
@@ -462,7 +469,13 @@ end
 function WeatherAddon:AppendWeatherTooltip(tooltip)
 	local weatherInfo = LibForecast:GetCurrentWeatherInfo();
 	if weatherInfo and WeatherAddon.WeatherNames then
-		local weatherName = WeatherAddon.WeatherNames[weatherInfo.type] or L["Unknown"];
+		local weatherType = weatherInfo.type;
+
+		if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
+			weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
+		end
+
+		local weatherName = WeatherAddon.WeatherNames[weatherType] or L["Unknown"];
 		local intensityStr = GetIntensityCategory(weatherInfo.intensity);
 		tooltip:AddLine(string.format(L["CurrentWeatherIntensity"], weatherName, intensityStr), 1, 1, 1);
 	end

@@ -422,8 +422,13 @@ function WeatherAddon:CheckUmbrellaReminder()
 	end
 
 	local weatherInfo = LibForecast:GetCurrentWeatherInfo();
+	local weatherType = weatherInfo.type;
 	
-	if isBusyOrInvalid or WeatherAddon.isIndoors or weatherInfo.type ~= LibForecast.WeatherType.Rain then
+	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
+		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
+	end
+	
+	if isBusyOrInvalid or WeatherAddon.isIndoors or weatherType ~= LibForecast.WeatherType.Rain then
 		if popup:IsShown() and not InCombatLockdown() then
 			popup:FadeOut();
 		end

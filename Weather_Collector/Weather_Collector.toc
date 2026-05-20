@@ -44,4 +44,5 @@
 
 Localization.lua
 Data_ForceWeatherSpells.lua
+Data_RecordIDs.lua
 Collector.lua

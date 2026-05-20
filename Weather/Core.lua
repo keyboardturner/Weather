@@ -5,13 +5,19 @@ local LibForecast = LibStub("LibForecast-1.0");
 local SOUND_CHANNEL = "Ambience";
 local frame = CreateFrame("Frame");
 
-local function Print(text)
+local function Print(...)
 	local textColor = CreateColor(0.2, 0.8, 1.0):GenerateHexColor();
 	local addonNameColored = WrapTextInColorCode(L["TOC_Title"], textColor);
 	local addonNameJoiner = string.join(": ", addonNameColored, "%s");
-	local text = string.format(addonNameJoiner, text);
 	
-	return DEFAULT_CHAT_FRAME:AddMessage(text, 1, 1, 1);
+	local args = {...};
+	for i = 1, #args do
+		args[i] = tostring(args[i]);
+	end
+	local fullText = table.concat(args, " ");
+	
+	local formattedText = string.format(addonNameJoiner, fullText);
+	return DEFAULT_CHAT_FRAME:AddMessage(formattedText, 1, 1, 1);
 end
 
 WeatherAddon.Print = Print;
@@ -22,6 +28,7 @@ local WeatherNames = {
 	[LibForecast.WeatherType.Snow] = L["Snow"],
 	[LibForecast.WeatherType.Sandstorm] = L["Sandstorm"],
 	[LibForecast.WeatherType.Miscellaneous] = L["Miscellaneous"],
+	[LibForecast.WeatherType.Firestorm] = L["Firestorm"],
 	[LibForecast.WeatherType.Unknown] = L["Unknown"],
 };
 
@@ -172,35 +179,6 @@ local SpellSounds = {
 
 WeatherAddon.SpellSounds = SpellSounds;
 
-local WeatherForecastTextures = {
-	Clear = {
-		Light_Day = "Interface\\AddOns\\Weather\\Forecast\\clear_day.png",
-		Medium_Day = "Interface\\AddOns\\Weather\\Forecast\\partialcloudy_day.png",
-		Heavy_Day = "Interface\\AddOns\\Weather\\Forecast\\cloudy_day.png",
-		Light_Night = "Interface\\AddOns\\Weather\\Forecast\\clear_night.png",
-		Medium_Night = "Interface\\AddOns\\Weather\\Forecast\\partialcloudy_night.png",
-		Heavy_Night = "Interface\\AddOns\\Weather\\Forecast\\cloudy_night.png",
-	};
-	Rain = {
-		Light = "Interface\\AddOns\\Weather\\Forecast\\rain_light.png",
-		Medium = "Interface\\AddOns\\Weather\\Forecast\\rain_medium.png",
-		Heavy = "Interface\\AddOns\\Weather\\Forecast\\rain_heavy.png",
-	};
-	Snow = {
-		Light = "Interface\\AddOns\\Weather\\Forecast\\snow_light.png",
-		Medium = "Interface\\AddOns\\Weather\\Forecast\\snow_medium.png",
-		Heavy = "Interface\\AddOns\\Weather\\Forecast\\snow_heavy.png",
-	};
-	Sandstorm = {
-		Light = "Interface\\AddOns\\Weather\\Forecast\\sandstorm_light.png",
-		Medium = "Interface\\AddOns\\Weather\\Forecast\\sandstorm_medium.png",
-		Heavy = "Interface\\AddOns\\Weather\\Forecast\\sandstorm_heavy.png",
-	};
-	Miscellaneous = "Interface\\AddOns\\Weather\\Forecast\\misc_unknown.png", -- also unknown
-};
-
-WeatherAddon.WeatherForecastTextures = WeatherForecastTextures;
-
 local function StopAllAmbience()
 	if playbackTimer then
 		playbackTimer:Cancel();
@@ -262,6 +240,11 @@ local function PlayNextTrack()
 
 	local weatherInfo = LibForecast:GetCurrentWeatherInfo()
 	local weatherType = weatherInfo.type
+	
+	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
+		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
+	end
+
 	local weatherIntensity = weatherInfo.intensity or 1
 	if WeatherAddon_DB.WeatherToggles and not WeatherAddon_DB.WeatherToggles[tostring(weatherType)] then return; end
 
@@ -360,6 +343,10 @@ local function OnEvent(self, event, ...)
 end
 
 local function OnWeatherChanged(event, weatherType, weatherInfo)
+	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
+		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType
+	end
+
 	if WeatherAddon_DB and WeatherAddon_DB.WeatherMessages then
 		local weatherName = WeatherNames[weatherType] or "Unknown";
 		local intensity = weatherInfo.intensity or 0;
