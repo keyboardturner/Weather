@@ -195,9 +195,9 @@ local function UpdateBackgroundDynamic()
 	local b = Lerp(startColor.b, endColor.b, t);
 
 	local starAlpha;
-	if currentTime >= 5.5 and currentTime < 6.5 then
-		starAlpha = 1 - ((currentTime - 5.5) / 1.0);
-	elseif currentTime >= 6.5 and currentTime < 19.0 then
+	if currentTime >= 4.0 and currentTime < 5.0 then
+		starAlpha = 1 - ((currentTime - 4.5) / 1.0);
+	elseif currentTime >= 5.0 and currentTime < 19.0 then
 		starAlpha = 0;
 	elseif currentTime >= 19.0 and currentTime < 20.5 then
 		starAlpha = (currentTime - 19.0) / 1.5;
