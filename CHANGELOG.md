@@ -6,6 +6,8 @@ Dropdown menus now alphabetize the accessory items
 
 Reminder button now allows dragging the icon onto the action bars
 
+Toys that are placed on the default action buttons are now given unique icons associated with the reminders instead of their default icons
+
 Slightly better checking on if a toy is learned and don't include it in the reminder dropdown / random accessory option
 
 # 0.0.4
