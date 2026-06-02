@@ -58,3 +58,4 @@ SettingsUI.lua
 CollectorPanel.lua
 ForecastIcon.lua
 ScreenEffects.lua
+ActionButtonReplacer.lua
