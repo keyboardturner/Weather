@@ -1,5 +1,13 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.5
+
+Dropdown menus now alphabetize the accessory items
+
+Reminder button now allows dragging the icon onto the action bars
+
+Slightly better checking on if a toy is learned and don't include it in the reminder dropdown / random accessory option
+
 # 0.0.4
 
 The weather type "Firestorm" is now fully supported. If you ever encounter this, make sure to report where you found it, as it seems particularly elusive. It will be classified differently, similar to Rain, Clear, Snow, and Sandstorm.
