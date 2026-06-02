@@ -1,5 +1,9 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.5a
+
+Made option to toggle action button replacer thingy
+
 # 0.0.5
 
 Dropdown menus now alphabetize the accessory items

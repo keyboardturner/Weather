@@ -39,6 +39,7 @@ local actionBarMappings = {
 };
 
 local function UpdateActionBarTextures()
+	if WeatherAddon_DB and WeatherAddon_DB.EnableParasolIconReplacement == false then return; end
 	for _, barInfo in ipairs(actionBarMappings) do
 		for i = barInfo.start, barInfo.stop do
 			local buttonName = barInfo.prefix .. (i - barInfo.start + 1);
@@ -81,6 +82,8 @@ local function OnEvent(self, event, ...)
 	UpdateActionBarTextures();
 end
 
+WeatherAddon.UpdateActionBarTextures = UpdateActionBarTextures;
+
 local f = CreateFrame("Frame");
 f:RegisterEvent("PLAYER_ENTERING_WORLD");
 f:RegisterEvent("ACTIONBAR_SLOT_CHANGED");
@@ -104,6 +107,7 @@ end
 local plumberHooked = false;
 
 local function UpdatePlumberFlyoutTextures(spellFlyout)
+	if WeatherAddon_DB and WeatherAddon_DB.EnableParasolIconReplacement == false then return; end
 	if not spellFlyout.ItemButtons then return; end
 	
 	for _, button in ipairs(spellFlyout.ItemButtons) do
@@ -145,6 +149,7 @@ end)
 
 -- toybox compatibility
 local function UpdateToyButtonTexture(button)
+	if WeatherAddon_DB and WeatherAddon_DB.EnableParasolIconReplacement == false then return; end
 	if button and button.itemID then
 		local itemData = itemTextures[button.itemID];
 		if itemData then

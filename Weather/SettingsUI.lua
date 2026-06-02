@@ -27,6 +27,7 @@ local Defaults = {
 	MinimapButtonRadius = 5,
 	FramePositions = {},
 	FrameSettings = {},
+	EnableParasolIconReplacement = true,
 	EnableScreenEffect = true,
 	ScreenEffectOpacity = 1.0,
 	ScreenEffectWeatherToggles = {},
@@ -628,6 +629,19 @@ local function BuildSettingsData()
 		label = L["Setting_TrackedAccessories"],
 		tooltip = L["Setting_TrackedAccessoriesTT"],
 		options = dynamicUmbrellaOptions
+	});
+
+	table.insert(allSettingsData, {
+		type = "checkbox",
+		key = "EnableParasolIconReplacement",
+		label = L["Setting_AccessoryIconReplacement"],
+		tooltip = L["Setting_AccessoryIconReplacementTT"],
+		default = Defaults.EnableParasolIconReplacement,
+		callback = function(value)
+			if WeatherAddon.UpdateActionBarTextures then
+				WeatherAddon.UpdateActionBarTextures();
+			end
+		end,
 	});
 
 	table.insert(allSettingsData, {

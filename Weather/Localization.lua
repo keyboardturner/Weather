@@ -110,6 +110,8 @@ if LOCALE == "enUS" then
 	L["Setting_SkyridingVolumeTT"] = "Adjusts the volume of skyriding ambience."
 	L["Setting_WeatherIntensityPercent"] = "Weather Intensity Percentage"
 	L["Setting_WeatherIntensityPercentTT"] = "Displays the weather intensity as a percentage rather than a 0 - 1 scale."
+	L["Setting_AccessoryIconReplacement"] = "Accessory Icon Replacement"
+	L["Setting_AccessoryIconReplacementTT"] = "Replaces the icons of the standard accessory items to be more accurate to the specific item."
 
 	L["Weather_Settings"] = "Weather - Settings"
 	L["UIScale"] = UI_SCALE
@@ -253,6 +255,8 @@ if LOCALE == "esMX" then
 	L["Setting_SkyridingVolumeTT"] = "Ajusta el volumen del ambiente de surcacielos."
 	L["Setting_WeatherIntensityPercent"] = "Porcentaje de intensidad del clima"
 	L["Setting_WeatherIntensityPercentTT"] = "Muestra la intensidad del clima como porcentaje en lugar de una escala de 0 a 1."
+	L["Setting_AccessoryIconReplacement"] = "Reemplazo de iconos de accesorios"
+	L["Setting_AccessoryIconReplacementTT"] = "Reemplaza los iconos de los accesorios estándar para que representen con mayor precisión el objeto específico."
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -385,6 +389,8 @@ if LOCALE == "esES" then
 	L["Setting_SkyridingVolumeTT"] = "Ajusta el volumen del ambiente de surcacielos."
 	L["Setting_WeatherIntensityPercent"] = "Porcentaje de intensidad meteorológica"
 	L["Setting_WeatherIntensityPercentTT"] = "Muestra la intensidad meteorológica como porcentaje en lugar de una escala de 0 a 1."
+	L["Setting_AccessoryIconReplacement"] = "Sustitución de iconos de accesorios"
+	L["Setting_AccessoryIconReplacementTT"] = "Sustituye los iconos de los accesorios estándar para que representen con mayor precisión el objeto específico."
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -517,6 +523,8 @@ if LOCALE == "deDE" then
 	L["Setting_SkyridingVolumeTT"] = "Passt die Lautstärke der Himmelsreiten-Umgebung an."
 	L["Setting_WeatherIntensityPercent"] = "Wetterintensität in Prozent"
 	L["Setting_WeatherIntensityPercentTT"] = "Zeigt die Wetterintensität als Prozentwert statt auf einer Skala von 0 bis 1 an."
+	L["Setting_AccessoryIconReplacement"] = "Accessoire-Symbole ersetzen"
+	L["Setting_AccessoryIconReplacementTT"] = "Ersetzt die Symbole der Standard-Accessoires durch passendere Symbole für den jeweiligen Gegenstand."
 
 	L["Weather_Settings"] = "Wetter - Einstellungen"
 	L["UIScale"] = UI_SCALE
@@ -649,6 +657,8 @@ if LOCALE == "frFR" then
 	L["Setting_SkyridingVolumeTT"] = "Ajuste le volume de l’ambiance de vol dynamique."
 	L["Setting_WeatherIntensityPercent"] = "Pourcentage d’intensité météo"
 	L["Setting_WeatherIntensityPercentTT"] = "Affiche l’intensité météo sous forme de pourcentage au lieu d’une échelle de 0 à 1."
+	L["Setting_AccessoryIconReplacement"] = "Remplacement des icônes d’accessoires"
+	L["Setting_AccessoryIconReplacementTT"] = "Remplace les icônes des accessoires standards par des icônes plus fidèles à l’objet spécifique."
 
 	L["Weather_Settings"] = "Météo - Paramètres"
 	L["UIScale"] = UI_SCALE
@@ -781,6 +791,8 @@ if LOCALE == "itIT" then
 	L["Setting_SkyridingVolumeTT"] = "Regola il volume dell’ambiente di volo dinamico."
 	L["Setting_WeatherIntensityPercent"] = "Percentuale intensità meteo"
 	L["Setting_WeatherIntensityPercentTT"] = "Mostra l’intensità meteo come percentuale invece che su una scala da 0 a 1."
+	L["Setting_AccessoryIconReplacement"] = "Sostituzione icone accessori"
+	L["Setting_AccessoryIconReplacementTT"] = "Sostituisce le icone degli accessori standard con icone più accurate per l'oggetto specifico."
 
 	L["Weather_Settings"] = "Meteo - Impostazioni"
 	L["UIScale"] = UI_SCALE
@@ -913,6 +925,8 @@ if LOCALE == "ptBR" then
 	L["Setting_SkyridingVolumeTT"] = "Ajusta o volume da ambiência de Skyriding."
 	L["Setting_WeatherIntensityPercent"] = "Porcentagem da intensidade do clima"
 	L["Setting_WeatherIntensityPercentTT"] = "Exibe a intensidade do clima como porcentagem em vez de uma escala de 0 a 1."
+	L["Setting_AccessoryIconReplacement"] = "Substituição de ícones de acessórios"
+	L["Setting_AccessoryIconReplacementTT"] = "Substitui os ícones dos acessórios padrão por ícones mais precisos para cada item específico."
 
 	L["Weather_Settings"] = "Clima - Configurações"
 	L["UIScale"] = UI_SCALE
@@ -1047,6 +1061,8 @@ if LOCALE == "ruRU" then
 	L["Setting_SkyridingVolumeTT"] = "Регулирует громкость атмосферных звуков небесной езды."
 	L["Setting_WeatherIntensityPercent"] = "Процент интенсивности погоды"
 	L["Setting_WeatherIntensityPercentTT"] = "Отображает интенсивность погоды в процентах вместо шкалы от 0 до 1."
+	L["Setting_AccessoryIconReplacement"] = "Замена значков аксессуаров"
+	L["Setting_AccessoryIconReplacementTT"] = "Заменяет значки стандартных аксессуаров на более точные изображения соответствующих предметов."
 
 	L["Weather_Settings"] = "Погода - Настройки"
 	L["UIScale"] = UI_SCALE
@@ -1179,6 +1195,8 @@ if LOCALE == "koKR" then
 	L["Setting_SkyridingVolumeTT"] = "하늘비행 환경음의 볼륨을 조절합니다."
 	L["Setting_WeatherIntensityPercent"] = "날씨 강도 백분율"
 	L["Setting_WeatherIntensityPercentTT"] = "날씨 강도를 0~1 범위 대신 백분율로 표시합니다."
+	L["Setting_AccessoryIconReplacement"] = "장신구 아이콘 교체"
+	L["Setting_AccessoryIconReplacementTT"] = "기본 장신구 아이콘을 해당 아이템에 더 적합한 아이콘으로 교체합니다."
 
 	L["Weather_Settings"] = "날씨 - 설정"
 	L["UIScale"] = UI_SCALE
@@ -1311,6 +1329,8 @@ if LOCALE == "zhCN" then
 	L["Setting_SkyridingVolumeTT"] = "调整驭空术环境音量。"
 	L["Setting_WeatherIntensityPercent"] = "天气强度百分比"
 	L["Setting_WeatherIntensityPercentTT"] = "以百分比而非 0 - 1 范围显示天气强度。"
+	L["Setting_AccessoryIconReplacement"] = "饰品图标替换"
+	L["Setting_AccessoryIconReplacementTT"] = "将标准饰品物品的图标替换为更符合对应物品的图标。"
 
 	L["Weather_Settings"] = "天气 - 设置"
 	L["UIScale"] = UI_SCALE
@@ -1443,6 +1463,8 @@ if LOCALE == "zhTW" then
 	L["Setting_SkyridingVolumeTT"] = "調整御空術環境音量。"
 	L["Setting_WeatherIntensityPercent"] = "天氣強度百分比"
 	L["Setting_WeatherIntensityPercentTT"] = "以百分比而非 0 - 1 範圍顯示天氣強度。"
+	L["Setting_AccessoryIconReplacement"] = "飾品圖示替換"
+	L["Setting_AccessoryIconReplacementTT"] = "將標準飾品物品的圖示替換為更符合實際物品的圖示。"
 
 	L["Weather_Settings"] = "天氣 - 設定"
 	L["UIScale"] = UI_SCALE
