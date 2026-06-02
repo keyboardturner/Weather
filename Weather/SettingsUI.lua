@@ -532,6 +532,9 @@ local function BuildSettingsData()
 				default = true
 			})
 		end
+		table.sort(dynamicUmbrellaOptions, function(a, b)
+			return a.text < b.text;
+		end)
 	end
 
 	local dynamicSpellOptions = {};

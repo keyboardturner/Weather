@@ -192,6 +192,13 @@ toyButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
 toyButton:SetAttribute("useOnKeyDown", false);
 toyButton:RegisterForClicks("LeftButtonUp");
 
+toyButton:RegisterForDrag("LeftButton");
+toyButton:SetScript("OnDragStart", function(self)
+	if self.currentItemID then
+		PickupItem(self.currentItemID);
+	end
+end);
+
 local function MenuGenerator(owner, rootDescription)
 	rootDescription:CreateRadio(L["RandomTrackedAccessories"],
 		function() return WeatherAddon_DB.CharacterParasols[playerKey] == "Random"; end,
@@ -202,22 +209,30 @@ local function MenuGenerator(owner, rootDescription)
 	)
 
 	-- specific accessory options (only show those enabled in SettingsUI + usable)
+	local collectedUmbrellas = {}
 	for itemIDStr, isEnabled in pairs(WeatherAddon_DB.UmbrellaToggles) do
 		if isEnabled then
 			local itemID = tonumber(itemIDStr);
-			if C_ToyBox.IsToyUsable(itemID) then
+			if itemID and PlayerHasToy(itemID) and C_ToyBox.IsToyUsable(itemID) then
 				local itemName = C_Item.GetItemInfo(itemID);
 				local display = itemName or ("Item #" .. itemID);
-
-				rootDescription:CreateRadio(display,
-					function() return WeatherAddon_DB.CharacterParasols[playerKey] == itemID; end,
-					function()
-						WeatherAddon_DB.CharacterParasols[playerKey] = itemID;
-						WeatherAddon:UpdateReminderButton();
-					end
-				)
+				table.insert(collectedUmbrellas, { id = itemID, name = display });
 			end
 		end
+	end
+
+	table.sort(collectedUmbrellas, function(a, b)
+		return a.name:lower() < b.name:lower();
+	end)
+
+	for _, umbrella in ipairs(collectedUmbrellas) do
+		rootDescription:CreateRadio(umbrella.name,
+			function() return WeatherAddon_DB.CharacterParasols[playerKey] == umbrella.id; end,
+			function()
+				WeatherAddon_DB.CharacterParasols[playerKey] = umbrella.id;
+				WeatherAddon:UpdateReminderButton();
+			end
+		)
 	end
 end
 
@@ -261,7 +276,7 @@ function WeatherAddon:UpdateReminderButton()
 		local available = {};
 		for itemIDStr, isEnabled in pairs(WeatherAddon_DB.UmbrellaToggles) do
 			local itemID = tonumber(itemIDStr);
-			if isEnabled and C_ToyBox.IsToyUsable(itemID) then
+			if isEnabled and PlayerHasToy(itemID) and C_ToyBox.IsToyUsable(itemID) then
 				table.insert(available, itemID);
 			end
 		end
@@ -358,7 +373,7 @@ local function GetParasolCooldown()
 	if charSelection == "Random" then
 		for itemIDStr, isEnabled in pairs(WeatherAddon_DB.UmbrellaToggles) do
 			local itemID = tonumber(itemIDStr);
-			if isEnabled and C_ToyBox.IsToyUsable(itemID) then
+			if isEnabled and PlayerHasToy(itemID) and C_ToyBox.IsToyUsable(itemID) then
 				local start, duration = C_Item.GetItemCooldown(itemID);
 				local remaining = 0;
 				if start and start > 0 and duration > 0 then
