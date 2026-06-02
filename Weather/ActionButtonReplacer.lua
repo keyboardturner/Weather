@@ -99,3 +99,85 @@ for _, barInfo in ipairs(actionBarMappings) do
 		end
 	end
 end
+
+-- Plumber compatibility stuffs
+local plumberHooked = false;
+
+local function UpdatePlumberFlyoutTextures(spellFlyout)
+	if not spellFlyout.ItemButtons then return; end
+	
+	for _, button in ipairs(spellFlyout.ItemButtons) do
+		if button.id and button.Icon then
+			local itemData = itemTextures[button.id];
+			if itemData then
+				button.Icon:SetTexture(itemData.default);
+			end
+		end
+	end
+end
+
+local function TryHookPlumber()
+	if plumberHooked then return; end
+
+	local container = _G["PlumberSecureFlyoutContainer"];
+	if not container then return; end
+
+	local spellFlyout;
+	for _, child in ipairs({container:GetChildren()}) do
+		if type(child.ShowActions) == "function" then
+			spellFlyout = child;
+			break;
+		end
+	end
+
+	if spellFlyout then
+		hooksecurefunc(spellFlyout, "ShowActions", function(self)
+			UpdatePlumberFlyoutTextures(self);
+		end)
+		plumberHooked = true;
+	end
+end
+
+EventUtil.ContinueOnAddOnLoaded("Plumber", function()
+	TryHookPlumber();
+end)
+
+
+-- toybox compatibility
+local function UpdateToyButtonTexture(button)
+	if button and button.itemID then
+		local itemData = itemTextures[button.itemID];
+		if itemData then
+			if button.iconTexture then
+				button.iconTexture:SetTexture(itemData.default);
+			end
+			if button.iconTextureUncollected then
+				button.iconTextureUncollected:SetTexture(itemData.default);
+			end
+		end
+	end
+end
+
+local function UpdateAllToyButtonTextures()
+	if not ToyBox or not ToyBox.iconsFrame then return; end
+	for i = 1, 18 do
+		local button = ToyBox.iconsFrame["spellButton"..i];
+		if button then
+			UpdateToyButtonTexture(button);
+		end
+	end
+end
+
+EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", function()
+	if ToySpellButton_UpdateButton then
+		hooksecurefunc("ToySpellButton_UpdateButton", function(self)
+			UpdateToyButtonTexture(self);
+		end)
+	end
+
+	if ToyBox_UpdateButtons then
+		hooksecurefunc("ToyBox_UpdateButtons", function()
+			RunNextFrame(UpdateAllToyButtonTextures);
+		end)
+	end
+end)
