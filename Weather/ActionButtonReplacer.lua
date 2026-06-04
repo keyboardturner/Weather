@@ -186,3 +186,5 @@ EventUtil.ContinueOnAddOnLoaded("Blizzard_Collections", function()
 		end)
 	end
 end)
+
+EventRegistry:RegisterFrameEventAndCallback("SPELL_UPDATE_COOLDOWN", function() RunNextFrame(UpdateAllToyButtonTextures); end);

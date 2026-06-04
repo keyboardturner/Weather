@@ -422,13 +422,22 @@ function WeatherAddon:CheckUmbrellaReminder()
 		end
 	end
 
+	local inDisabledInstance = false;
+	if WeatherAddon_DB.ReminderInstances then
+		local inInstance, instanceType = IsInInstance();
+		if inInstance and instanceType and WeatherAddon_DB.ReminderInstances[instanceType] then
+			inDisabledInstance = true;
+		end
+	end
+
 	-- horrendously long, should i table these?
 	local isBusyOrInvalid = UnitIsDeadOrGhost("player")
 		or IsMounted() or isGliding
 		or UnitInVehicle("player")
 		or UnitHasVehicleUI("player")
 		or (C_PetBattles and C_PetBattles.IsInBattle())
-		or notInCharacter;
+		or notInCharacter
+		or inDisabledInstance;
 
 
 	if expirationTimer then

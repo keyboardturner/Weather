@@ -112,6 +112,8 @@ if LOCALE == "enUS" then
 	L["Setting_WeatherIntensityPercentTT"] = "Displays the weather intensity as a percentage rather than a 0 - 1 scale."
 	L["Setting_AccessoryIconReplacement"] = "Accessory Icon Replacement"
 	L["Setting_AccessoryIconReplacementTT"] = "Replaces the icons of the standard accessory items to be more accurate to the specific item."
+	L["Setting_DisableRemindersInstances"] = "Hide in Instances"
+	L["Setting_DisableRemindersInstancesTT"] = "Toggles the accessory reminders to be hidden during certain specific instances."
 
 	L["Weather_Settings"] = "Weather - Settings"
 	L["UIScale"] = UI_SCALE
@@ -257,6 +259,8 @@ if LOCALE == "esMX" then
 	L["Setting_WeatherIntensityPercentTT"] = "Muestra la intensidad del clima como porcentaje en lugar de una escala de 0 a 1."
 	L["Setting_AccessoryIconReplacement"] = "Reemplazo de iconos de accesorios"
 	L["Setting_AccessoryIconReplacementTT"] = "Reemplaza los iconos de los accesorios estándar para que representen con mayor precisión el objeto específico."
+	L["Setting_DisableRemindersInstances"] = "Ocultar en instancias"
+	L["Setting_DisableRemindersInstancesTT"] = "Oculta los recordatorios de accesorios durante ciertas instancias específicas."
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -391,6 +395,8 @@ if LOCALE == "esES" then
 	L["Setting_WeatherIntensityPercentTT"] = "Muestra la intensidad meteorológica como porcentaje en lugar de una escala de 0 a 1."
 	L["Setting_AccessoryIconReplacement"] = "Sustitución de iconos de accesorios"
 	L["Setting_AccessoryIconReplacementTT"] = "Sustituye los iconos de los accesorios estándar para que representen con mayor precisión el objeto específico."
+	L["Setting_DisableRemindersInstances"] = "Ocultar en estancias"
+	L["Setting_DisableRemindersInstancesTT"] = "Oculta los recordatorios de accesorios durante determinadas estancias específicas."
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -525,6 +531,8 @@ if LOCALE == "deDE" then
 	L["Setting_WeatherIntensityPercentTT"] = "Zeigt die Wetterintensität als Prozentwert statt auf einer Skala von 0 bis 1 an."
 	L["Setting_AccessoryIconReplacement"] = "Accessoire-Symbole ersetzen"
 	L["Setting_AccessoryIconReplacementTT"] = "Ersetzt die Symbole der Standard-Accessoires durch passendere Symbole für den jeweiligen Gegenstand."
+	L["Setting_DisableRemindersInstances"] = "In Instanzen ausblenden"
+	L["Setting_DisableRemindersInstancesTT"] = "Blendet Accessoire-Erinnerungen in bestimmten Instanzen aus."
 
 	L["Weather_Settings"] = "Wetter - Einstellungen"
 	L["UIScale"] = UI_SCALE
@@ -659,6 +667,8 @@ if LOCALE == "frFR" then
 	L["Setting_WeatherIntensityPercentTT"] = "Affiche l’intensité météo sous forme de pourcentage au lieu d’une échelle de 0 à 1."
 	L["Setting_AccessoryIconReplacement"] = "Remplacement des icônes d’accessoires"
 	L["Setting_AccessoryIconReplacementTT"] = "Remplace les icônes des accessoires standards par des icônes plus fidèles à l’objet spécifique."
+	L["Setting_DisableRemindersInstances"] = "Masquer en instance"
+	L["Setting_DisableRemindersInstancesTT"] = "Masque les rappels d’accessoires dans certaines instances spécifiques."
 
 	L["Weather_Settings"] = "Météo - Paramètres"
 	L["UIScale"] = UI_SCALE
@@ -793,6 +803,8 @@ if LOCALE == "itIT" then
 	L["Setting_WeatherIntensityPercentTT"] = "Mostra l’intensità meteo come percentuale invece che su una scala da 0 a 1."
 	L["Setting_AccessoryIconReplacement"] = "Sostituzione icone accessori"
 	L["Setting_AccessoryIconReplacementTT"] = "Sostituisce le icone degli accessori standard con icone più accurate per l'oggetto specifico."
+	L["Setting_DisableRemindersInstances"] = "Nascondi nelle istanze"
+	L["Setting_DisableRemindersInstancesTT"] = "Nasconde i promemoria degli accessori durante specifiche istanze."
 
 	L["Weather_Settings"] = "Meteo - Impostazioni"
 	L["UIScale"] = UI_SCALE
@@ -927,6 +939,8 @@ if LOCALE == "ptBR" then
 	L["Setting_WeatherIntensityPercentTT"] = "Exibe a intensidade do clima como porcentagem em vez de uma escala de 0 a 1."
 	L["Setting_AccessoryIconReplacement"] = "Substituição de ícones de acessórios"
 	L["Setting_AccessoryIconReplacementTT"] = "Substitui os ícones dos acessórios padrão por ícones mais precisos para cada item específico."
+	L["Setting_DisableRemindersInstances"] = "Ocultar em instâncias"
+	L["Setting_DisableRemindersInstancesTT"] = "Oculta os lembretes de acessórios durante instâncias específicas."
 
 	L["Weather_Settings"] = "Clima - Configurações"
 	L["UIScale"] = UI_SCALE
@@ -1063,6 +1077,8 @@ if LOCALE == "ruRU" then
 	L["Setting_WeatherIntensityPercentTT"] = "Отображает интенсивность погоды в процентах вместо шкалы от 0 до 1."
 	L["Setting_AccessoryIconReplacement"] = "Замена значков аксессуаров"
 	L["Setting_AccessoryIconReplacementTT"] = "Заменяет значки стандартных аксессуаров на более точные изображения соответствующих предметов."
+	L["Setting_DisableRemindersInstances"] = "Скрывать в подземельях"
+	L["Setting_DisableRemindersInstancesTT"] = "Скрывает напоминания об аксессуарах в определённых подземельях и сценариях."
 
 	L["Weather_Settings"] = "Погода - Настройки"
 	L["UIScale"] = UI_SCALE
@@ -1197,6 +1213,8 @@ if LOCALE == "koKR" then
 	L["Setting_WeatherIntensityPercentTT"] = "날씨 강도를 0~1 범위 대신 백분율로 표시합니다."
 	L["Setting_AccessoryIconReplacement"] = "장신구 아이콘 교체"
 	L["Setting_AccessoryIconReplacementTT"] = "기본 장신구 아이콘을 해당 아이템에 더 적합한 아이콘으로 교체합니다."
+	L["Setting_DisableRemindersInstances"] = "인스턴스에서 숨기기"
+	L["Setting_DisableRemindersInstancesTT"] = "특정 인스턴스에서 장신구 알림을 숨깁니다."
 
 	L["Weather_Settings"] = "날씨 - 설정"
 	L["UIScale"] = UI_SCALE
@@ -1331,6 +1349,8 @@ if LOCALE == "zhCN" then
 	L["Setting_WeatherIntensityPercentTT"] = "以百分比而非 0 - 1 范围显示天气强度。"
 	L["Setting_AccessoryIconReplacement"] = "饰品图标替换"
 	L["Setting_AccessoryIconReplacementTT"] = "将标准饰品物品的图标替换为更符合对应物品的图标。"
+	L["Setting_DisableRemindersInstances"] = "在副本中隐藏"
+	L["Setting_DisableRemindersInstancesTT"] = "在某些特定副本中隐藏饰品提醒。"
 
 	L["Weather_Settings"] = "天气 - 设置"
 	L["UIScale"] = UI_SCALE
@@ -1465,6 +1485,8 @@ if LOCALE == "zhTW" then
 	L["Setting_WeatherIntensityPercentTT"] = "以百分比而非 0 - 1 範圍顯示天氣強度。"
 	L["Setting_AccessoryIconReplacement"] = "飾品圖示替換"
 	L["Setting_AccessoryIconReplacementTT"] = "將標準飾品物品的圖示替換為更符合實際物品的圖示。"
+	L["Setting_DisableRemindersInstances"] = "在副本中隱藏"
+	L["Setting_DisableRemindersInstancesTT"] = "在某些特定副本中隱藏飾品提醒。"
 
 	L["Weather_Settings"] = "天氣 - 設定"
 	L["UIScale"] = UI_SCALE

@@ -11,6 +11,14 @@ local Defaults = {
 	EnableUmbrellaSounds = true,
 	UmbrellaToggles = {},
 	EnableReminders = true,
+	ReminderInstances = {
+		neighborhood = false,
+		party = true,
+		scenario = true,
+		raid = true,
+		arena = true,
+		pvp = true,
+	},
 	ReminderSoundEnabled = true,
 	ReminderSoundFile = "BNET_VoiceChat_ChannelInvite",
 	ReminderSoundVolume = 1.0,
@@ -565,6 +573,11 @@ local function BuildSettingsData()
 			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Sandstorm],
 			default = true
 		},
+		{
+			key = tostring(LibForecast.WeatherType.Firestorm),
+			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Firestorm],
+			default = true
+		},
 	};
 
 	local dynamicInstanceOptions = {
@@ -665,6 +678,14 @@ local function BuildSettingsData()
 		label = L["Setting_AccessoryReminders"],
 		tooltip = L["Setting_AccessoryRemindersTT"],
 		default = Defaults.EnableReminders,
+	});
+
+	table.insert(allSettingsData, {
+		type = "multicheckbox",
+		key = "ReminderInstances",
+		label = L["Setting_DisableRemindersInstances"], 
+		tooltip = L["Setting_DisableRemindersInstancesTT"],
+		options = dynamicInstanceOptions,
 	});
 
 	table.insert(allSettingsData, {
@@ -963,10 +984,15 @@ local function BuildSettingsData()
 	});
 
 	-- automatically generate search text for all entries
+	local currentHeaderLabel = "";
 	for _, data in ipairs(allSettingsData) do
+		if data.type == "header" then
+			currentHeaderLabel = data.label or "";
+		end
+
 		if data.label then
 			local tooltipText = data.tooltip or "";
-			data.searchText = (data.label .. " " .. tooltipText):lower();
+			data.searchText = (currentHeaderLabel .. " " .. data.label .. " " .. tooltipText):lower();
 		end
 	end
 
@@ -1157,8 +1183,25 @@ function WeatherAddon:CreateSettingsUI()
 		local query = SearchBox:GetText():lower();
 		local filtered = {};
 		
+		local currentHeaderData = nil;
+		local headerAdded = false;
+		
 		for _, data in ipairs(allSettingsData) do
-			if query == "" or (data.searchText and data.searchText:find(query, 1, true)) then
+			if data.type == "header" then
+				currentHeaderData = data;
+				headerAdded = false;
+			end
+			
+			local isMatch = query == "" or (data.searchText and data.searchText:find(query, 1, true));
+			
+			if isMatch then
+				if currentHeaderData and not headerAdded then
+					if data ~= currentHeaderData then
+						table.insert(filtered, currentHeaderData);
+					end
+					headerAdded = true;
+				end
+				
 				table.insert(filtered, data);
 			end
 		end

@@ -1,5 +1,14 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.6
+
+Added option to toggle accessory reminders per instance type
+ - by default reminders will be hidden in dungeon, raid, scenario/delve, battleground, and arena. Housing remains enabled
+
+Adjusted the search to include the header for an associated option (and incidentally allowing searching a header to show only those associated options)
+
+Small fix to update toy textures in the toybox when casting a spell
+
 # 0.0.5a
 
 Made option to toggle action button replacer thingy
