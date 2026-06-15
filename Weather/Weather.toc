@@ -1,4 +1,4 @@
-## Interface: 120005
+## Interface: 120005, 120007
 ## Title: Weather
 ## Notes: Various weather-related options and features, including indoor weather ambience and accessory reminders.
 ## Author: Keyboardturner

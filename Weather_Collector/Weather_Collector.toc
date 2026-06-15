@@ -1,4 +1,4 @@
-## Interface: 120005
+## Interface: 120005, 120007
 ## Title: Weather_Collector
 ## Notes: Data storage collection for historical observed weather.
 ## Author: Keyboardturner
