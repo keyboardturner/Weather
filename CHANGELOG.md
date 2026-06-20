@@ -1,5 +1,9 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.7a
+
+Adjusted a tiny screen effect layer catastrophe (it should maybe hopefully be lower than nameplates now and not just randomly?)
+
 # 0.0.7
 
 12.0.7 toc update
