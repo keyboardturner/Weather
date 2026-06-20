@@ -158,8 +158,8 @@ end
 
 local function BuildEffectFrame()
 	effectFrame = CreateFrame("Frame", "Weather_ScreenEffectFrame", WorldFrame);
-	effectFrame:SetFrameStrata("BACKGROUND");
-	effectFrame:SetFrameLevel(1);
+	effectFrame:SetFrameStrata("WORLD");
+	effectFrame:SetFrameLevel(0);
 	effectFrame:SetPoint("CENTER", WorldFrame, "CENTER", 0, 0);
 	effectFrame:SetSize(WorldFrame:GetWidth(), WorldFrame:GetHeight());
 
