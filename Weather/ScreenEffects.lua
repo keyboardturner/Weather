@@ -158,12 +158,12 @@ end
 
 local function BuildEffectFrame()
 	effectFrame = CreateFrame("Frame", "Weather_ScreenEffectFrame", WorldFrame);
-	effectFrame:SetFrameStrata("WORLD");
+	effectFrame:SetFrameStrata("BACKGROUND");
 	effectFrame:SetFrameLevel(0);
 	effectFrame:SetPoint("CENTER", WorldFrame, "CENTER", 0, 0);
 	effectFrame:SetSize(WorldFrame:GetWidth(), WorldFrame:GetHeight());
 
-	colorTex = effectFrame:CreateTexture(nil, "BACKGROUND", nil, 0);
+	colorTex = effectFrame:CreateTexture(nil, "BACKGROUND", nil, -8);
 	colorTex:SetAllPoints(effectFrame);
 	colorTex:SetColorTexture(0, 0, 0, 0);
 end
