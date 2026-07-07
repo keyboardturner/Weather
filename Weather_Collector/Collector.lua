@@ -107,7 +107,7 @@ local function CheckEnvironment()
 	local newWeatherType = weatherInfo and weatherInfo.type or LibForecast.WeatherType.Unknown;
 
 	if newWeatherType == LibForecast.WeatherType.Unknown and weatherInfo and weatherInfo.recordID then
-		newWeatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or newWeatherType;
+		newWeatherType = WeatherCollector.RecordIDsTable[weatherInfo.recordID] or newWeatherType;
 	end
 
 	UpdateAuraState();
@@ -118,7 +118,7 @@ local function OnWeatherChanged(event, weatherType, weatherInfo)
 	local newMapID, newSubzone = GetCurrentLocationInfo();
 	
 	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
+		weatherType = WeatherCollector.RecordIDsTable[weatherInfo.recordID] or weatherType;
 	end
 	
 	UpdateState(newMapID, newSubzone, weatherType);
