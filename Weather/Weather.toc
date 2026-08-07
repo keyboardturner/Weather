@@ -1,8 +1,8 @@
-## Interface: 120005, 120007
+## Interface: 120007, 120100
 ## Title: Weather
 ## Notes: Various weather-related options and features, including indoor weather ambience and accessory reminders.
 ## Author: Keyboardturner
-## Version: 0.0.1-alpha
+## Version: @project-version@
 ## IconTexture: Interface\AddOns\Weather\Textures\Forecast\rain_heavy.png
 ## SavedVariables: WeatherAddon_DB
 ## X-Curse-Project-ID: 1537521

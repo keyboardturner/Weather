@@ -1,5 +1,9 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.8
+
+12.1.0 toc update
+
 # 0.0.7b
 
 Re-adjusted a screen efect layer catstrophe (ok for real this time it should be lower maybe?)
