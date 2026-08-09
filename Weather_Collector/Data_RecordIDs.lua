@@ -192,6 +192,8 @@ local RecordIDsTable = {
     [552] = 1,
     [553] = 1,
     [554] = 4,
+    [558] = 1,
+    [559] = 1,
     [561] = 1,
     [562] = 1,
     [563] = 1,
@@ -199,5 +201,6 @@ local RecordIDsTable = {
     [578] = 2,
     [582] = 4,
     [583] = 2,
+    [605] = 4,
 };
 WeatherAddon.RecordIDsTable = RecordIDsTable;

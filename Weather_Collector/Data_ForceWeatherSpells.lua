@@ -1,4 +1,4 @@
-local AddonName, WeatherCollector = ...
+local AddonName, WeatherCollector = ...;
 
 local ForceWeatherEffectTable = {
     82651,
@@ -258,7 +258,6 @@ local ForceWeatherEffectTable = {
     1224478,
     1229074,
     1235676,
-    1235684,
     1240264,
     1242841,
     1243574,
@@ -274,15 +273,27 @@ local ForceWeatherEffectTable = {
     1256890,
     1257561,
     1259207,
+    1259283,
     1259408,
     1259783,
+    1260847,
     1265309,
+    1270063,
     1272583,
+    1280926,
     1283036,
     1286763,
     1286948,
     1294028,
-    1294464,
+    1295746,
+    1295747,
+    1295755,
+    1295757,
+    1295759,
+    1295765,
+    1295774,
+    1308119,
+    1308871,
 };
 
 WeatherCollector.ForceWeatherEffectTable = ForceWeatherEffectTable;
