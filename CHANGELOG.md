@@ -2,6 +2,8 @@
 
 # 0.0.8
 
+Regenerated weather data for 12.1.0
+
 12.1.0 toc update
 
 # 0.0.7b
