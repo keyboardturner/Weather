@@ -229,9 +229,11 @@ local function UpdateWeatherIcon()
 	local intensityStr = GetIntensityCategory(weatherInfo.intensity);
 	local newTexturePath = WeatherForecastTextures.Miscellaneous;
 
-	if weatherType == LibForecast.WeatherType.Clear then
+	-- 12.1 broke weathers initially upon login, so display them as "clear" instead of unknown
+	if weatherType == LibForecast.WeatherType.Clear or weatherType == LibForecast.WeatherType.Unknown then
 		local timeOfDay = GetTimeOfDay();
-		newTexturePath = WeatherForecastTextures.Clear[intensityStr .. "_" .. timeOfDay];
+		local displayIntensity = (weatherType == LibForecast.WeatherType.Unknown) and "Light" or intensityStr;
+		newTexturePath = WeatherForecastTextures.Clear[displayIntensity .. "_" .. timeOfDay];
 	elseif weatherType == LibForecast.WeatherType.Rain then
 		newTexturePath = WeatherForecastTextures.Rain[intensityStr];
 	elseif weatherType == LibForecast.WeatherType.Snow then

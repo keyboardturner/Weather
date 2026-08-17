@@ -1,5 +1,10 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.0.9
+
+Provide fake Clear weather indication upon login for the Forecast icon. Does not count toward actual data collected.
+ - Until Blizzard fixes the issue weather data is no longer available upon login. Of note in game there are weathers in various locations which are also broken such as Gilneas' 24/7 rain being entirely absent
+
 # 0.0.8
 
 Regenerated weather data for 12.1.0
