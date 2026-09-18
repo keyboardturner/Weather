@@ -266,6 +266,11 @@ if LOCALE == "esMX" then
 	L["Setting_AccessoryIconReplacementTT"] = "Reemplaza los iconos de los accesorios estándar para que representen con mayor precisión el objeto específico."
 	L["Setting_DisableRemindersInstances"] = "Ocultar en instancias"
 	L["Setting_DisableRemindersInstancesTT"] = "Oculta los recordatorios de accesorios durante ciertas instancias específicas."
+	L["Setting_DielIntegration"] = "Integración de Diel"
+	L["Setting_DielIntegrationTT"] = "Adaptar al icono diel predeterminado del minimapa."
+	L["Setting_DielIntegration_Replace"] = "Reemplazar icono de Diel"
+	L["Setting_DielIntegration_Enhance"] = "Mejorar icono de Diel"
+	L["Setting_DielIntegration_None"] = "Ninguno (iconos separados)"
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -402,6 +407,11 @@ if LOCALE == "esES" then
 	L["Setting_AccessoryIconReplacementTT"] = "Sustituye los iconos de los accesorios estándar para que representen con mayor precisión el objeto específico."
 	L["Setting_DisableRemindersInstances"] = "Ocultar en estancias"
 	L["Setting_DisableRemindersInstancesTT"] = "Oculta los recordatorios de accesorios durante determinadas estancias específicas."
+	L["Setting_DielIntegration"] = "Integración de Diel"
+	L["Setting_DielIntegrationTT"] = "Adaptarse al icono diel predeterminado del minimapa."
+	L["Setting_DielIntegration_Replace"] = "Reemplazar icono de Diel"
+	L["Setting_DielIntegration_Enhance"] = "Mejorar icono de Diel"
+	L["Setting_DielIntegration_None"] = "Ninguno (iconos separados)"
 
 	L["Weather_Settings"] = "Clima - Configuración"
 	L["UIScale"] = UI_SCALE
@@ -538,6 +548,11 @@ if LOCALE == "deDE" then
 	L["Setting_AccessoryIconReplacementTT"] = "Ersetzt die Symbole der Standard-Accessoires durch passendere Symbole für den jeweiligen Gegenstand."
 	L["Setting_DisableRemindersInstances"] = "In Instanzen ausblenden"
 	L["Setting_DisableRemindersInstancesTT"] = "Blendet Accessoire-Erinnerungen in bestimmten Instanzen aus."
+	L["Setting_DielIntegration"] = "Diel-Integration"
+	L["Setting_DielIntegrationTT"] = "An das standardmäßige Diel-Symbol der Minikarte anpassen."
+	L["Setting_DielIntegration_Replace"] = "Diel-Symbol ersetzen"
+	L["Setting_DielIntegration_Enhance"] = "Diel-Symbol verbessern"
+	L["Setting_DielIntegration_None"] = "Keine (separate Symbole)"
 
 	L["Weather_Settings"] = "Wetter - Einstellungen"
 	L["UIScale"] = UI_SCALE
@@ -674,6 +689,11 @@ if LOCALE == "frFR" then
 	L["Setting_AccessoryIconReplacementTT"] = "Remplace les icônes des accessoires standards par des icônes plus fidèles à l’objet spécifique."
 	L["Setting_DisableRemindersInstances"] = "Masquer en instance"
 	L["Setting_DisableRemindersInstancesTT"] = "Masque les rappels d’accessoires dans certaines instances spécifiques."
+	L["Setting_DielIntegration"] = "Intégration de Diel"
+	L["Setting_DielIntegrationTT"] = "S’adapter à l’icône Diel par défaut de la minicarte."
+	L["Setting_DielIntegration_Replace"] = "Remplacer l’icône Diel"
+	L["Setting_DielIntegration_Enhance"] = "Améliorer l’icône Diel"
+	L["Setting_DielIntegration_None"] = "Aucune (icônes séparées)"
 
 	L["Weather_Settings"] = "Météo - Paramètres"
 	L["UIScale"] = UI_SCALE
@@ -810,6 +830,11 @@ if LOCALE == "itIT" then
 	L["Setting_AccessoryIconReplacementTT"] = "Sostituisce le icone degli accessori standard con icone più accurate per l'oggetto specifico."
 	L["Setting_DisableRemindersInstances"] = "Nascondi nelle istanze"
 	L["Setting_DisableRemindersInstancesTT"] = "Nasconde i promemoria degli accessori durante specifiche istanze."
+	L["Setting_DielIntegration"] = "Integrazione Diel"
+	L["Setting_DielIntegrationTT"] = "Adattarsi all’icona Diel predefinita della minimappa."
+	L["Setting_DielIntegration_Replace"] = "Sostituisci icona Diel"
+	L["Setting_DielIntegration_Enhance"] = "Migliora icona Diel"
+	L["Setting_DielIntegration_None"] = "Nessuna (icone separate)"
 
 	L["Weather_Settings"] = "Meteo - Impostazioni"
 	L["UIScale"] = UI_SCALE
@@ -946,6 +971,11 @@ if LOCALE == "ptBR" then
 	L["Setting_AccessoryIconReplacementTT"] = "Substitui os ícones dos acessórios padrão por ícones mais precisos para cada item específico."
 	L["Setting_DisableRemindersInstances"] = "Ocultar em instâncias"
 	L["Setting_DisableRemindersInstancesTT"] = "Oculta os lembretes de acessórios durante instâncias específicas."
+	L["Setting_DielIntegration"] = "Integração do Diel"
+	L["Setting_DielIntegrationTT"] = "Adaptar-se ao ícone Diel padrão do minimapa."
+	L["Setting_DielIntegration_Replace"] = "Substituir ícone do Diel"
+	L["Setting_DielIntegration_Enhance"] = "Aprimorar ícone do Diel"
+	L["Setting_DielIntegration_None"] = "Nenhum (ícones separados)"
 
 	L["Weather_Settings"] = "Clima - Configurações"
 	L["UIScale"] = UI_SCALE
@@ -1084,6 +1114,11 @@ if LOCALE == "ruRU" then
 	L["Setting_AccessoryIconReplacementTT"] = "Заменяет значки стандартных аксессуаров на более точные изображения соответствующих предметов."
 	L["Setting_DisableRemindersInstances"] = "Скрывать в подземельях"
 	L["Setting_DisableRemindersInstancesTT"] = "Скрывает напоминания об аксессуарах в определённых подземельях и сценариях."
+	L["Setting_DielIntegration"] = "Интеграция Diel"
+	L["Setting_DielIntegrationTT"] = "Адаптироваться к стандартному значку Diel на мини-карте."
+	L["Setting_DielIntegration_Replace"] = "Заменить значок Diel"
+	L["Setting_DielIntegration_Enhance"] = "Улучшить значок Diel"
+	L["Setting_DielIntegration_None"] = "Нет (отдельные значки)"
 
 	L["Weather_Settings"] = "Погода - Настройки"
 	L["UIScale"] = UI_SCALE
@@ -1220,6 +1255,11 @@ if LOCALE == "koKR" then
 	L["Setting_AccessoryIconReplacementTT"] = "기본 장신구 아이콘을 해당 아이템에 더 적합한 아이콘으로 교체합니다."
 	L["Setting_DisableRemindersInstances"] = "인스턴스에서 숨기기"
 	L["Setting_DisableRemindersInstancesTT"] = "특정 인스턴스에서 장신구 알림을 숨깁니다."
+	L["Setting_DielIntegration"] = "Diel 통합"
+	L["Setting_DielIntegrationTT"] = "미니맵의 기본 Diel 아이콘에 맞게 조정합니다."
+	L["Setting_DielIntegration_Replace"] = "Diel 아이콘 대체"
+	L["Setting_DielIntegration_Enhance"] = "Diel 아이콘 개선"
+	L["Setting_DielIntegration_None"] = "없음 (아이콘 분리)"
 
 	L["Weather_Settings"] = "날씨 - 설정"
 	L["UIScale"] = UI_SCALE
@@ -1356,6 +1396,11 @@ if LOCALE == "zhCN" then
 	L["Setting_AccessoryIconReplacementTT"] = "将标准饰品物品的图标替换为更符合对应物品的图标。"
 	L["Setting_DisableRemindersInstances"] = "在副本中隐藏"
 	L["Setting_DisableRemindersInstancesTT"] = "在某些特定副本中隐藏饰品提醒。"
+	L["Setting_DielIntegration"] = "Diel 集成"
+	L["Setting_DielIntegrationTT"] = "适配小地图默认的 Diel 图标。"
+	L["Setting_DielIntegration_Replace"] = "替换 Diel 图标"
+	L["Setting_DielIntegration_Enhance"] = "增强 Diel 图标"
+	L["Setting_DielIntegration_None"] = "无（独立图标）"
 
 	L["Weather_Settings"] = "天气 - 设置"
 	L["UIScale"] = UI_SCALE
@@ -1492,6 +1537,11 @@ if LOCALE == "zhTW" then
 	L["Setting_AccessoryIconReplacementTT"] = "將標準飾品物品的圖示替換為更符合實際物品的圖示。"
 	L["Setting_DisableRemindersInstances"] = "在副本中隱藏"
 	L["Setting_DisableRemindersInstancesTT"] = "在某些特定副本中隱藏飾品提醒。"
+	L["Setting_DielIntegration"] = "Diel 整合"
+	L["Setting_DielIntegrationTT"] = "配合小地圖預設的 Diel 圖示。"
+	L["Setting_DielIntegration_Replace"] = "取代 Diel 圖示"
+	L["Setting_DielIntegration_Enhance"] = "強化 Diel 圖示"
+	L["Setting_DielIntegration_None"] = "無（分開顯示圖示）"
 
 	L["Weather_Settings"] = "天氣 - 設定"
 	L["UIScale"] = UI_SCALE
