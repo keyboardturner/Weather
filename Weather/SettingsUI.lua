@@ -1,6 +1,7 @@
 local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
-local LibForecast = LibStub("LibForecast-1.0");
+--local LibForecast = LibStub("LibForecast-1.0");
+local WeatherType = WeatherAddon.WeatherType;
 local Print = WeatherAddon.Print;
 
 local REMINDER_EVENT_ID = 8
@@ -45,9 +46,9 @@ local Defaults = {
 		Regional = true,
 		Local = true,
 	},
-	["WeatherVolume_" .. LibForecast.WeatherType.Rain] = 0.25,
-	["WeatherVolume_" .. LibForecast.WeatherType.Snow] = 0.50,
-	["WeatherVolume_" .. LibForecast.WeatherType.Sandstorm] = 0.40,
+	["WeatherVolume_" .. WeatherType.Rain] = 0.25,
+	["WeatherVolume_" .. WeatherType.Snow] = 0.50,
+	["WeatherVolume_" .. WeatherType.Sandstorm] = 0.40,
 	UmbrellaVolume = 0.50,
 	SpellVolume = 0.50,
 	FallingVolume = 0.50,
@@ -567,23 +568,23 @@ local function BuildSettingsData()
 
 	local dynamicScreenEffectOptions = {
 		{
-			key = tostring(LibForecast.WeatherType.Rain),
-			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Rain],
+			key = tostring(WeatherType.Rain),
+			text = WeatherAddon.WeatherNames[WeatherType.Rain],
 			default = true
 		},
 		{
-			key = tostring(LibForecast.WeatherType.Snow),
-			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Snow],
+			key = tostring(WeatherType.Snow),
+			text = WeatherAddon.WeatherNames[WeatherType.Snow],
 			default = true
 		},
 		{
-			key = tostring(LibForecast.WeatherType.Sandstorm),
-			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Sandstorm],
+			key = tostring(WeatherType.Sandstorm),
+			text = WeatherAddon.WeatherNames[WeatherType.Sandstorm],
 			default = true
 		},
 		{
-			key = tostring(LibForecast.WeatherType.Firestorm),
-			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Firestorm],
+			key = tostring(WeatherType.Firestorm),
+			text = WeatherAddon.WeatherNames[WeatherType.Firestorm],
 			default = true
 		},
 	};

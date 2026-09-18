@@ -44,8 +44,8 @@
 ## Category-zhCN: 角色扮演
 ## Category-zhTW: 角色扮演
 
-Libs\LibStub\LibStub.lua
-Libs\LibForecast\lib.xml
+## Libs\LibStub\LibStub.lua
+## Libs\LibForecast\lib.xml
 
 Localization.lua
 Data_SlowFallSpells.lua

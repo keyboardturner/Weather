@@ -1,7 +1,6 @@
 local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
-local LibForecast = LibStub("LibForecast-1.0");
-
+--local LibForecast = LibStub("LibForecast-1.0");
 local build = select(4, GetBuildInfo());
 
 local IsForever = build >= 16000 and build < 20000;
@@ -27,14 +26,26 @@ end
 
 WeatherAddon.Print = Print;
 
+local WeatherType = {
+	Clear = 0,
+	Rain = 1,
+	Snow = 2,
+	Sandstorm = 3,
+	Miscellaneous = 4,
+	Firestorm = 5,
+	Unknown = -1,
+};
+
+WeatherAddon.WeatherType = WeatherType;
+
 local WeatherNames = {
-	[LibForecast.WeatherType.Clear] = L["Clear"],
-	[LibForecast.WeatherType.Rain] = L["Rain"],
-	[LibForecast.WeatherType.Snow] = L["Snow"],
-	[LibForecast.WeatherType.Sandstorm] = L["Sandstorm"],
-	[LibForecast.WeatherType.Miscellaneous] = L["Miscellaneous"],
-	[LibForecast.WeatherType.Firestorm] = L["Firestorm"],
-	[LibForecast.WeatherType.Unknown] = L["Unknown"],
+	[WeatherType.Clear] = L["Clear"],
+	[WeatherType.Rain] = L["Rain"],
+	[WeatherType.Snow] = L["Snow"],
+	[WeatherType.Sandstorm] = L["Sandstorm"],
+	[WeatherType.Miscellaneous] = L["Miscellaneous"],
+	[WeatherType.Firestorm] = L["Firestorm"],
+	[WeatherType.Unknown] = L["Unknown"],
 };
 
 WeatherAddon.WeatherNames = WeatherNames;
@@ -52,7 +63,7 @@ local REMINDER_THROTTLE_SECONDS = 30;
 local lastWarnedExpiration = 0;
 
 local WeatherSounds = {
-	[LibForecast.WeatherType.Rain] = {
+	[WeatherType.Rain] = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_000_faded_boostedx2.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_001_faded_boostedx2.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_002_faded_boostedx2.ogg", duration = 60 },
@@ -65,7 +76,7 @@ local WeatherSounds = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_009_faded_boostedx2.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_010_faded_boostedx2.ogg", duration = 60 },
 	},
-	[LibForecast.WeatherType.Snow] = {
+	[WeatherType.Snow] = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_000_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_001_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_002_faded.ogg", duration = 60 },
@@ -78,7 +89,7 @@ local WeatherSounds = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_009_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_010_faded.ogg", duration = 60 },
 	},
-	[LibForecast.WeatherType.Sandstorm] = {
+	[WeatherType.Sandstorm] = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_sandstorm_000_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_sandstorm_001_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_sandstorm_002_faded.ogg", duration = 60 },
@@ -243,12 +254,8 @@ end
 local function PlayNextTrack()
 	if not isSoundEnabled or (not isIndoors and not hasUmbrella and not activeSpellID) then return; end
 
-	local weatherInfo = LibForecast:GetCurrentWeatherInfo()
+	local weatherInfo = C_Weather.GetCurrentWeather()
 	local weatherType = weatherInfo.type
-	
-	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
-	end
 
 	local weatherIntensity = weatherInfo.intensity or 1
 	if WeatherAddon_DB.WeatherToggles and not WeatherAddon_DB.WeatherToggles[tostring(weatherType)] then return; end
@@ -262,12 +269,12 @@ local function PlayNextTrack()
 		local volDefault = WeatherAddon.Defaults and WeatherAddon.Defaults[volKey] or 0.5;
 		categoryVol = WeatherAddon_DB[volKey] ~= nil and WeatherAddon_DB[volKey] or volDefault;
 	elseif hasUmbrella and not isIndoors then
-		if weatherType == LibForecast.WeatherType.Rain then
+		if weatherType == WeatherType.Rain then
 			soundTable = UmbrellaSounds;
 			categoryVol = WeatherAddon_DB.UmbrellaVolume or 0.5;
 		end
 	elseif activeSpellID and not isIndoors then
-		if weatherType == LibForecast.WeatherType.Rain then
+		if weatherType == WeatherType.Rain then
 			soundTable = SpellSounds[activeSpellID];
 			categoryVol = WeatherAddon_DB.SpellVolume or 0.5;
 		end
@@ -333,24 +340,8 @@ local function CheckEnvironment()
 	end
 end
 
-local function OnEvent(self, event, ...)
-	if event == "PLAYER_LOGOUT" then
-		StopAllAmbience();
-	elseif event == "CVAR_UPDATE" then
-		local cvarName = ...;
-		if cvarName == "Sound_EnableAllSound" or cvarName == "Sound_EnableAmbience" or cvarName == "Sound_MasterVolume" or cvarName == "Sound_AmbienceVolume" then
-			CheckEnvironment();
-		end
-	else
-		CheckEnvironment();
-		WeatherAddon:CheckUmbrellaReminder();
-	end
-end
-
-local function OnWeatherChanged(event, weatherType, weatherInfo)
-	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType
-	end
+local function OnWeatherChanged(weatherType, weatherInfo)
+	weatherInfo = weatherInfo or {};
 
 	if WeatherAddon_DB and WeatherAddon_DB.WeatherMessages then
 		local weatherName = WeatherNames[weatherType] or "Unknown";
@@ -363,8 +354,6 @@ local function OnWeatherChanged(event, weatherType, weatherInfo)
 			formattedIntensity = tostring(intensity);
 		end
 		
-		local recordID = weatherInfo.recordID;
-		
 		Print(string.format(L["ChangedWeather"], weatherName, formattedIntensity));
 	end
 
@@ -374,6 +363,23 @@ local function OnWeatherChanged(event, weatherType, weatherInfo)
 	end
 	
 	WeatherAddon:CheckUmbrellaReminder();
+end
+
+local function OnEvent(self, event, ...)
+	if event == "PLAYER_LOGOUT" then
+		StopAllAmbience();
+	elseif event == "CVAR_UPDATE" then
+		local cvarName = ...;
+		if cvarName == "Sound_EnableAllSound" or cvarName == "Sound_EnableAmbience" or cvarName == "Sound_MasterVolume" or cvarName == "Sound_AmbienceVolume" then
+			CheckEnvironment();
+		end
+	elseif event == "WEATHER_CHANGED" then
+		local weatherInfo = C_Weather.GetCurrentWeather();
+		OnWeatherChanged(weatherInfo and weatherInfo.type, weatherInfo);
+	else
+		CheckEnvironment();
+		WeatherAddon:CheckUmbrellaReminder();
+	end
 end
 
 frame:RegisterEvent("CVAR_UPDATE");
@@ -388,6 +394,6 @@ frame:RegisterEvent("ZONE_CHANGED");
 frame:RegisterEvent("ZONE_CHANGED_INDOORS");
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 frame:RegisterEvent("PLAYER_LOGOUT");
+frame:RegisterEvent("WEATHER_CHANGED");
 
 frame:SetScript("OnEvent", OnEvent);
-LibForecast.RegisterCallback(frame, "OnWeatherChanged", OnWeatherChanged);

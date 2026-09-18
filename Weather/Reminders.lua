@@ -1,6 +1,7 @@
 local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
-local LibForecast = LibStub("LibForecast-1.0");
+--local LibForecast = LibStub("LibForecast-1.0");
+local WeatherType = WeatherAddon.WeatherType;
 local Print = WeatherAddon.Print;
 
 local sessionIgnored = false;
@@ -445,14 +446,10 @@ function WeatherAddon:CheckUmbrellaReminder()
 		expirationTimer = nil;
 	end
 
-	local weatherInfo = LibForecast:GetCurrentWeatherInfo();
+	local weatherInfo = C_Weather.GetCurrentWeather();
 	local weatherType = weatherInfo.type;
 	
-	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
-	end
-	
-	if isBusyOrInvalid or WeatherAddon.isIndoors or weatherType ~= LibForecast.WeatherType.Rain then
+	if isBusyOrInvalid or WeatherAddon.isIndoors or weatherType ~= WeatherType.Rain then
 		if popup:IsShown() and not InCombatLockdown() then
 			popup:FadeOut();
 		end
