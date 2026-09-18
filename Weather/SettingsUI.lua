@@ -63,6 +63,13 @@ local reminderSoundOptions = {
 	{ key = "BNET_VoiceChat_ChannelInvite", text = L["Sound_BNET_VoiceChat_ChannelInvite"], value = 2113869 },
 };
 
+local function IsEntryValidForClient(entry)
+	if entry.forever ~= nil and entry.forever ~= WeatherAddon.IsForever then
+		return false;
+	end
+	return true;
+end
+
 function WeatherAddon:GetReminderSoundFile(key)
 	for _, opt in ipairs(reminderSoundOptions) do
 		if opt.key == key then return opt.value; end
@@ -626,7 +633,7 @@ local function BuildSettingsData()
 		end
 	end
 
-	table.insert(allSettingsData, { type = "header", label = L["Header_AccessorySettings"] });
+	table.insert(allSettingsData, { type = "header", label = L["Header_AccessorySettings"], });
 
 	table.insert(allSettingsData, {
 		type = "checkbox",
@@ -634,6 +641,7 @@ local function BuildSettingsData()
 		label = L["Setting_AccessorySounds"],
 		tooltip = L["Setting_AccessorySoundsTT"],
 		default = Defaults.EnableUmbrellaSounds,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -641,7 +649,8 @@ local function BuildSettingsData()
 		key = "UmbrellaToggles",
 		label = L["Setting_TrackedAccessories"],
 		tooltip = L["Setting_TrackedAccessoriesTT"],
-		options = dynamicUmbrellaOptions
+		options = dynamicUmbrellaOptions,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -655,6 +664,7 @@ local function BuildSettingsData()
 				WeatherAddon.UpdateActionBarTextures();
 			end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -670,6 +680,7 @@ local function BuildSettingsData()
 		callback = function(value)
 			if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -678,6 +689,7 @@ local function BuildSettingsData()
 		label = L["Setting_AccessoryReminders"],
 		tooltip = L["Setting_AccessoryRemindersTT"],
 		default = Defaults.EnableReminders,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -686,6 +698,7 @@ local function BuildSettingsData()
 		label = L["Setting_DisableRemindersInstances"], 
 		tooltip = L["Setting_DisableRemindersInstancesTT"],
 		options = dynamicInstanceOptions,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -694,6 +707,7 @@ local function BuildSettingsData()
 		label = L["Setting_ReminderSound"],
 		tooltip = L["Setting_ReminderSoundTT"],
 		default = Defaults.ReminderSoundEnabled,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -711,6 +725,7 @@ local function BuildSettingsData()
 			C_EncounterEvents.PlayEventSound(REMINDER_EVENT_ID, REMINDER_TRIGGER_ID);
 			C_EncounterEvents.SetEventSound(REMINDER_EVENT_ID, REMINDER_TRIGGER_ID, nil);
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -723,6 +738,7 @@ local function BuildSettingsData()
 		formatter = function(value)
 			return math.floor(value * 100 + 0.5) .. "%";
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -731,6 +747,7 @@ local function BuildSettingsData()
 		label = L["Setting_TRP3_IC_Only"],
 		tooltip = L["Setting_TRP3_IC_OnlyTT"],
 		default = Defaults.OnlyInCharacter,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -767,6 +784,7 @@ local function BuildSettingsData()
 				WeatherAddon:ResetSessionIgnored();
 			end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, { type = "header", label = L["Header_MovementSounds"] });
@@ -807,6 +825,7 @@ local function BuildSettingsData()
 				WeatherAddon:UpdateSkyridingSoundState();
 			end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -819,6 +838,7 @@ local function BuildSettingsData()
 		formatter = function(value)
 			return math.floor(value * 100 + 0.5) .. "%";
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, { type = "header", label = L["Header_ScreenEffects"] });
@@ -982,6 +1002,15 @@ local function BuildSettingsData()
 		tooltip = L["Setting_WeatherIntensityPercentTT"], 
 		default = Defaults.DisplayIntensityAsPercentage,
 	});
+
+	-- filter out non-forever / forever settings
+	local clientFilteredData = {}
+	for _, data in ipairs(allSettingsData) do
+		if IsEntryValidForClient(data) then
+			table.insert(clientFilteredData, data);
+		end
+	end
+	allSettingsData = clientFilteredData;
 
 	-- automatically generate search text for all entries
 	local currentHeaderLabel = "";

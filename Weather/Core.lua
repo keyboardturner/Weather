@@ -2,6 +2,11 @@ local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
 local LibForecast = LibStub("LibForecast-1.0");
 
+local build = select(4, GetBuildInfo());
+
+local IsForever = build >= 16000 and build < 20000;
+WeatherAddon.IsForever = IsForever;
+
 local SOUND_CHANNEL = "Ambience";
 local frame = CreateFrame("Frame");
 
