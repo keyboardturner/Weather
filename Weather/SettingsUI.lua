@@ -30,6 +30,7 @@ local Defaults = {
 	EnableSkyridingSound = true,
 	ShowMinimapButton = true,
 	LockMinimapButton = false,
+	DielIntegrationMode = "ENHANCE",
 	HideMinimapDecoration = false,
 	MinimapButtonSize = 36,
 	MinimapButtonRadius = 5,
@@ -900,6 +901,26 @@ local function BuildSettingsData()
 	});
 
 	table.insert(allSettingsData, { type = "header", label = L["Header_MinimapIcon"] });
+
+	table.insert(allSettingsData, {
+		type = "dropdown",
+		key = "DielIntegrationMode",
+		label = L["Setting_DielIntegration"],
+		tooltip = L["Setting_DielIntegrationTT"],
+		defaultValue = Defaults.DielIntegrationMode,
+		options = {
+			{ key = "REPLACE", text = L["Setting_DielIntegration_Replace"] },
+			{ key = "ENHANCE", text = L["Setting_DielIntegration_Enhance"] },
+			{ key = "OFF", text = L["Setting_DielIntegration_None"] },
+		},
+		useOptionKey = true,
+		callback = function(value)
+			if WeatherAddon.UpdateDielIntegration then
+				WeatherAddon:UpdateDielIntegration();
+			end
+		end,
+		forever = true,
+	});
 
 	table.insert(allSettingsData, {
 		type = "checkbox",

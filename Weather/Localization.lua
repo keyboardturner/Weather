@@ -114,6 +114,11 @@ if LOCALE == "enUS" then
 	L["Setting_AccessoryIconReplacementTT"] = "Replaces the icons of the standard accessory items to be more accurate to the specific item."
 	L["Setting_DisableRemindersInstances"] = "Hide in Instances"
 	L["Setting_DisableRemindersInstancesTT"] = "Toggles the accessory reminders to be hidden during certain specific instances."
+	L["Setting_DielIntegration"] = "Diel Integration"
+	L["Setting_DielIntegrationTT"] = "Accomodate for the default minimap diel icon."
+	L["Setting_DielIntegration_Replace"] = "Replace Diel Icon"
+	L["Setting_DielIntegration_Enhance"] = "Enhance Diel Icon"
+	L["Setting_DielIntegration_None"] = "None (Separate Icons)"
 
 	L["Weather_Settings"] = "Weather - Settings"
 	L["UIScale"] = UI_SCALE

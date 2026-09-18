@@ -546,6 +546,57 @@ minimapBtn:SetScript("OnEnter", function(self)
 end)
 minimapBtn:SetScript("OnLeave", GameTooltip_Hide);
 
+function WeatherAddon:UpdateDielIntegration()
+	local diel = MinimapCluster and MinimapCluster.DielFrame;
+	if not diel then return; end
+	
+	local mode = WeatherAddon_DB and WeatherAddon_DB.DielIntegrationMode or "OFF";
+	
+	if mode == "REPLACE" then
+		diel:UnregisterEvent("DIEL_CYCLE_CHANGED");
+		diel:Hide();
+		
+		minimapBtn:ClearAllPoints();
+		minimapBtn:SetPoint("CENTER", diel, "CENTER", 0, 0);
+		minimapBtn:RegisterForDrag();
+		minimapBtn:Show();
+		
+	elseif mode == "ENHANCE" then
+		diel:RegisterEvent("DIEL_CYCLE_CHANGED");
+		diel:Show();
+		
+		minimapBtn:Hide();
+		
+		diel:EnableMouse(true);
+		diel:SetScript("OnMouseUp", function(self, button)
+			if button == "LeftButton" and WeatherAddon.ToggleSettings then
+				WeatherAddon:ToggleSettings(1);
+			elseif button == "RightButton" and WeatherAddon.ToggleSettings then
+				if C_AddOns.IsAddOnLoaded("Weather_Collector") then
+					WeatherAddon:ToggleSettings(2);
+				else
+					WeatherAddon:ToggleSettings(1);
+				end
+			end
+		end)
+		
+		diel:SetScript("OnEnter", minimapBtn:GetScript("OnEnter"));
+		diel:SetScript("OnLeave", minimapBtn:GetScript("OnLeave"));
+		
+	else
+		diel:RegisterEvent("DIEL_CYCLE_CHANGED");
+		diel:Show();
+		diel:EnableMouse(false);
+		diel:SetScript("OnMouseUp", nil);
+		diel:SetScript("OnEnter", nil);
+		diel:SetScript("OnLeave", nil);
+		
+		WeatherAddon:UpdateMinimapButtonVisibility();
+		WeatherAddon:UpdateMinimapButtonPosition();
+		WeatherAddon:UpdateMinimapButtonLock();
+	end
+end
+
 local globalEventFrame = CreateFrame("Frame");
 globalEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 globalEventFrame:SetScript("OnEvent", function(self, event)
@@ -555,6 +606,10 @@ globalEventFrame:SetScript("OnEvent", function(self, event)
 		WeatherAddon:UpdateMinimapButtonLock();
 		RestoreMinimapPosition(minimapBtn);
 		WeatherAddon:UpdateMinimapIconDecoration();
+
+		if WeatherAddon.UpdateDielIntegration then
+			WeatherAddon:UpdateDielIntegration();
+		end
 
 		UpdateWeatherIcon();
 
