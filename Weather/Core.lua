@@ -62,6 +62,11 @@ local lastReminderTime = 0;
 local REMINDER_THROTTLE_SECONDS = 30;
 local lastWarnedExpiration = 0;
 
+local lastWeatherType = nil;
+local lastWeatherIntensity = nil;
+local lastWeatherPrintTime = 0;
+local WEATHER_PRINT_COOLDOWN = 15;
+
 local WeatherSounds = {
 	[WeatherType.Rain] = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_000_faded_boostedx2.ogg", duration = 60 },
@@ -255,9 +260,9 @@ local function PlayNextTrack()
 	if not isSoundEnabled or (not isIndoors and not hasUmbrella and not activeSpellID) then return; end
 
 	local weatherInfo = C_Weather.GetCurrentWeather()
-	local weatherType = weatherInfo.type
+	local weatherType = weatherInfo and weatherInfo.type or WeatherType.Clear
 
-	local weatherIntensity = weatherInfo.intensity or 1
+	local weatherIntensity = weatherInfo and weatherInfo.intensity or 1
 	if WeatherAddon_DB.WeatherToggles and not WeatherAddon_DB.WeatherToggles[tostring(weatherType)] then return; end
 
 	local soundTable = nil;
@@ -340,21 +345,28 @@ local function CheckEnvironment()
 	end
 end
 
-local function OnWeatherChanged(weatherType, weatherInfo)
+local function OnWeatherChanged(weatherType, weatherInfo, isLogin)
 	weatherInfo = weatherInfo or {};
+	weatherType = weatherType or WeatherType.Clear;
+	local intensity = weatherInfo.intensity or 0;
+	local now = GetTime();
+
+	local weatherHasChanged = (weatherType ~= lastWeatherType) or (intensity ~= lastWeatherIntensity);
 
 	if WeatherAddon_DB and WeatherAddon_DB.WeatherMessages then
-		local weatherName = WeatherNames[weatherType] or "Unknown";
-		local intensity = weatherInfo.intensity or 0;
-		
-		local formattedIntensity;
-		if WeatherAddon_DB.DisplayIntensityAsPercentage then
-			formattedIntensity = math.floor((intensity * 100) + 0.5) .. "%";
-		else
-			formattedIntensity = tostring(intensity);
+		if isLogin or (weatherHasChanged and (now - lastWeatherPrintTime >= WEATHER_PRINT_COOLDOWN)) then
+			local weatherName = WeatherNames[weatherType] or WeatherNames[WeatherType.Unknown] or "Unknown";
+			
+			local formattedIntensity;
+			if WeatherAddon_DB.DisplayIntensityAsPercentage then
+				formattedIntensity = math.floor((intensity * 100) + 0.5) .. "%";
+			else
+				formattedIntensity = tostring(intensity);
+			end
+			
+			Print(string.format(L["ChangedWeather"], weatherName, formattedIntensity));
+			lastWeatherPrintTime = now;
 		end
-		
-		Print(string.format(L["ChangedWeather"], weatherName, formattedIntensity));
 	end
 
 	if isSoundEnabled and (isIndoors or hasUmbrella or activeSpellID) then
@@ -375,7 +387,16 @@ local function OnEvent(self, event, ...)
 		end
 	elseif event == "WEATHER_CHANGED" then
 		local weatherInfo = C_Weather.GetCurrentWeather();
-		OnWeatherChanged(weatherInfo and weatherInfo.type, weatherInfo);
+		OnWeatherChanged(weatherInfo and weatherInfo.type, weatherInfo, false);
+	elseif event == "PLAYER_ENTERING_WORLD" then
+		local isInitialLogin, isReloadingUi = ...;
+		CheckEnvironment();
+		WeatherAddon:CheckUmbrellaReminder();
+		
+		if isInitialLogin or isReloadingUi then
+			local weatherInfo = C_Weather.GetCurrentWeather();
+			OnWeatherChanged(weatherInfo and weatherInfo.type, weatherInfo, true);
+		end
 	else
 		CheckEnvironment();
 		WeatherAddon:CheckUmbrellaReminder();
