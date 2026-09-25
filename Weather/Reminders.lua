@@ -13,6 +13,7 @@ local queuedReminderTimer = nil;
 local trp3Ready = false;
 local REMINDER_EVENT_ID = 8;
 local REMINDER_TRIGGER_ID = 0;
+if WeatherAddon.IsForever then return; end
 
 local playerKey;
 

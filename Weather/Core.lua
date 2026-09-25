@@ -65,7 +65,7 @@ local lastWarnedExpiration = 0;
 local lastWeatherType = nil;
 local lastWeatherIntensity = nil;
 local lastWeatherPrintTime = 0;
-local WEATHER_PRINT_COOLDOWN = 15;
+local WEATHER_PRINT_COOLDOWN = 5;
 
 local WeatherSounds = {
 	[WeatherType.Rain] = {
@@ -374,7 +374,9 @@ local function OnWeatherChanged(weatherType, weatherInfo, isLogin)
 		RunNextFrame(PlayNextTrack);
 	end
 	
-	WeatherAddon:CheckUmbrellaReminder();
+	if not WeatherAddon.IsForever then
+		WeatherAddon:CheckUmbrellaReminder();
+	end
 end
 
 local function OnEvent(self, event, ...)
@@ -391,7 +393,9 @@ local function OnEvent(self, event, ...)
 	elseif event == "PLAYER_ENTERING_WORLD" then
 		local isInitialLogin, isReloadingUi = ...;
 		CheckEnvironment();
-		WeatherAddon:CheckUmbrellaReminder();
+		if not WeatherAddon.IsForever then
+			WeatherAddon:CheckUmbrellaReminder();
+		end
 		
 		if isInitialLogin or isReloadingUi then
 			local weatherInfo = C_Weather.GetCurrentWeather();
@@ -399,7 +403,9 @@ local function OnEvent(self, event, ...)
 		end
 	else
 		CheckEnvironment();
-		WeatherAddon:CheckUmbrellaReminder();
+		if not WeatherAddon.IsForever then
+			WeatherAddon:CheckUmbrellaReminder();
+		end
 	end
 end
 
