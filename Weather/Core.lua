@@ -219,7 +219,8 @@ and proceed to play ambience if within ~5 yards of that placed location
 this will not be for release though
 ]]
 local function CheckForUmbrellaBuff()
-	if not WeatherAddon_DB.EnableUmbrellaSounds then return false; end
+	if IsForever then return end
+	if not WeatherAddon_DB or not WeatherAddon_DB.EnableUmbrellaSounds then return false; end
 
 	for itemID, spellID in pairs(UmbrellaItemIDsBuffIDs) do
 		if WeatherAddon_DB.UmbrellaToggles[tostring(itemID)] then
@@ -231,7 +232,7 @@ local function CheckForUmbrellaBuff()
 end
 
 local function CheckForSpellBuff()
-	if not WeatherAddon_DB.SpellToggles then return nil; end
+	if not WeatherAddon_DB or not WeatherAddon_DB.SpellToggles then return nil; end
 
 	for spellID, _ in pairs(SpellSounds) do
 		if WeatherAddon_DB.SpellToggles[tostring(spellID)] then
