@@ -5,6 +5,10 @@
 Provide fake Clear weather indication upon login for the Forecast icon. Does not count toward actual data collected.
  - Until Blizzard fixes the issue weather data is no longer available upon login. Of note in game there are weathers in various locations which are also broken such as Gilneas' 24/7 rain being entirely absent
 
+Migrating from LibForecast to use new C_Weather API
+
+12.1.5 toc update
+
 # 0.0.8
 
 Regenerated weather data for 12.1.0

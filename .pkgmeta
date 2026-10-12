@@ -4,8 +4,6 @@ enable-nolib-creation: no
 license-output: LICENSE
 
 externals:
-  Libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
-  Libs/LibForecast: https://github.com/Meorawr/LibForecast
 
 ignore:
   - Libs/*/*.rockspec
