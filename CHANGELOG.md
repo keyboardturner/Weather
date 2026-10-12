@@ -1,13 +1,20 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.1.0
+
+Migrating from LibForecast to use new C_Weather API
+
+Addition of C_Weather additionally now allows for WoW Forever testing. There are some known issues:
+ - Integrated Diel option doesn't currently have artwork for each weather type
+ - Indoor ambience can't play due to a lack of Encounter data, the solution may be to remove the volume slider for this option (Forever-specific) unfortunately, waiting to see if this will be the case at release
+ - Firestorm (a brief spell that occurs in the Windrunner Spire dungeon) is untested in the new update
+
+12.1.5 toc update
+
 # 0.0.9
 
 Provide fake Clear weather indication upon login for the Forecast icon. Does not count toward actual data collected.
  - Until Blizzard fixes the issue weather data is no longer available upon login. Of note in game there are weathers in various locations which are also broken such as Gilneas' 24/7 rain being entirely absent
-
-Migrating from LibForecast to use new C_Weather API
-
-12.1.5 toc update
 
 # 0.0.8
 
