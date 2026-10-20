@@ -1072,6 +1072,13 @@ function WeatherMeowFrameMixin:OnLoad()
 end
 
 function WeatherMeowFrameMixin:OnClick(button, down)
+	if button == "RightButton" then
+		if not down and WeatherAddon.OpenWeatherAmbienceMenu then
+			WeatherAddon:OpenWeatherAmbienceMenu(self);
+		end
+		return;
+	end
+
 	if not down then
 		self.Icon:SetTexCoord(0, 1, 0, 1);
 	else

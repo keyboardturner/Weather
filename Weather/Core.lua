@@ -2,6 +2,7 @@ local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
 --local LibForecast = LibStub("LibForecast-1.0");
 local build = select(4, GetBuildInfo());
+local forcedPlaybackTimer = nil;
 
 local IsForever = build >= 16000 and build < 20000;
 WeatherAddon.IsForever = IsForever;
@@ -124,6 +125,8 @@ local UmbrellaSounds = {
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_009_faded.ogg", duration = 60 },
 };
 
+WeatherAddon.UmbrellaSounds = UmbrellaSounds;
+
 local UmbrellaItemIDsBuffIDs = {
 	[212523] = 431994,
 	[212524] = 431998,
@@ -212,6 +215,49 @@ local function StopAllAmbience()
 	wipe(activeSoundHandles);
 end
 
+function WeatherAddon:StopForcedAmbience()
+	if forcedPlaybackTimer then
+		forcedPlaybackTimer:Cancel();
+		forcedPlaybackTimer = nil;
+	end
+	StopAllAmbience();
+end
+
+function WeatherAddon:ForcePlaySoundTable(soundTable, volume)
+	WeatherAddon:StopForcedAmbience();
+	if not soundTable or #soundTable == 0 then
+		return;
+	end
+	
+	local function PlayLoop()
+		local randomIndex = math.random(1, #soundTable);
+		local soundData = soundTable[randomIndex];
+		local soundFile = soundData.file;
+		local soundDuration = soundData.duration;
+		local finalVol = volume or 0.5;
+		
+		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, { file = soundFile, channel = SOUND_CHANNEL, volume = finalVol });
+		local soundHandle = C_EncounterEvents.PlayEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID);
+		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, nil);
+		
+		if soundHandle then
+			activeSoundHandles[soundHandle] = true;
+			
+			C_Timer.After(soundDuration, function()
+				activeSoundHandles[soundHandle] = nil;
+			end)
+		end
+
+		local nextTrackDelay = math.max(0.1, soundDuration - 5);
+		forcedPlaybackTimer = C_Timer.NewTimer(nextTrackDelay, PlayLoop);
+	end
+	
+	PlayLoop();
+end
+
+WeatherAddon.StopForcedAmbience = WeatherAddon.StopForcedAmbience;
+WeatherAddon.ForcePlaySoundTable = WeatherAddon.ForcePlaySoundTable;
+
 --[[
 i have a future idea to add some of the placeable umbrella chair toys
 basically place down the toy (successful cast), check player current position,
@@ -258,6 +304,7 @@ local function CheckSoundEnabled()
 end
 
 local function PlayNextTrack()
+	if forcedPlaybackTimer then return; end
 	if not isSoundEnabled or (not isIndoors and not hasUmbrella and not activeSpellID) then return; end
 
 	local weatherInfo = C_Weather.GetCurrentWeather()

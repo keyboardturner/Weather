@@ -41,6 +41,36 @@ local WeatherForecastTextures = {
 
 WeatherAddon.WeatherIcons = {};
 
+function WeatherAddon:OpenWeatherAmbienceMenu(owner)
+	MenuUtil.CreateContextMenu(owner, function(owner, rootDescription)
+		rootDescription:CreateTitle(L["TOC_Title"]);
+		rootDescription:CreateButton(L["Rain"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.WeatherSounds[WeatherAddon.WeatherType.Rain], 0.5);
+		end);
+		rootDescription:CreateButton(L["Snow"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.WeatherSounds[WeatherAddon.WeatherType.Snow], 0.5);
+		end);
+		rootDescription:CreateButton(L["Sandstorm"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.WeatherSounds[WeatherAddon.WeatherType.Sandstorm], 0.5);
+		end);
+		rootDescription:CreateButton("[PH] Magic Spell Ambience", function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.SpellSounds[17], 0.5);
+		end);
+		rootDescription:CreateButton("[PH] Fire Spell Ambience", function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.SpellSounds[235313], 0.5);
+		end);
+		rootDescription:CreateButton("[PH] Accessory Ambience", function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.UmbrellaSounds, 0.5);
+		end);
+		rootDescription:CreateDivider();
+		rootDescription:CreateButton("[PH] Stop Forced Ambience", function()
+			WeatherAddon:StopForcedAmbience();
+			WeatherAddon:RefreshAmbience();
+		end);
+	end);
+end
+
+
 function WeatherAddon:CreateWeatherIcon(parent, size)
 	local frame = CreateFrame("Button", nil, parent);
 	frame:SetSize(size, size);
@@ -48,6 +78,10 @@ function WeatherAddon:CreateWeatherIcon(parent, size)
 	frame:SetFrameStrata("MEDIUM");
 	frame:SetFixedFrameLevel(true);
 	frame:SetFrameLevel(8);
+
+	if parent ~= MinimapBackdrop then
+		frame:SetAllPoints(parent);
+	end
 
 	frame.BG = frame:CreateTexture(nil, "OVERLAY", nil, 3);
 	frame.BG:SetAllPoints();
