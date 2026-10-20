@@ -3,7 +3,7 @@
 # 0.1.1
 
 Added Forever compatibility adjustments:
- - A new set of prebaked 50% volume sound files were added for indoor ambience and accessory effects. This will also increase the installed file size unfortunately. Because Blizzard has not added any encounter event data, this also means that I can't add options for volume sliders for the time being.
+ - A new set of prebaked 50% volume sound files were added for indoor ambience and accessory effects. This will also increase the installed file size unfortunately. Because Blizzard has not added any encounter event data, this also means that I can't add volume sliders to the Forever version for the time being.
  - Added a hidden "force playback" dropdown menu in the right click functionality of the settings UI portrait button. This is mostly meant as a debug option, but it can also be used to force some of the various sound playback options
 
 # 0.1.0
