@@ -59,8 +59,11 @@ function WeatherAddon:OpenWeatherAmbienceMenu(owner)
 		rootDescription:CreateButton(string.join(" - ",L["Setting_WeatherAmbienceSpells"], STRING_SCHOOL_FIRE), function()
 			WeatherAddon:ForcePlaySoundTable(WeatherAddon.SpellSounds[235313], 0.5);
 		end);
-		rootDescription:CreateButton(string.join(" - ",L["Setting_WeatherAmbienceSpells"], L["Header_AccessorySettings"]), function()
+		rootDescription:CreateButton(L["Header_AccessorySettings"], function()
 			WeatherAddon:ForcePlaySoundTable(WeatherAddon.UmbrellaSounds, 0.5);
+		end);
+		rootDescription:CreateButton(L["Setting_FallingSounds"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.FallingSounds, 0.5);
 		end);
 		rootDescription:CreateDivider();
 		rootDescription:CreateButton(QUEST_SESSION_CHECK_STOP_DIALOG_CONFIRM, function()

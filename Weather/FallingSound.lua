@@ -17,6 +17,8 @@ local FallingSounds = {
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\falling_005_faded.ogg", duration = 10 },
 };
 
+WeatherAddon.FallingSounds = FallingSounds;
+
 local fallTicker = nil;
 local isFalling = false;
 local fallStartTime = 0;
