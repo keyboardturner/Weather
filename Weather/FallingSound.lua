@@ -3,7 +3,7 @@ local L = WeatherAddon.L;
 --local LibForecast = LibStub("LibForecast-1.0");
 local Print = WeatherAddon.Print;
 
-local SOUND_CHANNEL = "Ambience";
+--local SOUND_CHANNEL = "Ambience";
 local FALL_DELAY_SECONDS = 1.5;
 local TICK_RATE = 0.1;
 local SOUND_FALLOFF = 50;
@@ -64,9 +64,7 @@ local function StartNextFallingSound()
 	local userVol = WeatherAddon_DB.FallingVolume or 0.6;
 	local finalVol = userVol;
 	
-	C_EncounterEvents.SetEventSound(8, 0, { file = soundData.file, channel = SOUND_CHANNEL, volume = finalVol });
-	local handle = C_EncounterEvents.PlayEventSound(8, 0);
-	C_EncounterEvents.SetEventSound(8, 0, nil);
+	local handle = WeatherAddon.PlayAmbienceSound(soundData.file, finalVol);
 	
 	if handle then
 		activeSoundHandle = handle;

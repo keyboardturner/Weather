@@ -631,6 +631,7 @@ local function BuildSettingsData()
 				callback = function(value)
 					if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
 				end,
+				forever = false,
 			});
 		end
 	end
@@ -773,6 +774,7 @@ local function BuildSettingsData()
 		callback = function(value)
 			if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -814,6 +816,7 @@ local function BuildSettingsData()
 		formatter = function(value)
 			return math.floor(value * 100 + 0.5) .. "%";
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {

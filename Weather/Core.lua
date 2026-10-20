@@ -4,7 +4,7 @@ local L = WeatherAddon.L;
 local build = select(4, GetBuildInfo());
 local forcedPlaybackTimer = nil;
 
-local IsForever = build >= 16000 and build < 20000;
+local IsForever = WOW_PROJECT_ID == WOW_PROJECT_CAMELOT;
 WeatherAddon.IsForever = IsForever;
 
 local SOUND_CHANNEL = "Ambience";
@@ -223,6 +223,28 @@ function WeatherAddon:StopForcedAmbience()
 	StopAllAmbience();
 end
 
+local function GetClientSoundFile(soundFile)
+	if IsForever and type(soundFile) == "string" then
+		-- Forever uses alternate files pre-baked at 50% volume
+		return (soundFile:gsub("%.ogg$", "_Forever.ogg"));
+	end
+	return soundFile;
+end
+
+local function PlayAmbienceSound(soundFile, volume)
+	if IsForever then
+		local willPlay, soundHandle = PlaySoundFile(GetClientSoundFile(soundFile), SOUND_CHANNEL);
+		return willPlay and soundHandle or nil;
+	end
+
+	C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, { file = soundFile, channel = SOUND_CHANNEL, volume = volume });
+	local soundHandle = C_EncounterEvents.PlayEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID);
+	C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, nil);
+	return soundHandle;
+end
+
+WeatherAddon.PlayAmbienceSound = PlayAmbienceSound;
+
 function WeatherAddon:ForcePlaySoundTable(soundTable, volume)
 	WeatherAddon:StopForcedAmbience();
 	if not soundTable or #soundTable == 0 then
@@ -236,9 +258,7 @@ function WeatherAddon:ForcePlaySoundTable(soundTable, volume)
 		local soundDuration = soundData.duration;
 		local finalVol = volume or 0.5;
 		
-		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, { file = soundFile, channel = SOUND_CHANNEL, volume = finalVol });
-		local soundHandle = C_EncounterEvents.PlayEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID);
-		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, nil);
+		local soundHandle = PlayAmbienceSound(soundFile, finalVol);
 		
 		if soundHandle then
 			activeSoundHandles[soundHandle] = true;
@@ -344,11 +364,7 @@ local function PlayNextTrack()
 		
 		local finalVol = weatherIntensity * categoryVol;
 		
-		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, { file = soundFile, channel = SOUND_CHANNEL, volume = finalVol });
-		
-		local soundHandle = C_EncounterEvents.PlayEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID);
-		
-		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, nil);
+		local soundHandle = PlayAmbienceSound(soundFile, finalVol);
 		
 		if soundHandle then
 			activeSoundHandles[soundHandle] = true;
