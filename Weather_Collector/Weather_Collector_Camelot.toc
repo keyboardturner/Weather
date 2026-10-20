@@ -43,6 +43,6 @@
 ## Category-zhTW: 角色扮演
 
 Localization.lua
-Data_ForceWeatherSpells.lua
-Data_RecordIDs.lua
+Data_ForceWeatherSpells_Forever.lua
+Data_RecordIDs_Forever.lua
 Collector.lua

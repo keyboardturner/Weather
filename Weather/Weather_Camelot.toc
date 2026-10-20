@@ -48,8 +48,8 @@
 ## Libs\LibForecast\lib.xml
 
 Localization.lua
-Data_SlowFallSpells.lua
-Data_RecordIDs.lua
+Data_SlowFallSpells_Forever.lua
+Data_RecordIDs_Forever.lua
 Core.lua
 FallingSound.lua
 SkyridingSound.lua
