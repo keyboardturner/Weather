@@ -1,5 +1,9 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.1.1a
+
+Fixed critical bug that prevented the whole addon from doing things apparently or something
+
 # 0.1.1
 
 Added Forever compatibility adjustments:
