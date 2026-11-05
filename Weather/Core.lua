@@ -331,7 +331,7 @@ local function PlayNextTrack()
 	local weatherType = weatherInfo and weatherInfo.type or WeatherType.Clear
 
 	local weatherIntensity = weatherInfo and weatherInfo.intensity or 1
-	if WeatherAddon_DB.WeatherToggles and not WeatherAddon_DB.WeatherToggles[tostring(weatherType)] then return; end
+	if WeatherAddon_DB and WeatherAddon_DB.WeatherToggles and not WeatherAddon_DB.WeatherToggles[tostring(weatherType)] then return; end
 
 	local soundTable = nil;
 	local categoryVol = 0.5;
@@ -443,8 +443,31 @@ local function OnWeatherChanged(weatherType, weatherInfo, isLogin)
 	end
 end
 
+local function InitializeDB()
+	WeatherAddon_DB = WeatherAddon_DB or {};
+
+	local function CopyDefaults(src, dst)
+		for k, v in pairs(src) do
+			if type(v) == "table" then
+				if type(dst[k]) ~= "table" then dst[k] = {}; end
+				CopyDefaults(v, dst[k]);
+			elseif dst[k] == nil then
+				dst[k] = v;
+			end
+		end
+	end
+
+	CopyDefaults(WeatherAddon.Defaults or {}, WeatherAddon_DB);
+end
+
 local function OnEvent(self, event, ...)
-	if event == "PLAYER_LOGOUT" then
+	if event == "ADDON_LOADED" then
+		local loadedName = ...;
+		if loadedName == AddonName then
+			InitializeDB();
+			self:UnregisterEvent("ADDON_LOADED");
+		end
+	elseif event == "PLAYER_LOGOUT" then
 		StopAllAmbience();
 	elseif event == "CVAR_UPDATE" then
 		local cvarName = ...;
@@ -486,5 +509,6 @@ frame:RegisterEvent("ZONE_CHANGED_INDOORS");
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 frame:RegisterEvent("PLAYER_LOGOUT");
 frame:RegisterEvent("WEATHER_CHANGED");
+frame:RegisterEvent("ADDON_LOADED");
 
 frame:SetScript("OnEvent", OnEvent);
