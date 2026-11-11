@@ -1,6 +1,7 @@
 local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
-local LibForecast = LibStub("LibForecast-1.0");
+--local LibForecast = LibStub("LibForecast-1.0");
+local WeatherType = WeatherAddon.WeatherType;
 local Print = WeatherAddon.Print;
 
 local REMINDER_EVENT_ID = 8
@@ -30,6 +31,7 @@ local Defaults = {
 	EnableSkyridingSound = true,
 	ShowMinimapButton = true,
 	LockMinimapButton = false,
+	DielIntegrationMode = "ENHANCE",
 	HideMinimapDecoration = false,
 	MinimapButtonSize = 36,
 	MinimapButtonRadius = 5,
@@ -44,9 +46,9 @@ local Defaults = {
 		Regional = true,
 		Local = true,
 	},
-	["WeatherVolume_" .. LibForecast.WeatherType.Rain] = 0.25,
-	["WeatherVolume_" .. LibForecast.WeatherType.Snow] = 0.50,
-	["WeatherVolume_" .. LibForecast.WeatherType.Sandstorm] = 0.40,
+	["WeatherVolume_" .. WeatherType.Rain] = 0.25,
+	["WeatherVolume_" .. WeatherType.Snow] = 0.50,
+	["WeatherVolume_" .. WeatherType.Sandstorm] = 0.40,
 	UmbrellaVolume = 0.50,
 	SpellVolume = 0.50,
 	FallingVolume = 0.50,
@@ -62,6 +64,13 @@ local ScrollView;
 local reminderSoundOptions = {
 	{ key = "BNET_VoiceChat_ChannelInvite", text = L["Sound_BNET_VoiceChat_ChannelInvite"], value = 2113869 },
 };
+
+local function IsEntryValidForClient(entry)
+	if entry.forever ~= nil and entry.forever ~= WeatherAddon.IsForever then
+		return false;
+	end
+	return true;
+end
 
 function WeatherAddon:GetReminderSoundFile(key)
 	for _, opt in ipairs(reminderSoundOptions) do
@@ -559,23 +568,23 @@ local function BuildSettingsData()
 
 	local dynamicScreenEffectOptions = {
 		{
-			key = tostring(LibForecast.WeatherType.Rain),
-			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Rain],
+			key = tostring(WeatherType.Rain),
+			text = WeatherAddon.WeatherNames[WeatherType.Rain],
 			default = true
 		},
 		{
-			key = tostring(LibForecast.WeatherType.Snow),
-			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Snow],
+			key = tostring(WeatherType.Snow),
+			text = WeatherAddon.WeatherNames[WeatherType.Snow],
 			default = true
 		},
 		{
-			key = tostring(LibForecast.WeatherType.Sandstorm),
-			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Sandstorm],
+			key = tostring(WeatherType.Sandstorm),
+			text = WeatherAddon.WeatherNames[WeatherType.Sandstorm],
 			default = true
 		},
 		{
-			key = tostring(LibForecast.WeatherType.Firestorm),
-			text = WeatherAddon.WeatherNames[LibForecast.WeatherType.Firestorm],
+			key = tostring(WeatherType.Firestorm),
+			text = WeatherAddon.WeatherNames[WeatherType.Firestorm],
 			default = true
 		},
 	};
@@ -622,11 +631,12 @@ local function BuildSettingsData()
 				callback = function(value)
 					if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
 				end,
+				forever = false,
 			});
 		end
 	end
 
-	table.insert(allSettingsData, { type = "header", label = L["Header_AccessorySettings"] });
+	table.insert(allSettingsData, { type = "header", label = L["Header_AccessorySettings"], });
 
 	table.insert(allSettingsData, {
 		type = "checkbox",
@@ -634,6 +644,7 @@ local function BuildSettingsData()
 		label = L["Setting_AccessorySounds"],
 		tooltip = L["Setting_AccessorySoundsTT"],
 		default = Defaults.EnableUmbrellaSounds,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -641,7 +652,8 @@ local function BuildSettingsData()
 		key = "UmbrellaToggles",
 		label = L["Setting_TrackedAccessories"],
 		tooltip = L["Setting_TrackedAccessoriesTT"],
-		options = dynamicUmbrellaOptions
+		options = dynamicUmbrellaOptions,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -655,6 +667,7 @@ local function BuildSettingsData()
 				WeatherAddon.UpdateActionBarTextures();
 			end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -670,6 +683,7 @@ local function BuildSettingsData()
 		callback = function(value)
 			if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -678,6 +692,7 @@ local function BuildSettingsData()
 		label = L["Setting_AccessoryReminders"],
 		tooltip = L["Setting_AccessoryRemindersTT"],
 		default = Defaults.EnableReminders,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -686,6 +701,7 @@ local function BuildSettingsData()
 		label = L["Setting_DisableRemindersInstances"], 
 		tooltip = L["Setting_DisableRemindersInstancesTT"],
 		options = dynamicInstanceOptions,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -694,6 +710,7 @@ local function BuildSettingsData()
 		label = L["Setting_ReminderSound"],
 		tooltip = L["Setting_ReminderSoundTT"],
 		default = Defaults.ReminderSoundEnabled,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -711,6 +728,7 @@ local function BuildSettingsData()
 			C_EncounterEvents.PlayEventSound(REMINDER_EVENT_ID, REMINDER_TRIGGER_ID);
 			C_EncounterEvents.SetEventSound(REMINDER_EVENT_ID, REMINDER_TRIGGER_ID, nil);
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -723,6 +741,7 @@ local function BuildSettingsData()
 		formatter = function(value)
 			return math.floor(value * 100 + 0.5) .. "%";
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -731,6 +750,7 @@ local function BuildSettingsData()
 		label = L["Setting_TRP3_IC_Only"],
 		tooltip = L["Setting_TRP3_IC_OnlyTT"],
 		default = Defaults.OnlyInCharacter,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -754,6 +774,7 @@ local function BuildSettingsData()
 		callback = function(value)
 			if WeatherAddon.RefreshAmbience then WeatherAddon:RefreshAmbience() end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -767,6 +788,7 @@ local function BuildSettingsData()
 				WeatherAddon:ResetSessionIgnored();
 			end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, { type = "header", label = L["Header_MovementSounds"] });
@@ -794,6 +816,7 @@ local function BuildSettingsData()
 		formatter = function(value)
 			return math.floor(value * 100 + 0.5) .. "%";
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -807,6 +830,7 @@ local function BuildSettingsData()
 				WeatherAddon:UpdateSkyridingSoundState();
 			end
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, {
@@ -819,6 +843,7 @@ local function BuildSettingsData()
 		formatter = function(value)
 			return math.floor(value * 100 + 0.5) .. "%";
 		end,
+		forever = false,
 	});
 
 	table.insert(allSettingsData, { type = "header", label = L["Header_ScreenEffects"] });
@@ -880,6 +905,26 @@ local function BuildSettingsData()
 	});
 
 	table.insert(allSettingsData, { type = "header", label = L["Header_MinimapIcon"] });
+
+	table.insert(allSettingsData, {
+		type = "dropdown",
+		key = "DielIntegrationMode",
+		label = L["Setting_DielIntegration"],
+		tooltip = L["Setting_DielIntegrationTT"],
+		defaultValue = Defaults.DielIntegrationMode,
+		options = {
+			{ key = "REPLACE", text = L["Setting_DielIntegration_Replace"] },
+			{ key = "ENHANCE", text = L["Setting_DielIntegration_Enhance"] },
+			{ key = "OFF", text = L["Setting_DielIntegration_None"] },
+		},
+		useOptionKey = true,
+		callback = function(value)
+			if WeatherAddon.UpdateDielIntegration then
+				WeatherAddon:UpdateDielIntegration();
+			end
+		end,
+		forever = true,
+	});
 
 	table.insert(allSettingsData, {
 		type = "checkbox",
@@ -983,6 +1028,15 @@ local function BuildSettingsData()
 		default = Defaults.DisplayIntensityAsPercentage,
 	});
 
+	-- filter out non-forever / forever settings
+	local clientFilteredData = {}
+	for _, data in ipairs(allSettingsData) do
+		if IsEntryValidForClient(data) then
+			table.insert(clientFilteredData, data);
+		end
+	end
+	allSettingsData = clientFilteredData;
+
 	-- automatically generate search text for all entries
 	local currentHeaderLabel = "";
 	for _, data in ipairs(allSettingsData) do
@@ -1021,6 +1075,13 @@ function WeatherMeowFrameMixin:OnLoad()
 end
 
 function WeatherMeowFrameMixin:OnClick(button, down)
+	if button == "RightButton" then
+		if not down and WeatherAddon.OpenWeatherAmbienceMenu then
+			WeatherAddon:OpenWeatherAmbienceMenu(self);
+		end
+		return;
+	end
+
 	if not down then
 		self.Icon:SetTexCoord(0, 1, 0, 1);
 	else

@@ -1,5 +1,26 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Weather/releases)
 
+# 0.1.1a
+
+Fixed critical bug that prevented the whole addon from doing things apparently or something
+
+# 0.1.1
+
+Added Forever compatibility adjustments:
+ - A new set of prebaked 50% volume sound files were added for indoor ambience and accessory effects. This will also increase the installed file size unfortunately. Because Blizzard has not added any encounter event data, this also means that I can't add volume sliders to the Forever version for the time being.
+ - Added a hidden "force playback" dropdown menu in the right click functionality of the settings UI portrait button. This is mostly meant as a debug option, but it can also be used to force some of the various sound playback options
+
+# 0.1.0
+
+Migrating from LibForecast to use new C_Weather API
+
+Addition of C_Weather additionally now allows for WoW Forever testing. There are some known issues:
+ - Integrated Diel option doesn't currently have artwork for each weather type
+ - Indoor ambience can't play due to a lack of Encounter data, the solution may be to remove the volume slider for this option (Forever-specific) unfortunately, waiting to see if this will be the case at release
+ - Firestorm (a brief spell that occurs in the Windrunner Spire dungeon) is untested in the new update
+
+12.1.5 toc update
+
 # 0.0.9
 
 Provide fake Clear weather indication upon login for the Forecast icon. Does not count toward actual data collected.

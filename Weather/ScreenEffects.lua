@@ -1,15 +1,16 @@
 local AddonName, WeatherAddon = ...;
-local LibForecast = LibStub("LibForecast-1.0");
+--local LibForecast = LibStub("LibForecast-1.0");
+local WeatherType = WeatherAddon.WeatherType;
 local Print = WeatherAddon.Print;
 
 local FADE_DURATION = 10.0
 local MAX_ALPHA = 0.30 -- any higher than this feels a bit too intense
 
 local WeatherColors = {
-	[LibForecast.WeatherType.Rain] = { 0.20, 0.45, 0.85 },
-	[LibForecast.WeatherType.Snow] = { 0.90, 0.95, 1.00 },
-	[LibForecast.WeatherType.Sandstorm] = { 0.72, 0.52, 0.10 },
-	[LibForecast.WeatherType.Firestorm] = { 0.95, 0.32, 0.08 },
+	[WeatherType.Rain] = { 0.20, 0.45, 0.85 },
+	[WeatherType.Snow] = { 0.90, 0.95, 1.00 },
+	[WeatherType.Sandstorm] = { 0.72, 0.52, 0.10 },
+	[WeatherType.Firestorm] = { 0.95, 0.32, 0.08 },
 };
 
 local isIndoors = false;
@@ -19,7 +20,7 @@ local pendingColor = { 0, 0, 0 };
 local pendingAlpha = 0;
 local curAlpha = 0;
 local fadeState = "idle";
-local curWeatherType = LibForecast.WeatherType.Unknown;
+local curWeatherType = WeatherType.Unknown;
 local curIntensity = 0;
 
 local function GetDB(key)
@@ -130,11 +131,7 @@ local function TriggerWeatherTransition(weatherType, intensity)
 	StartAnimation();
 end
 
-local function OnWeatherChanged(event, weatherType, weatherInfo)
-	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
-	end
-
+local function OnWeatherChanged(weatherType, weatherInfo)
 	curWeatherType = weatherType;
 	curIntensity = weatherInfo.intensity or 0;
 	TriggerWeatherTransition(curWeatherType, curIntensity);
@@ -192,6 +189,7 @@ initFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 initFrame:RegisterEvent("ZONE_CHANGED");
 initFrame:RegisterEvent("ZONE_CHANGED_INDOORS");
 initFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+initFrame:RegisterEvent("WEATHER_CHANGED");
 
 initFrame:SetScript("OnEvent", function(self, event)
 	if event == "PLAYER_LOGIN" then
@@ -207,13 +205,8 @@ initFrame:SetScript("OnEvent", function(self, event)
 		
 		isIndoors = not IsOutdoors();
 
-		local info = LibForecast:GetCurrentWeatherInfo();
+		local info = C_Weather.GetCurrentWeather();
 		curWeatherType = info.type;
-		
-		if curWeatherType == LibForecast.WeatherType.Unknown and info.recordID then
-			curWeatherType = WeatherAddon.RecordIDsTable[info.recordID] or curWeatherType;
-		end
-		
 		curIntensity = info.intensity or 0;
 
 		TriggerWeatherTransition(curWeatherType, curIntensity);
@@ -224,9 +217,10 @@ initFrame:SetScript("OnEvent", function(self, event)
 		if effectFrame then
 			effectFrame:SetSize(WorldFrame:GetWidth(), WorldFrame:GetHeight());
 		end
+	elseif event == "WEATHER_CHANGED" then
+		local weatherInfo = C_Weather.GetCurrentWeather();
+		OnWeatherChanged(weatherInfo and weatherInfo.type, weatherInfo);
 	else
 		CheckEnvironment();
 	end
 end)
-
-LibForecast.RegisterCallback(initFrame, "OnWeatherChanged", OnWeatherChanged);

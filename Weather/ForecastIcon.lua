@@ -1,6 +1,7 @@
 local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
-local LibForecast = LibStub("LibForecast-1.0");
+--local LibForecast = LibStub("LibForecast-1.0");
+local WeatherType = WeatherAddon.WeatherType;
 local Print = WeatherAddon.Print;
 
 local currentIconTexture = nil;
@@ -40,6 +41,39 @@ local WeatherForecastTextures = {
 
 WeatherAddon.WeatherIcons = {};
 
+function WeatherAddon:OpenWeatherAmbienceMenu(owner)
+	MenuUtil.CreateContextMenu(owner, function(owner, rootDescription)
+		rootDescription:CreateTitle(L["TOC_Title"]);
+		rootDescription:CreateButton(L["Rain"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.WeatherSounds[WeatherAddon.WeatherType.Rain], 0.5);
+		end);
+		rootDescription:CreateButton(L["Snow"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.WeatherSounds[WeatherAddon.WeatherType.Snow], 0.5);
+		end);
+		rootDescription:CreateButton(L["Sandstorm"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.WeatherSounds[WeatherAddon.WeatherType.Sandstorm], 0.5);
+		end);
+		rootDescription:CreateButton(string.join(" - ",L["Setting_WeatherAmbienceSpells"], STRING_SCHOOL_MAGIC), function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.SpellSounds[17], 0.5);
+		end);
+		rootDescription:CreateButton(string.join(" - ",L["Setting_WeatherAmbienceSpells"], STRING_SCHOOL_FIRE), function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.SpellSounds[235313], 0.5);
+		end);
+		rootDescription:CreateButton(L["Header_AccessorySettings"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.UmbrellaSounds, 0.5);
+		end);
+		rootDescription:CreateButton(L["Setting_FallingSounds"], function()
+			WeatherAddon:ForcePlaySoundTable(WeatherAddon.FallingSounds, 0.5);
+		end);
+		rootDescription:CreateDivider();
+		rootDescription:CreateButton(QUEST_SESSION_CHECK_STOP_DIALOG_CONFIRM, function()
+			WeatherAddon:StopForcedAmbience();
+			WeatherAddon:RefreshAmbience();
+		end);
+	end);
+end
+
+
 function WeatherAddon:CreateWeatherIcon(parent, size)
 	local frame = CreateFrame("Button", nil, parent);
 	frame:SetSize(size, size);
@@ -47,6 +81,10 @@ function WeatherAddon:CreateWeatherIcon(parent, size)
 	frame:SetFrameStrata("MEDIUM");
 	frame:SetFixedFrameLevel(true);
 	frame:SetFrameLevel(8);
+
+	if parent ~= MinimapBackdrop then
+		frame:SetAllPoints(parent);
+	end
 
 	frame.BG = frame:CreateTexture(nil, "OVERLAY", nil, 3);
 	frame.BG:SetAllPoints();
@@ -100,6 +138,9 @@ local function GetRegionUTCOffset()
 		return 8;
 	elseif region == 5 then -- China
 		return 8;
+
+	elseif region == 90 then -- Camelot (US Pacific?)
+		return -8;
 	end
 	return 0;
 end
@@ -217,30 +258,26 @@ end
 local function UpdateWeatherIcon()
 	UpdateBackgroundDynamic()
 
-	local weatherInfo = LibForecast:GetCurrentWeatherInfo();
+	local weatherInfo = C_Weather.GetCurrentWeather();
 	if not weatherInfo then return; end
 
 	local weatherType = weatherInfo.type;
-
-	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType
-	end
 
 	local intensityStr = GetIntensityCategory(weatherInfo.intensity);
 	local newTexturePath = WeatherForecastTextures.Miscellaneous;
 
 	-- 12.1 broke weathers initially upon login, so display them as "clear" instead of unknown
-	if weatherType == LibForecast.WeatherType.Clear or weatherType == LibForecast.WeatherType.Unknown then
+	if weatherType == WeatherType.Clear or weatherType == WeatherType.Unknown then
 		local timeOfDay = GetTimeOfDay();
-		local displayIntensity = (weatherType == LibForecast.WeatherType.Unknown) and "Light" or intensityStr;
+		local displayIntensity = (weatherType == WeatherType.Unknown) and "Light" or intensityStr;
 		newTexturePath = WeatherForecastTextures.Clear[displayIntensity .. "_" .. timeOfDay];
-	elseif weatherType == LibForecast.WeatherType.Rain then
+	elseif weatherType == WeatherType.Rain then
 		newTexturePath = WeatherForecastTextures.Rain[intensityStr];
-	elseif weatherType == LibForecast.WeatherType.Snow then
+	elseif weatherType == WeatherType.Snow then
 		newTexturePath = WeatherForecastTextures.Snow[intensityStr];
-	elseif weatherType == LibForecast.WeatherType.Sandstorm then
+	elseif weatherType == WeatherType.Sandstorm then
 		newTexturePath = WeatherForecastTextures.Sandstorm[intensityStr];
-	elseif weatherType == LibForecast.WeatherType.Firestorm then
+	elseif weatherType == WeatherType.Firestorm then
 		newTexturePath = WeatherForecastTextures.Firestorm[intensityStr];
 	end
 
@@ -474,13 +511,9 @@ local function SortedWeatherEntries(data, total)
 end
 
 function WeatherAddon:AppendWeatherTooltip(tooltip)
-	local weatherInfo = LibForecast:GetCurrentWeatherInfo();
+	local weatherInfo = C_Weather.GetCurrentWeather();
 	if weatherInfo and WeatherAddon.WeatherNames then
 		local weatherType = weatherInfo.type;
-
-		if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-			weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
-		end
 
 		local weatherName = WeatherAddon.WeatherNames[weatherType] or L["Unknown"];
 		local intensityStr = GetIntensityCategory(weatherInfo.intensity);
@@ -546,19 +579,78 @@ minimapBtn:SetScript("OnEnter", function(self)
 end)
 minimapBtn:SetScript("OnLeave", GameTooltip_Hide);
 
+function WeatherAddon:UpdateDielIntegration()
+	local diel = MinimapCluster and MinimapCluster.DielFrame;
+	if not diel then return; end
+	
+	local mode = WeatherAddon_DB and WeatherAddon_DB.DielIntegrationMode or "ENHANCE";
+	
+	if mode == "REPLACE" then
+		diel:UnregisterEvent("DIEL_CYCLE_CHANGED");
+		diel:Hide();
+		
+		minimapBtn:ClearAllPoints();
+		minimapBtn:SetPoint("CENTER", diel, "CENTER", 0, 0);
+		minimapBtn:RegisterForDrag();
+		minimapBtn:Show();
+		
+	elseif mode == "ENHANCE" then
+		diel:RegisterEvent("DIEL_CYCLE_CHANGED");
+		diel:Show();
+		
+		minimapBtn:Hide();
+		
+		diel:EnableMouse(true);
+		diel:SetScript("OnMouseUp", function(self, button)
+			if button == "LeftButton" and WeatherAddon.ToggleSettings then
+				WeatherAddon:ToggleSettings(1);
+			elseif button == "RightButton" and WeatherAddon.ToggleSettings then
+				if C_AddOns.IsAddOnLoaded("Weather_Collector") then
+					WeatherAddon:ToggleSettings(2);
+				else
+					WeatherAddon:ToggleSettings(1);
+				end
+			end
+		end)
+		
+		diel:SetScript("OnEnter", minimapBtn:GetScript("OnEnter"));
+		diel:SetScript("OnLeave", minimapBtn:GetScript("OnLeave"));
+		
+	else
+		diel:RegisterEvent("DIEL_CYCLE_CHANGED");
+		diel:Show();
+		diel:EnableMouse(false);
+		diel:SetScript("OnMouseUp", nil);
+		diel:SetScript("OnEnter", nil);
+		diel:SetScript("OnLeave", nil);
+		
+		WeatherAddon:UpdateMinimapButtonVisibility();
+		WeatherAddon:UpdateMinimapButtonPosition();
+		WeatherAddon:UpdateMinimapButtonLock();
+	end
+end
+
 local globalEventFrame = CreateFrame("Frame");
 globalEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
+globalEventFrame:RegisterEvent("WEATHER_CHANGED");
 globalEventFrame:SetScript("OnEvent", function(self, event)
-	if event == "PLAYER_ENTERING_WORLD" then
+	if event == "WEATHER_CHANGED" then
+		UpdateWeatherIcon();
+	elseif event == "PLAYER_ENTERING_WORLD" then
 		WeatherAddon:UpdateMinimapButtonSize();
 		WeatherAddon:UpdateMinimapButtonVisibility();
 		WeatherAddon:UpdateMinimapButtonLock();
 		RestoreMinimapPosition(minimapBtn);
 		WeatherAddon:UpdateMinimapIconDecoration();
 
+		if WeatherAddon.UpdateDielIntegration then
+			WeatherAddon:UpdateDielIntegration();
+		end
+
 		UpdateWeatherIcon();
 
 		--[[
+		this note was relevant to when it was LibForecast:
 		on fresh login WoW fires the "Weather changed to..." console message
 		LibForecast should usually catch these, but just in case,
 		check every second until we get a known weather type (or give up
@@ -568,8 +660,8 @@ globalEventFrame:SetScript("OnEvent", function(self, event)
 		local initTicker;
 		initTicker = C_Timer.NewTicker(1, function()
 			retries = retries + 1;
-			local weatherInfo = LibForecast:GetCurrentWeatherInfo();
-			if weatherInfo.type ~= LibForecast.WeatherType.Unknown or retries >= 10 then
+			local weatherInfo = C_Weather.GetCurrentWeather();
+			if weatherInfo.type ~= WeatherType.Unknown or retries >= 10 then
 				UpdateWeatherIcon();
 				initTicker:Cancel();
 			end
@@ -577,7 +669,6 @@ globalEventFrame:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-LibForecast.RegisterCallback(globalEventFrame, "OnWeatherChanged", UpdateWeatherIcon);
 C_Timer.NewTicker(60, UpdateWeatherIcon);
 
 --[[

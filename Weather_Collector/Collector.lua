@@ -3,7 +3,17 @@ local L = WeatherCollector.L;
 
 local frame = CreateFrame("Frame");
 
-local LibForecast = LibStub("LibForecast-1.0")
+--local LibForecast = LibStub("LibForecast-1.0")
+
+local WeatherType = {
+	Clear = 0,
+	Rain = 1,
+	Snow = 2,
+	Sandstorm = 3,
+	Miscellaneous = 4,
+	Firestorm = 5,
+	Unknown = -1,
+};
 
 Weather_Collector_DB = Weather_Collector_DB or {};
 
@@ -15,13 +25,13 @@ local isForcedWeatherActive = false;
 local isSceneActive = false;
 
 local WeatherNames = {
-	[LibForecast.WeatherType.Clear] = L["Clear"],
-	[LibForecast.WeatherType.Rain] = L["Rain"],
-	[LibForecast.WeatherType.Snow] = L["Snow"],
-	[LibForecast.WeatherType.Sandstorm] = L["Sandstorm"],
-	[LibForecast.WeatherType.Miscellaneous] = L["Miscellaneous"],
-	[LibForecast.WeatherType.Firestorm] = L["Firestorm"],
-	[LibForecast.WeatherType.Unknown] = L["Unknown"],
+	[WeatherType.Clear] = L["Clear"],
+	[WeatherType.Rain] = L["Rain"],
+	[WeatherType.Snow] = L["Snow"],
+	[WeatherType.Sandstorm] = L["Sandstorm"],
+	[WeatherType.Miscellaneous] = L["Miscellaneous"],
+	[WeatherType.Firestorm] = L["Firestorm"],
+	[WeatherType.Unknown] = L["Unknown"],
 };
 
 local function IsForcedWeatherActive()
@@ -103,24 +113,15 @@ end
 
 local function CheckEnvironment()
 	local newMapID, newSubzone = GetCurrentLocationInfo();
-	local weatherInfo = LibForecast:GetCurrentWeatherInfo();
-	local newWeatherType = weatherInfo and weatherInfo.type or LibForecast.WeatherType.Unknown;
-
-	if newWeatherType == LibForecast.WeatherType.Unknown and weatherInfo and weatherInfo.recordID then
-		newWeatherType = WeatherCollector.RecordIDsTable[weatherInfo.recordID] or newWeatherType;
-	end
+	local weatherInfo = C_Weather.GetCurrentWeather();
+	local newWeatherType = weatherInfo and weatherInfo.type or WeatherType.Unknown;
 
 	UpdateAuraState();
 	UpdateState(newMapID, newSubzone, newWeatherType);
 end
 
-local function OnWeatherChanged(event, weatherType, weatherInfo)
+local function OnWeatherChanged(weatherType, weatherInfo)
 	local newMapID, newSubzone = GetCurrentLocationInfo();
-	
-	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherCollector.RecordIDsTable[weatherInfo.recordID] or weatherType;
-	end
-	
 	UpdateState(newMapID, newSubzone, weatherType);
 end
 
@@ -141,6 +142,9 @@ local function OnEvent(self, event, ...)
 		RecordCurrentWeatherDuration()
 	elseif event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED" or event == "ZONE_CHANGED_INDOORS" or event == "ZONE_CHANGED_NEW_AREA" then
 		CheckEnvironment();
+	elseif event == "WEATHER_CHANGED" then
+		local weatherInfo = C_Weather.GetCurrentWeather();
+		OnWeatherChanged(weatherInfo and weatherInfo.type, weatherInfo);
 	end
 end
 
@@ -151,10 +155,9 @@ frame:RegisterEvent("ZONE_CHANGED_INDOORS");
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 frame:RegisterEvent("CLIENT_SCENE_OPENED");
 frame:RegisterEvent("CLIENT_SCENE_CLOSED");
+frame:RegisterEvent("WEATHER_CHANGED");
 frame:RegisterUnitEvent("UNIT_AURA", "player");
 frame:SetScript("OnEvent", OnEvent);
-
-LibForecast.RegisterCallback(frame, "OnWeatherChanged", OnWeatherChanged);
 
 Weather_Collector = Weather_Collector or {};
 function Weather_Collector.FlushCurrentDuration()

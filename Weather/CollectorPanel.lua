@@ -1,6 +1,6 @@
 local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
-local LibForecast = LibStub("LibForecast-1.0");
+--local LibForecast = LibStub("LibForecast-1.0");
 local Print = WeatherAddon.Print;
 
 local selectedMapID = nil;

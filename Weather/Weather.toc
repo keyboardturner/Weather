@@ -1,4 +1,4 @@
-## Interface: 120007, 120100
+## Interface: 120105
 ## Title: Weather
 ## Notes: Various weather-related options and features, including indoor weather ambience and accessory reminders.
 ## Author: Keyboardturner
@@ -44,8 +44,8 @@
 ## Category-zhCN: 角色扮演
 ## Category-zhTW: 角色扮演
 
-Libs\LibStub\LibStub.lua
-Libs\LibForecast\lib.xml
+## Libs\LibStub\LibStub.lua
+## Libs\LibForecast\lib.xml
 
 Localization.lua
 Data_SlowFallSpells.lua

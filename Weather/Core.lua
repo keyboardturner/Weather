@@ -1,6 +1,11 @@
 local AddonName, WeatherAddon = ...;
 local L = WeatherAddon.L;
-local LibForecast = LibStub("LibForecast-1.0");
+--local LibForecast = LibStub("LibForecast-1.0");
+local build = select(4, GetBuildInfo());
+local forcedPlaybackTimer = nil;
+
+local IsForever = WOW_PROJECT_ID == WOW_PROJECT_CAMELOT;
+WeatherAddon.IsForever = IsForever;
 
 local SOUND_CHANNEL = "Ambience";
 local frame = CreateFrame("Frame");
@@ -22,14 +27,26 @@ end
 
 WeatherAddon.Print = Print;
 
+local WeatherType = {
+	Clear = 0,
+	Rain = 1,
+	Snow = 2,
+	Sandstorm = 3,
+	Miscellaneous = 4,
+	Firestorm = 5,
+	Unknown = -1,
+};
+
+WeatherAddon.WeatherType = WeatherType;
+
 local WeatherNames = {
-	[LibForecast.WeatherType.Clear] = L["Clear"],
-	[LibForecast.WeatherType.Rain] = L["Rain"],
-	[LibForecast.WeatherType.Snow] = L["Snow"],
-	[LibForecast.WeatherType.Sandstorm] = L["Sandstorm"],
-	[LibForecast.WeatherType.Miscellaneous] = L["Miscellaneous"],
-	[LibForecast.WeatherType.Firestorm] = L["Firestorm"],
-	[LibForecast.WeatherType.Unknown] = L["Unknown"],
+	[WeatherType.Clear] = L["Clear"],
+	[WeatherType.Rain] = L["Rain"],
+	[WeatherType.Snow] = L["Snow"],
+	[WeatherType.Sandstorm] = L["Sandstorm"],
+	[WeatherType.Miscellaneous] = L["Miscellaneous"],
+	[WeatherType.Firestorm] = L["Firestorm"],
+	[WeatherType.Unknown] = L["Unknown"],
 };
 
 WeatherAddon.WeatherNames = WeatherNames;
@@ -46,8 +63,13 @@ local lastReminderTime = 0;
 local REMINDER_THROTTLE_SECONDS = 30;
 local lastWarnedExpiration = 0;
 
+local lastWeatherType = nil;
+local lastWeatherIntensity = nil;
+local lastWeatherPrintTime = 0;
+local WEATHER_PRINT_COOLDOWN = 5;
+
 local WeatherSounds = {
-	[LibForecast.WeatherType.Rain] = {
+	[WeatherType.Rain] = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_000_faded_boostedx2.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_001_faded_boostedx2.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_002_faded_boostedx2.ogg", duration = 60 },
@@ -60,7 +82,7 @@ local WeatherSounds = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_009_faded_boostedx2.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_rain_010_faded_boostedx2.ogg", duration = 60 },
 	},
-	[LibForecast.WeatherType.Snow] = {
+	[WeatherType.Snow] = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_000_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_001_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_002_faded.ogg", duration = 60 },
@@ -73,7 +95,7 @@ local WeatherSounds = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_009_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_snow_010_faded.ogg", duration = 60 },
 	},
-	[LibForecast.WeatherType.Sandstorm] = {
+	[WeatherType.Sandstorm] = {
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_sandstorm_000_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_sandstorm_001_faded.ogg", duration = 60 },
 		{ file = "Interface\\AddOns\\Weather\\Sounds\\indoor_sandstorm_002_faded.ogg", duration = 60 },
@@ -102,6 +124,8 @@ local UmbrellaSounds = {
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_008_faded.ogg", duration = 60 },
 	{ file = "Interface\\AddOns\\Weather\\Sounds\\umbrellarain_009_faded.ogg", duration = 60 },
 };
+
+WeatherAddon.UmbrellaSounds = UmbrellaSounds;
 
 local UmbrellaItemIDsBuffIDs = {
 	[212523] = 431994,
@@ -191,6 +215,69 @@ local function StopAllAmbience()
 	wipe(activeSoundHandles);
 end
 
+function WeatherAddon:StopForcedAmbience()
+	if forcedPlaybackTimer then
+		forcedPlaybackTimer:Cancel();
+		forcedPlaybackTimer = nil;
+	end
+	StopAllAmbience();
+end
+
+local function GetClientSoundFile(soundFile)
+	if IsForever and type(soundFile) == "string" then
+		-- Forever uses alternate files pre-baked at 50% volume
+		return (soundFile:gsub("%.ogg$", "_Forever.ogg"));
+	end
+	return soundFile;
+end
+
+local function PlayAmbienceSound(soundFile, volume)
+	if IsForever then
+		local willPlay, soundHandle = PlaySoundFile(GetClientSoundFile(soundFile), SOUND_CHANNEL);
+		return willPlay and soundHandle or nil;
+	end
+
+	C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, { file = soundFile, channel = SOUND_CHANNEL, volume = volume });
+	local soundHandle = C_EncounterEvents.PlayEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID);
+	C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, nil);
+	return soundHandle;
+end
+
+WeatherAddon.PlayAmbienceSound = PlayAmbienceSound;
+
+function WeatherAddon:ForcePlaySoundTable(soundTable, volume)
+	WeatherAddon:StopForcedAmbience();
+	if not soundTable or #soundTable == 0 then
+		return;
+	end
+	
+	local function PlayLoop()
+		local randomIndex = math.random(1, #soundTable);
+		local soundData = soundTable[randomIndex];
+		local soundFile = soundData.file;
+		local soundDuration = soundData.duration;
+		local finalVol = volume or 0.5;
+		
+		local soundHandle = PlayAmbienceSound(soundFile, finalVol);
+		
+		if soundHandle then
+			activeSoundHandles[soundHandle] = true;
+			
+			C_Timer.After(soundDuration, function()
+				activeSoundHandles[soundHandle] = nil;
+			end)
+		end
+
+		local nextTrackDelay = math.max(0.1, soundDuration - 5);
+		forcedPlaybackTimer = C_Timer.NewTimer(nextTrackDelay, PlayLoop);
+	end
+	
+	PlayLoop();
+end
+
+WeatherAddon.StopForcedAmbience = WeatherAddon.StopForcedAmbience;
+WeatherAddon.ForcePlaySoundTable = WeatherAddon.ForcePlaySoundTable;
+
 --[[
 i have a future idea to add some of the placeable umbrella chair toys
 basically place down the toy (successful cast), check player current position,
@@ -198,7 +285,8 @@ and proceed to play ambience if within ~5 yards of that placed location
 this will not be for release though
 ]]
 local function CheckForUmbrellaBuff()
-	if not WeatherAddon_DB.EnableUmbrellaSounds then return false; end
+	if IsForever then return end
+	if not WeatherAddon_DB or not WeatherAddon_DB.EnableUmbrellaSounds then return false; end
 
 	for itemID, spellID in pairs(UmbrellaItemIDsBuffIDs) do
 		if WeatherAddon_DB.UmbrellaToggles[tostring(itemID)] then
@@ -210,7 +298,7 @@ local function CheckForUmbrellaBuff()
 end
 
 local function CheckForSpellBuff()
-	if not WeatherAddon_DB.SpellToggles then return nil; end
+	if not WeatherAddon_DB or not WeatherAddon_DB.SpellToggles then return nil; end
 
 	for spellID, _ in pairs(SpellSounds) do
 		if WeatherAddon_DB.SpellToggles[tostring(spellID)] then
@@ -236,17 +324,14 @@ local function CheckSoundEnabled()
 end
 
 local function PlayNextTrack()
+	if forcedPlaybackTimer then return; end
 	if not isSoundEnabled or (not isIndoors and not hasUmbrella and not activeSpellID) then return; end
 
-	local weatherInfo = LibForecast:GetCurrentWeatherInfo()
-	local weatherType = weatherInfo.type
-	
-	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType;
-	end
+	local weatherInfo = C_Weather.GetCurrentWeather()
+	local weatherType = weatherInfo and weatherInfo.type or WeatherType.Clear
 
-	local weatherIntensity = weatherInfo.intensity or 1
-	if WeatherAddon_DB.WeatherToggles and not WeatherAddon_DB.WeatherToggles[tostring(weatherType)] then return; end
+	local weatherIntensity = weatherInfo and weatherInfo.intensity or 1
+	if WeatherAddon_DB and WeatherAddon_DB.WeatherToggles and not WeatherAddon_DB.WeatherToggles[tostring(weatherType)] then return; end
 
 	local soundTable = nil;
 	local categoryVol = 0.5;
@@ -257,12 +342,12 @@ local function PlayNextTrack()
 		local volDefault = WeatherAddon.Defaults and WeatherAddon.Defaults[volKey] or 0.5;
 		categoryVol = WeatherAddon_DB[volKey] ~= nil and WeatherAddon_DB[volKey] or volDefault;
 	elseif hasUmbrella and not isIndoors then
-		if weatherType == LibForecast.WeatherType.Rain then
+		if weatherType == WeatherType.Rain then
 			soundTable = UmbrellaSounds;
 			categoryVol = WeatherAddon_DB.UmbrellaVolume or 0.5;
 		end
 	elseif activeSpellID and not isIndoors then
-		if weatherType == LibForecast.WeatherType.Rain then
+		if weatherType == WeatherType.Rain then
 			soundTable = SpellSounds[activeSpellID];
 			categoryVol = WeatherAddon_DB.SpellVolume or 0.5;
 		end
@@ -279,11 +364,7 @@ local function PlayNextTrack()
 		
 		local finalVol = weatherIntensity * categoryVol;
 		
-		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, { file = soundFile, channel = SOUND_CHANNEL, volume = finalVol });
-		
-		local soundHandle = C_EncounterEvents.PlayEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID);
-		
-		C_EncounterEvents.SetEventSound(AMBIENCE_EVENT_ID, AMBIENCE_TRIGGER_ID, nil);
+		local soundHandle = PlayAmbienceSound(soundFile, finalVol);
 		
 		if soundHandle then
 			activeSoundHandles[soundHandle] = true;
@@ -328,39 +409,28 @@ local function CheckEnvironment()
 	end
 end
 
-local function OnEvent(self, event, ...)
-	if event == "PLAYER_LOGOUT" then
-		StopAllAmbience();
-	elseif event == "CVAR_UPDATE" then
-		local cvarName = ...;
-		if cvarName == "Sound_EnableAllSound" or cvarName == "Sound_EnableAmbience" or cvarName == "Sound_MasterVolume" or cvarName == "Sound_AmbienceVolume" then
-			CheckEnvironment();
-		end
-	else
-		CheckEnvironment();
-		WeatherAddon:CheckUmbrellaReminder();
-	end
-end
+local function OnWeatherChanged(weatherType, weatherInfo, isLogin)
+	weatherInfo = weatherInfo or {};
+	weatherType = weatherType or WeatherType.Clear;
+	local intensity = weatherInfo.intensity or 0;
+	local now = GetTime();
 
-local function OnWeatherChanged(event, weatherType, weatherInfo)
-	if weatherType == LibForecast.WeatherType.Unknown and weatherInfo.recordID then
-		weatherType = WeatherAddon.RecordIDsTable[weatherInfo.recordID] or weatherType
-	end
+	local weatherHasChanged = (weatherType ~= lastWeatherType) or (intensity ~= lastWeatherIntensity);
 
 	if WeatherAddon_DB and WeatherAddon_DB.WeatherMessages then
-		local weatherName = WeatherNames[weatherType] or "Unknown";
-		local intensity = weatherInfo.intensity or 0;
-		
-		local formattedIntensity;
-		if WeatherAddon_DB.DisplayIntensityAsPercentage then
-			formattedIntensity = math.floor((intensity * 100) + 0.5) .. "%";
-		else
-			formattedIntensity = tostring(intensity);
+		if isLogin or (weatherHasChanged and (now - lastWeatherPrintTime >= WEATHER_PRINT_COOLDOWN)) then
+			local weatherName = WeatherNames[weatherType] or WeatherNames[WeatherType.Unknown] or "Unknown";
+			
+			local formattedIntensity;
+			if WeatherAddon_DB.DisplayIntensityAsPercentage then
+				formattedIntensity = math.floor((intensity * 100) + 0.5) .. "%";
+			else
+				formattedIntensity = tostring(intensity);
+			end
+			
+			Print(string.format(L["ChangedWeather"], weatherName, formattedIntensity));
+			lastWeatherPrintTime = now;
 		end
-		
-		local recordID = weatherInfo.recordID;
-		
-		Print(string.format(L["ChangedWeather"], weatherName, formattedIntensity));
 	end
 
 	if isSoundEnabled and (isIndoors or hasUmbrella or activeSpellID) then
@@ -368,7 +438,62 @@ local function OnWeatherChanged(event, weatherType, weatherInfo)
 		RunNextFrame(PlayNextTrack);
 	end
 	
-	WeatherAddon:CheckUmbrellaReminder();
+	if not WeatherAddon.IsForever then
+		WeatherAddon:CheckUmbrellaReminder();
+	end
+end
+
+local function InitializeDB()
+	WeatherAddon_DB = WeatherAddon_DB or {};
+
+	local function CopyDefaults(src, dst)
+		for k, v in pairs(src) do
+			if type(v) == "table" then
+				if type(dst[k]) ~= "table" then dst[k] = {}; end
+				CopyDefaults(v, dst[k]);
+			elseif dst[k] == nil then
+				dst[k] = v;
+			end
+		end
+	end
+
+	CopyDefaults(WeatherAddon.Defaults or {}, WeatherAddon_DB);
+end
+
+local function OnEvent(self, event, ...)
+	if event == "ADDON_LOADED" then
+		local loadedName = ...;
+		if loadedName == AddonName then
+			InitializeDB();
+			self:UnregisterEvent("ADDON_LOADED");
+		end
+	elseif event == "PLAYER_LOGOUT" then
+		StopAllAmbience();
+	elseif event == "CVAR_UPDATE" then
+		local cvarName = ...;
+		if cvarName == "Sound_EnableAllSound" or cvarName == "Sound_EnableAmbience" or cvarName == "Sound_MasterVolume" or cvarName == "Sound_AmbienceVolume" then
+			CheckEnvironment();
+		end
+	elseif event == "WEATHER_CHANGED" then
+		local weatherInfo = C_Weather.GetCurrentWeather();
+		OnWeatherChanged(weatherInfo and weatherInfo.type, weatherInfo, false);
+	elseif event == "PLAYER_ENTERING_WORLD" then
+		local isInitialLogin, isReloadingUi = ...;
+		CheckEnvironment();
+		if not WeatherAddon.IsForever then
+			WeatherAddon:CheckUmbrellaReminder();
+		end
+		
+		if isInitialLogin or isReloadingUi then
+			local weatherInfo = C_Weather.GetCurrentWeather();
+			OnWeatherChanged(weatherInfo and weatherInfo.type, weatherInfo, true);
+		end
+	else
+		CheckEnvironment();
+		if not WeatherAddon.IsForever then
+			WeatherAddon:CheckUmbrellaReminder();
+		end
+	end
 end
 
 frame:RegisterEvent("CVAR_UPDATE");
@@ -383,6 +508,7 @@ frame:RegisterEvent("ZONE_CHANGED");
 frame:RegisterEvent("ZONE_CHANGED_INDOORS");
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 frame:RegisterEvent("PLAYER_LOGOUT");
+frame:RegisterEvent("WEATHER_CHANGED");
+frame:RegisterEvent("ADDON_LOADED");
 
 frame:SetScript("OnEvent", OnEvent);
-LibForecast.RegisterCallback(frame, "OnWeatherChanged", OnWeatherChanged);

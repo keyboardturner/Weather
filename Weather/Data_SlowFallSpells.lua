@@ -507,10 +507,12 @@ local SlowFallEffectTable = {
     1266473,
     1267007,
     1270095,
+    1279801,
     1282035,
     1282407,
     1282409,
     1282489,
+    1283542,
     1283575,
     1285447,
     1285736,
@@ -529,6 +531,7 @@ local SlowFallEffectTable = {
     1305692,
     1308242,
     1312399,
+    1325695,
 };
 
 WeatherAddon.SlowFallEffectTable = SlowFallEffectTable;
